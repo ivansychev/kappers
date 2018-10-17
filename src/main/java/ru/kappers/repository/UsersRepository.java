@@ -1,6 +1,7 @@
-package ru.kappers;
+package ru.kappers.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import ru.kappers.model.User;
 
 import java.util.List;
 
