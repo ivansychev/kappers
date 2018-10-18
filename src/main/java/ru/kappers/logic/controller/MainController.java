@@ -1,5 +1,6 @@
 package ru.kappers.logic.controller;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j
 @Controller
 public class MainController {
     private static List<User> persons = new ArrayList<>();
@@ -30,18 +32,18 @@ public class MainController {
 
     @RequestMapping(value = "/mazi", method = RequestMethod.GET)
     public String personList(Model model) {
-        User user = User.builder()
-                .name("Shama2")
-                .password("Serasdsas")
-                .roleId(Roles.RoleType.ROLE_USER.getId())
-                .userName("shama123")
-                .currency("RUB")
-                .lang("RUSSIAN")
-                .email("sas@sasas")
-                .dateOfBirth(Timestamp.valueOf(LocalDateTime.of(1985, Month.APRIL, 29, 1,45)))
-                .dateOfRegistration(new Timestamp(System.currentTimeMillis()))
-                .isblocked(false).build();
-        service.addUser(user);
+//        User user = User.builder()
+//                .name("Shama2")
+//                .password("Serasdsas")
+//                .roleId(Roles.RoleType.ROLE_USER.getId())
+//                .userName("shama123")
+//                .currency("RUB")
+//                .lang("RUSSIAN")
+//                .email("sas@sasas")
+//                .dateOfBirth(Timestamp.valueOf(LocalDateTime.of(1985, Month.APRIL, 29, 1,45)))
+//                .dateOfRegistration(new Timestamp(System.currentTimeMillis()))
+//                .isblocked(false).build();
+//        service.addUser(user);
         persons = service.getAll();
         model.addAttribute("persons", persons);
         return "index1";
