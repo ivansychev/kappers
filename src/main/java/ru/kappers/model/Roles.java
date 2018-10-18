@@ -23,25 +23,17 @@ public class Roles implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id", nullable = false, insertable = true, updatable = false)
     private int roleId;
-    @Column(name = "role_name")
-    private String roleName;
+    @Column(name = "role_name", nullable = false, unique=true)
+    private RoleType roleName;
 
-    public enum RoleTypes {
-        ADMIN, KAPPER, USER
+    public enum RoleType {
+        ROLE_ADMIN(1), ROLE_USER(2), ROLE_KAPPER(3);
+        int id;
+        RoleType(int id){
+            this.id = id;
+        }
+        public int getId(){
+            return id;
+        }
     }
-
-    public static Roles of(RoleTypes type) {
-//        Session session = HibernateSessionFactory.getSession();
-//        switch (type) {
-//            case ADMIN:
-//                return session.load(Roles.class, 1);
-//            case USER:
-//                return session.load(Roles.class, 2);
-//            case KAPPER:
-//                return session.load(Roles.class, 3);
-//            default:
-//                return null;
-       return null;
-    }
-
 }

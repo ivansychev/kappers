@@ -60,7 +60,7 @@ public class User implements Serializable {
     private String lang;
 
     @Column(name = "role_id")
-    private int roleId;
+    private Integer roleId;
 
 //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

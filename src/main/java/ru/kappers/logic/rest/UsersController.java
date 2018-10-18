@@ -1,10 +1,14 @@
-package ru.kappers.rest;
+package ru.kappers.logic.rest;
 
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UsersController {
-//private final UsersRepository repository;
+/**
+ * Класс предназначен для передачи данных в виде JSON
+ *
+ * */
+    //private final UsersRepository repository;
 //
 //    public UsersController(UsersRepository repository) {
 //        this.repository = repository;
