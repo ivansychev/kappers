@@ -15,14 +15,14 @@ public class DateUtil {
 		return new Timestamp(System.currentTimeMillis());
 	}
 	
-	public static Timestamp convertDate(String date) throws ParseException {
+	public static Timestamp convertDate(String date) {
 		try {
 			Date ddate=df.parse(date);
 			return new Timestamp(ddate.getTime());
 		} catch (ParseException e) {
 			log.error("Wrong date given");
 			e.printStackTrace();
-			throw e;
+			throw new RuntimeException(e);
 		}
 		
 	}
