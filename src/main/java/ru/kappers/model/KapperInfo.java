@@ -26,10 +26,6 @@ public class KapperInfo implements IRaiting, Serializable {
     @Column(name = "id", nullable = false, insertable = true, updatable = false)
     private int id;
 
-//    @Column(name = "u_id")
-//    @NaturalId
-//    private int uId;
-
     @Column(name = "tokens")
     private Double tokens;
 

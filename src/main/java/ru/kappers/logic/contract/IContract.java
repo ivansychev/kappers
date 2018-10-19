@@ -8,7 +8,7 @@ public interface IContract {
     KapperInfo initCapper(User user);
     KapperInfo getKapperInfo(User user);
     void blockTokens(User user, double amount);
-    Map<User, Double> getBalance();
-    Map<User, KapperInfo> getAllInfo();
     void unblockAmount(User user, double amount);
+    void withdrawBlockedTokens(User user, double amount);
+    Map<User, KapperInfo> getAllInfo();
 }
