@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtil {
-	private static DateFormat df=new SimpleDateFormat("yyyMMdd");
+	private static DateFormat df=new SimpleDateFormat("yyyyMMdd");
 	
 	public static Timestamp getCurrentTime() {
 		return new Timestamp(System.currentTimeMillis());

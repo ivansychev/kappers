@@ -6,6 +6,7 @@ import ru.kappers.model.*;
 import ru.kappers.repository.RolesRepository;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.UserService;
+import ru.kappers.util.DateUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(User user) {
         if (user.getDateOfRegistration()==null){
-            user.setDateOfRegistration(new Timestamp(System.currentTimeMillis()));
+            user.setDateOfRegistration(DateUtil.getCurrentTime());
         }
         if (user.getIsblocked()==null){
             user.setIsblocked(false);
