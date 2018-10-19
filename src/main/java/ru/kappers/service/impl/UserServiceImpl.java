@@ -1,5 +1,6 @@
 package ru.kappers.service.impl;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.*;
@@ -10,7 +11,7 @@ import ru.kappers.util.DateUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
-
+@Log4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -25,22 +26,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        if (user.getDateOfRegistration()==null){
-            user.setDateOfRegistration(DateUtil.getCurrentTime());
+        User byUserId = repository.getByUserName(user.getUserName());
+        if (byUserId == null) {
+            if (user.getDateOfRegistration() == null) {
+                user.setDateOfRegistration(DateUtil.getCurrentTime());
+            }
+            if (user.getIsblocked() == null) {
+                user.setIsblocked(false);
+            }
+            if (user.getRoleId() == null) {
+                user.setRoleId(Roles.RoleType.ROLE_USER.getId());
+            }
+            repository.save(user);
+        } else{
+            log.info("Пользователь "+user.getUserName()+" уже существует");
         }
-        if (user.getIsblocked()==null){
-            user.setIsblocked(false);
-        }
-        if (user.getRoleId()==null){
-           user.setRoleId(Roles.RoleType.ROLE_USER.getId());
-        }
-        repository.save(user);
         return repository.getUserByName(user.getName());
     }
 
     @Override
     public void delete(User user) {
-        repository.delete(user);
+        User byUserId = repository.getByUserId(user.getUserId());
+        if (byUserId != null)
+            repository.delete(user);
     }
 
     @Override
@@ -88,22 +96,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean hasRole(User user, String roleName) {
-        return user.getRoleId()== rolesRepository.getByRoleName(Enum.valueOf(Roles.RoleType.class, roleName)).getRoleId();
+        return user.getRoleId() == rolesRepository.getByRoleName(Enum.valueOf(Roles.RoleType.class, roleName)).getRoleId();
     }
 
     @Override
     public boolean hasRole(User user, int roleId) {
-        return user.getRoleId()==roleId;
+        return user.getRoleId() == roleId;
     }
 
     @Override
     public boolean hasRole(User user, Roles role) {
-        return user.getRoleId()==role.getRoleId();
+        return user.getRoleId() == role.getRoleId();
     }
 
     @Override
     public Roles getRole(User user) {
-        return rolesRepository.getByRoleId(user.getRoleId());
+  //      return rolesRepository.getByRoleId(user.getRoleId());
+        return null;
+        //TODO разобраться почему не срабатывает
     }
 
     @Override

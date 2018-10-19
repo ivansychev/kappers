@@ -18,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Roles implements Serializable {
+public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id", nullable = false, insertable = true, updatable = false)

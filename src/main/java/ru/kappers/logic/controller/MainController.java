@@ -26,8 +26,6 @@ public class MainController {
 
     public MainController(UserService service) {
         this.service = service;
-//        user = User.builder().name("Mazi").password("Sersas").build();
-//        repository.save(user);
     }
 
     @RequestMapping(value = "/mazi", method = RequestMethod.GET)
