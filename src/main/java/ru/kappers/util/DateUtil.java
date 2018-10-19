@@ -1,11 +1,13 @@
 package ru.kappers.util;
 
+import lombok.extern.log4j.Log4j;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+@Log4j
 public class DateUtil {
 	private static DateFormat df=new SimpleDateFormat("yyyyMMdd");
 	
@@ -13,14 +15,14 @@ public class DateUtil {
 		return new Timestamp(System.currentTimeMillis());
 	}
 	
-	public static Timestamp convertDate(String date) {
+	public static Timestamp convertDate(String date) throws ParseException {
 		try {
 			Date ddate=df.parse(date);
 			return new Timestamp(ddate.getTime());
 		} catch (ParseException e) {
-			System.out.println("WRONG DATA GIVEN");
+			log.error("Wrong date given");
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		
 	}
