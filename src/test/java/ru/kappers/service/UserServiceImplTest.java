@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 @Log4j
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = { KappersApplication.class, AdditionalBDConfig.class })
 public class UserServiceImplTest {
 
@@ -29,7 +30,7 @@ public class UserServiceImplTest {
     private User user;
     private User kapper;
 
-    @Before
+    @Test
     public void addUsers() {
         admin = User.builder()
                 .userName("admin")
@@ -59,25 +60,15 @@ public class UserServiceImplTest {
                 .roleId(Roles.RoleType.ROLE_KAPPER.getId())
                 .build();
         userService.addUser(admin);
-        log.debug("admin создан");
         userService.addUser(user);
-        log.debug("user создан");
         userService.addUser(kapper);
-        log.debug("kapper создан");
-
     }
 
-    @After
+    @Test
     public void deleteUsers() {
         userService.delete(user);
-        log.debug("user удален");
-
         userService.delete(admin);
-        log.debug("admin удален");
-
         userService.delete(kapper);
-        log.debug("kapper удален");
-
     }
 
     @Test

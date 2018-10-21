@@ -7,7 +7,7 @@ import ru.kappers.model.User;
 import java.util.List;
 
 public interface PersonalInfoService {
-    PersonalInfo addInfo(User user, PersonalInfo info);
+    PersonalInfo addInfo(PersonalInfo info);
 
     void clearPersonalInfo(User user);
 

@@ -5,7 +5,7 @@ import ru.kappers.model.Roles;
 import java.util.List;
 
 public interface RolesService {
-    Roles addBank(Roles role);
+    Roles addRole(Roles role);
 
     void delete(Roles role);
 

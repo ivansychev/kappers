@@ -7,7 +7,7 @@ import ru.kappers.model.utilmodel.IssueType;
 import java.util.List;
 
 public interface StatService {
-    Stat addStat(User user, Stat stat);
+    Stat addRecord(Stat stat);
     void deleteRecord(Stat id);
     void clearUserStat(User user);
     List<Stat> getUserStat(User user);
