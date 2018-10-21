@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private int userId;
 
     @NaturalId
@@ -83,7 +85,7 @@ public class User implements Serializable {
         return roleId == role_id;
     }
 
-    public boolean hasRole(String roleName) {
+    public boolean hasRole(String roleName){
         return roleName.equals(RoleUtil.getRoleNameById(roleId).getRoleName());
     }
 

@@ -46,8 +46,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
-        User byUserId = repository.getByUserId(user.getUserId());
-        if (byUserId != null)
+//        User byUserId = repository.getByUserName(user.getUserName());
+//        if (byUserId != null)
             repository.delete(user);
     }
 

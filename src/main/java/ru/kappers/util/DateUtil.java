@@ -21,7 +21,6 @@ public class DateUtil {
 			return new Timestamp(ddate.getTime());
 		} catch (ParseException e) {
 			log.error("Wrong date given");
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		

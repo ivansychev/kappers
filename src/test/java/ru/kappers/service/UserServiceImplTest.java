@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
@@ -13,12 +14,14 @@ import ru.kappers.config.AdditionalBDConfig;
 import ru.kappers.model.Roles;
 import ru.kappers.model.User;
 import ru.kappers.util.DateUtil;
+import ru.kappers.util.RoleUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 @Log4j
+@DirtiesContext
 //@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { KappersApplication.class, AdditionalBDConfig.class })
@@ -26,8 +29,6 @@ public class UserServiceImplTest {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private RolesService rolesService;
 
     private  User admin;
     private  User user;
@@ -40,7 +41,7 @@ public class UserServiceImplTest {
                 .dateOfBirth(DateUtil.convertDate("19650806"))
                 .currency("RUB")
                 .lang("RUSSIAN")
-                .roleId(rolesService.getRoleIdByName("ROLE_ADMIN"))
+                .roleId(1)
                 .build();
         user = User.builder()
                 .userName("user")
@@ -49,7 +50,7 @@ public class UserServiceImplTest {
                 .dateOfBirth(DateUtil.convertDate("19650806"))
                 .currency("RUB")
                 .lang("RUSSIAN")
-                .roleId(rolesService.getRoleIdByName("ROLE_USER"))
+                .roleId(2)
                 .build();
         kapper = User.builder()
                 .userName("kapper")
@@ -58,14 +59,17 @@ public class UserServiceImplTest {
                 .dateOfBirth(DateUtil.convertDate("19650806"))
                 .currency("RUB")
                 .lang("RUSSIAN")
-                .roleId(rolesService.getRoleIdByName("ROLE_KAPPER"))
+                .roleId(3)
                 .build();
     }
     @Test
     public void addUsers() {
-        userService.addUser(admin);
-        userService.addUser(user);
-        userService.addUser(kapper);
+        User userA = userService.addUser(admin);
+        User userU = userService.addUser(user);
+        User userK = userService.addUser(kapper);
+        assertEquals(userA, admin);
+        assertEquals(userU, user);
+        assertEquals(userK, kapper);
     }
 
     @Test

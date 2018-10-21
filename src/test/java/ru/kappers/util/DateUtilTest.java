@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class DateUtilTest {
 
 	@Test
-	public void convertDate() throws ParseException {
+	public void convertDate(){
 		String incomeDate = "20001202";
 		Timestamp t1 = DateUtil.convertDate(incomeDate);
 		t1.setHours(12);
@@ -23,8 +23,8 @@ public class DateUtilTest {
 		Assert.assertEquals(t1, t2);
 	}
 
-	@Test(expected = ParseException.class)
-	public void convertDateWrong() throws ParseException {
+	@Test(expected = RuntimeException.class)
+	public void convertDateWrong(){
 		String incomeDate = "98798asd";
 		Timestamp t1 = DateUtil.convertDate(incomeDate);
 	}
