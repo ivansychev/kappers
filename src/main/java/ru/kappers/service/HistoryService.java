@@ -6,7 +6,7 @@ import ru.kappers.model.User;
 import java.util.List;
 
 public interface HistoryService {
-    History addHistoryRecord(User user, History record);
+    History addHistoryRecord(History record);
     void delete(History record);
     void clearHistory(User user);
     History getById(int id);
