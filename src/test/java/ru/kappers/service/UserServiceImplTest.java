@@ -26,12 +26,13 @@ public class UserServiceImplTest {
 
     @Autowired
     private UserService userService;
-    private User admin;
-    private User user;
-    private User kapper;
+    @Autowired
+    private RolesService rolesService;
 
-    @Test
-    public void addUsers() {
+    private  User admin;
+    private  User user;
+    private  User kapper;
+    {
         admin = User.builder()
                 .userName("admin")
                 .name("админ")
@@ -39,7 +40,7 @@ public class UserServiceImplTest {
                 .dateOfBirth(DateUtil.convertDate("19650806"))
                 .currency("RUB")
                 .lang("RUSSIAN")
-                .roleId(Roles.RoleType.ROLE_ADMIN.getId())
+                .roleId(rolesService.getRoleIdByName("ROLE_ADMIN"))
                 .build();
         user = User.builder()
                 .userName("user")
@@ -48,7 +49,7 @@ public class UserServiceImplTest {
                 .dateOfBirth(DateUtil.convertDate("19650806"))
                 .currency("RUB")
                 .lang("RUSSIAN")
-                .roleId(Roles.RoleType.ROLE_USER.getId())
+                .roleId(rolesService.getRoleIdByName("ROLE_USER"))
                 .build();
         kapper = User.builder()
                 .userName("kapper")
@@ -57,8 +58,11 @@ public class UserServiceImplTest {
                 .dateOfBirth(DateUtil.convertDate("19650806"))
                 .currency("RUB")
                 .lang("RUSSIAN")
-                .roleId(Roles.RoleType.ROLE_KAPPER.getId())
+                .roleId(rolesService.getRoleIdByName("ROLE_KAPPER"))
                 .build();
+    }
+    @Test
+    public void addUsers() {
         userService.addUser(admin);
         userService.addUser(user);
         userService.addUser(kapper);
@@ -122,7 +126,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getAll() {
-        List<String> all = userService.getAll().stream().map(s->s.getUserName()).collect(Collectors.toList());
+        List<String> all = userService.getAll().stream().map(User::getUserName).collect(Collectors.toList());
         assertTrue(all.contains(user.getUserName()));
         assertTrue(all.contains(admin.getUserName()));
         assertTrue(all.contains(kapper.getUserName()));
@@ -139,10 +143,9 @@ public class UserServiceImplTest {
 
     @Test
     public void hasRole() {
-//        assertTrue(userService.hasRole(kapper, "ROLE_KAPPER"));
-//        assertFalse(userService.hasRole(user, "ROLE_KAPPER"));
-//        assertFalse(userService.hasRole(kapper, "ROLE_ADMIN"));
-        assertTrue(userService.hasRole(kapper, Roles.RoleType.ROLE_KAPPER.getId()));
+        assertTrue(userService.hasRole(kapper, "ROLE_KAPPER"));
+        assertFalse(userService.hasRole(user, "ROLE_KAPPER"));
+        assertFalse(userService.hasRole(kapper, "ROLE_ADMIN"));
     }
 
     @Test

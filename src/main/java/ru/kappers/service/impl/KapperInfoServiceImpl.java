@@ -24,7 +24,7 @@ public class KapperInfoServiceImpl implements KapperInfoService {
     @Override
     public KapperInfo initKapper(User user) {
         KapperInfo kapper = null;
-        if (user.hasRole(Roles.RoleType.ROLE_KAPPER.getId())) {
+        if (user.hasRole("ROLE_KAPPER")) {
             kapper = getByUser(user);
             if (kapper == null) {
                 kapper = KapperInfo.builder().user(user).build();

@@ -9,7 +9,9 @@ public interface RolesService {
 
     void delete(Roles role);
 
-    Roles getByName(String name);
+    Roles getByName(String roleName);
+
+    int getRoleIdByName (String roleName);
 
     Roles getById(int id);
 

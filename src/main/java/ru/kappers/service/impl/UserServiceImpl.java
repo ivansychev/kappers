@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
                 user.setIsblocked(false);
             }
             if (user.getRoleId() == null) {
-                user.setRoleId(Roles.RoleType.ROLE_USER.getId());
+                user.setRoleId(rolesRepository.getByRoleName("ROLE_USER").getRoleId());
             }
             repository.save(user);
         } else{
@@ -90,13 +90,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllByRole(String roleName) {
-        Roles role = rolesRepository.getByRoleName(Enum.valueOf(Roles.RoleType.class, roleName));
+        Roles role = rolesRepository.getByRoleName(roleName);
         return repository.getAllByRoleId(role.getRoleId());
     }
 
     @Override
     public boolean hasRole(User user, String roleName) {
-        return user.getRoleId() == rolesRepository.getByRoleName(Enum.valueOf(Roles.RoleType.class, roleName)).getRoleId();
+        return user.getRoleId() == rolesRepository.getByRoleName(roleName).getRoleId();
     }
 
     @Override
