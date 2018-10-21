@@ -13,4 +13,6 @@ public interface UsersRepository extends CrudRepository<User, Integer> {
     User getByUserId(int id);
     List<User> getAllByRoleId(int roleId);
     User getByUserName(String userName);
+    void deleteByUserName(String userName);
+    void delete(User user);
 }

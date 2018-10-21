@@ -8,9 +8,11 @@ import ru.kappers.repository.RolesRepository;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.UserService;
 import ru.kappers.util.DateUtil;
+import ru.kappers.util.RoleUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
+
 @Log4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,17 +40,20 @@ public class UserServiceImpl implements UserService {
                 user.setRoleId(rolesRepository.getByRoleName("ROLE_USER").getRoleId());
             }
             repository.save(user);
-        } else{
-            log.info("Пользователь "+user.getUserName()+" уже существует");
+        } else {
+            log.info("Пользователь " + user.getUserName() + " уже существует");
         }
         return repository.getUserByName(user.getName());
     }
 
     @Override
+    public void deleteByUserName(String userName) {
+        repository.deleteByUserName(userName);
+    }
+
+    @Override
     public void delete(User user) {
-//        User byUserId = repository.getByUserName(user.getUserName());
-//        if (byUserId != null)
-            repository.delete(user);
+        repository.delete(user);
     }
 
     @Override
@@ -111,8 +116,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Roles getRole(User user) {
-  //      return rolesRepository.getByRoleId(user.getRoleId());
-        return null;
+       return rolesRepository.getByRoleId(user.getRoleId());
+
         //TODO разобраться почему не срабатывает
     }
 

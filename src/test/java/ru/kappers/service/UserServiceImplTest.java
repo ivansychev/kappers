@@ -74,15 +74,16 @@ public class UserServiceImplTest {
 
     @Test
     public void deleteUsers() {
-        userService.delete(user);
-        userService.delete(admin);
-        userService.delete(kapper);
+        userService.delete(userService.getByUserName(user.getUserName()));
+        userService.delete(userService.getByUserName(admin.getUserName()));
+        userService.delete(userService.getByUserName(kapper.getUserName()));
+        assertTrue(true);
     }
-
+//TODO переписать этот тест так, чтоб создавались сущности один раз, а потом с ними можно было бы поработать и в конце чтоб они удалялись. Контекст межу тестами и основной программой должен быть разный
     @Test
     public void delete() {
         User beforeDelete = user;
-        userService.delete(user);
+        userService.deleteByUserName(user.getUserName());
         User afterDelete = userService.getById(beforeDelete.getUserId());
         assertNull(afterDelete);
         userService.addUser(beforeDelete);
