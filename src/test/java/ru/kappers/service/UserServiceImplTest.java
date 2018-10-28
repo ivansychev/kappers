@@ -30,38 +30,34 @@ public class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
-    private  User admin;
-    private  User user;
-    private  User kapper;
-    {
-        admin = User.builder()
-                .userName("admin")
-                .name("админ")
-                .password("asasdgfas")
-                .dateOfBirth(DateUtil.convertDate("19650806"))
-                .currency("RUB")
-                .lang("RUSSIAN")
-                .roleId(1)
-                .build();
-        user = User.builder()
-                .userName("user")
-                .name("юзер")
-                .password("assaasas")
-                .dateOfBirth(DateUtil.convertDate("19650806"))
-                .currency("RUB")
-                .lang("RUSSIAN")
-                .roleId(2)
-                .build();
-        kapper = User.builder()
-                .userName("kapper")
-                .name("каппер")
-                .password("assaasas")
-                .dateOfBirth(DateUtil.convertDate("19650806"))
-                .currency("RUB")
-                .lang("RUSSIAN")
-                .roleId(3)
-                .build();
-    }
+    private  User admin= User.builder()
+            .userName("admin")
+            .name("админ")
+            .password("asasdgfas")
+            .dateOfBirth(DateUtil.convertDate("19650806"))
+            .currency("RUB")
+            .lang("RUSSIAN")
+            .roleId(1)
+            .build();;
+    private  User user = User.builder()
+            .userName("user")
+            .name("юзер")
+            .password("assaasas")
+            .dateOfBirth(DateUtil.convertDate("19650806"))
+            .currency("RUB")
+            .lang("RUSSIAN")
+            .roleId(2)
+            .build();;
+    private  User kapper= User.builder()
+            .userName("kapper")
+            .name("каппер")
+            .password("assaasas")
+            .dateOfBirth(DateUtil.convertDate("19650806"))
+            .currency("RUB")
+            .lang("RUSSIAN")
+            .roleId(3)
+            .build();;
+
     @Test
     public void addUsers() {
         User userA = userService.addUser(admin);
@@ -70,56 +66,46 @@ public class UserServiceImplTest {
         assertEquals(userA, admin);
         assertEquals(userU, user);
         assertEquals(userK, kapper);
+        userService.delete(userA);
+        userService.delete(userU);
+        userService.delete(userK);
     }
 
-    @Test
-    public void deleteUsers() {
-        userService.delete(userService.getByUserName(user.getUserName()));
-        userService.delete(userService.getByUserName(admin.getUserName()));
-        userService.delete(userService.getByUserName(kapper.getUserName()));
-        assertTrue(true);
-    }
 //TODO переписать этот тест так, чтоб создавались сущности один раз, а потом с ними можно было бы поработать и в конце чтоб они удалялись. Контекст межу тестами и основной программой должен быть разный
     @Test
     public void delete() {
         User beforeDelete = user;
-        userService.deleteByUserName(user.getUserName());
-        User afterDelete = userService.getById(beforeDelete.getUserId());
-        assertNull(afterDelete);
         userService.addUser(beforeDelete);
-        afterDelete = userService.getByUserName(beforeDelete.getUserName());
-        assertNotNull(afterDelete);
+        userService.delete(user);
+        User afterDelete = userService.getByUserName(beforeDelete.getUserName());
+        assertNull(afterDelete);
     }
 
     @Test
     public void getByUserName() {
+        userService.addUser(kapper);
         User user1 = userService.getByUserName("kapper");
         assertNotNull(user1);
         assertEquals(user1.getUserName(), kapper.getUserName());
         assertNotEquals(user1, user);
         assertNotEquals(user1, admin);
+        userService.delete(kapper);
     }
 
     @Test
     public void getByName() {
+        userService.addUser(admin);
         User user1 = userService.getByName("админ");
         assertNotNull(user1);
         assertNotEquals(user1, kapper);
         assertNotEquals(user1, user);
         assertEquals(user1.getUserName(), admin.getUserName());
-    }
-
-    @Test
-    public void getById() {
-//        User user1 = userService.getById(user.getUserId());
-//        assertNotNull(user1);
-//        assertNotEquals(user1, kapper);
-//        assertEquals(user1, user);
-//        assertNotEquals(user1, admin);
+        userService.delete(admin);
     }
 
     @Test
     public void editUser() {
+        userService.addUser(admin);
         User user1 = userService.getByUserName("admin");
         String curr = user1.getCurrency();
         assertNotNull(user1);
@@ -127,15 +113,21 @@ public class UserServiceImplTest {
         userService.editUser(user1);
         user1 = userService.getByUserName("admin");
         assertNotEquals(curr, user1.getCurrency());
+        userService.delete(admin);
     }
 
     @Test
     public void getAll() {
+        User userA = userService.addUser(admin);
+        User userU = userService.addUser(user);
+        User userK = userService.addUser(kapper);
         List<String> all = userService.getAll().stream().map(User::getUserName).collect(Collectors.toList());
-        assertTrue(all.contains(user.getUserName()));
-        assertTrue(all.contains(admin.getUserName()));
-        assertTrue(all.contains(kapper.getUserName()));
-
+        assertTrue(all.contains(userA.getUserName()));
+        assertTrue(all.contains(userU.getUserName()));
+        assertTrue(all.contains(userK.getUserName()));
+        userService.delete(userA);
+        userService.delete(userU);
+        userService.delete(userK);
     }
 
     @Test
@@ -148,15 +140,20 @@ public class UserServiceImplTest {
 
     @Test
     public void hasRole() {
+        User userA = userService.addUser(admin);
+        User userU = userService.addUser(user);
+        User userK = userService.addUser(kapper);
         assertTrue(userService.hasRole(kapper, "ROLE_KAPPER"));
         assertFalse(userService.hasRole(user, "ROLE_KAPPER"));
         assertFalse(userService.hasRole(kapper, "ROLE_ADMIN"));
+        userService.delete(userA);
+        userService.delete(userU);
+        userService.delete(userK);
     }
 
     @Test
     public void getRole() {
-//        Roles role = userService.getRole(admin);
-//        assertEquals(1, role.getRoleId());
+
     }
 
     @Test
