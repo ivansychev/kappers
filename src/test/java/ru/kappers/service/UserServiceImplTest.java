@@ -4,9 +4,13 @@ import lombok.extern.log4j.Log4j;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
@@ -22,9 +26,10 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 @Log4j
 @DirtiesContext
-//@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { KappersApplication.class, AdditionalBDConfig.class })
+@DataJpaTest
+@ActiveProfiles("test")
+@SpringBootTest(classes = { KappersApplication.class})
 public class UserServiceImplTest {
 
     @Autowired
@@ -38,7 +43,7 @@ public class UserServiceImplTest {
             .currency("RUB")
             .lang("RUSSIAN")
             .roleId(1)
-            .build();;
+            .build();
     private  User user = User.builder()
             .userName("user")
             .name("юзер")
@@ -47,7 +52,7 @@ public class UserServiceImplTest {
             .currency("RUB")
             .lang("RUSSIAN")
             .roleId(2)
-            .build();;
+            .build();
     private  User kapper= User.builder()
             .userName("kapper")
             .name("каппер")
@@ -56,7 +61,7 @@ public class UserServiceImplTest {
             .currency("RUB")
             .lang("RUSSIAN")
             .roleId(3)
-            .build();;
+            .build();
 
     @Test
     public void addUsers() {
@@ -66,9 +71,9 @@ public class UserServiceImplTest {
         assertEquals(userA, admin);
         assertEquals(userU, user);
         assertEquals(userK, kapper);
-        userService.delete(userA);
-        userService.delete(userU);
-        userService.delete(userK);
+//        userService.delete(userA);
+//        userService.delete(userU);
+//        userService.delete(userK);
     }
 
 //TODO переписать этот тест так, чтоб создавались сущности один раз, а потом с ними можно было бы поработать и в конце чтоб они удалялись. Контекст межу тестами и основной программой должен быть разный

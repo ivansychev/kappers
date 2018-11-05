@@ -31,17 +31,17 @@ public class MainController {
     @RequestMapping(value = "/mazi", method = RequestMethod.GET)
     public String personList(Model model) {
 //        User user = User.builder()
-////                .name("Shama2")
-////                .password("Serasdsas")
-////                .roleId(Roles.RoleType.ROLE_USER.getId())
-////                .userName("shama123")
-////                .currency("RUB")
-////                .lang("RUSSIAN")
-////                .email("sas@sasas")
-////                .dateOfBirth(Timestamp.valueOf(LocalDateTime.of(1985, Month.APRIL, 29, 1,45)))
-////                .dateOfRegistration(new Timestamp(System.currentTimeMillis()))
-////                .isblocked(false).build();
-////        service.addUser(user);
+//                .name("ODMIN")
+//                .password("Serasdsas")
+//                .roleId(1)
+//                .userName("admin")
+//                .currency("USD")
+//                .lang("ENGLISH")
+//                .email("admin@admin")
+//                .dateOfBirth(Timestamp.valueOf(LocalDateTime.of(1987, Month.APRIL, 18, 1,45)))
+//                .dateOfRegistration(new Timestamp(System.currentTimeMillis()))
+//                .isblocked(false).build();
+//        service.addUser(user);
 
         persons = service.getAll();
         model.addAttribute("persons", persons);
