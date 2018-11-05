@@ -4,38 +4,38 @@ import lombok.extern.log4j.Log4j;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
-import ru.kappers.config.AdditionalBDConfig;
 import ru.kappers.model.Roles;
 import ru.kappers.model.User;
 import ru.kappers.util.DateUtil;
-import ru.kappers.util.RoleUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
+
 @Log4j
+//@RunWith(SpringRunner.class)
+//@DataJpaTest
+//////@ContextConfiguration
+@ActiveProfiles("test")
 @DirtiesContext
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@ActiveProfiles("test")
-@SpringBootTest(classes = { KappersApplication.class})
+@SpringBootTest(classes = {KappersApplication.class})
 public class UserServiceImplTest {
 
     @Autowired
     private UserService userService;
 
-    private  User admin= User.builder()
+    private User admin = User.builder()
             .userName("admin")
             .name("админ")
             .password("asasdgfas")
@@ -44,7 +44,7 @@ public class UserServiceImplTest {
             .lang("RUSSIAN")
             .roleId(1)
             .build();
-    private  User user = User.builder()
+    private User user = User.builder()
             .userName("user")
             .name("юзер")
             .password("assaasas")
@@ -53,7 +53,7 @@ public class UserServiceImplTest {
             .lang("RUSSIAN")
             .roleId(2)
             .build();
-    private  User kapper= User.builder()
+    private User kapper = User.builder()
             .userName("kapper")
             .name("каппер")
             .password("assaasas")
@@ -71,12 +71,12 @@ public class UserServiceImplTest {
         assertEquals(userA, admin);
         assertEquals(userU, user);
         assertEquals(userK, kapper);
-//        userService.delete(userA);
-//        userService.delete(userU);
-//        userService.delete(userK);
+        userService.delete(userA);
+        userService.delete(userU);
+        userService.delete(userK);
     }
 
-//TODO переписать этот тест так, чтоб создавались сущности один раз, а потом с ними можно было бы поработать и в конце чтоб они удалялись. Контекст межу тестами и основной программой должен быть разный
+    //TODO переписать этот тест так, чтоб создавались сущности один раз, а потом с ними можно было бы поработать и в конце чтоб они удалялись. Контекст межу тестами и основной программой должен быть разный
     @Test
     public void delete() {
         User beforeDelete = user;
@@ -90,11 +90,12 @@ public class UserServiceImplTest {
     public void getByUserName() {
         userService.addUser(kapper);
         User user1 = userService.getByUserName("kapper");
+        System.out.println(user1.getDateOfRegistration());
         assertNotNull(user1);
         assertEquals(user1.getUserName(), kapper.getUserName());
         assertNotEquals(user1, user);
         assertNotEquals(user1, admin);
-        userService.delete(kapper);
+        //      userService.delete(kapper);
     }
 
     @Test
@@ -114,7 +115,7 @@ public class UserServiceImplTest {
         User user1 = userService.getByUserName("admin");
         String curr = user1.getCurrency();
         assertNotNull(user1);
-        user1.setCurrency(curr.equals("USD")?"RUB":"USD");
+        user1.setCurrency(curr.equals("USD") ? "RUB" : "USD");
         userService.editUser(user1);
         user1 = userService.getByUserName("admin");
         assertNotEquals(curr, user1.getCurrency());
@@ -158,7 +159,15 @@ public class UserServiceImplTest {
 
     @Test
     public void getRole() {
+     //   userService.addUser(kapper);
+        User user1 = userService.getByUserName("kapper");
+        assertNotNull(user1);
+        Roles role = userService.getRole(user1); //TODO не работает!!!
+        assertNotNull(role);
+     //   assertTrue(user1.hasRole("ROLE_KAPPER"));
+        assertEquals(userService.getRole(user1).getRoleName(), "ROLE_KAPPER");
 
+//todo срочно
     }
 
     @Test
