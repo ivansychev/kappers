@@ -1,5 +1,6 @@
 package ru.kappers.logic.controller;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -7,47 +8,73 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
-import ru.kappers.model.Roles;
+import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
-import ru.kappers.repository.UsersRepository;
+import ru.kappers.service.FixtureService;
 import ru.kappers.service.UserService;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j
 @Controller
 public class MainController {
     private static List<User> persons = new ArrayList<>();
     private final UserService service;
+    private FixtureService fService;
 
-    public MainController(UserService service) {
+    public MainController(UserService service, FixtureService fService) {
         this.service = service;
+        this.fService = fService;
     }
 
-    @RequestMapping(value = "/mazi", method = RequestMethod.GET)
-    public String personList(Model model) {
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String personList(Model model) throws UnirestException {
 //        User user = User.builder()
-//                .name("ODMIN")
-//                .password("Serasdsas")
-//                .roleId(1)
-//                .userName("admin")
-//                .currency("USD")
-//                .lang("ENGLISH")
-//                .email("admin@admin")
-//                .dateOfBirth(Timestamp.valueOf(LocalDateTime.of(1987, Month.APRIL, 18, 1,45)))
+//                .name("kapper")
+//                .password("kapper")
+//                .roleId(3)
+//                .userName("kapper")
+//                .currency("RUB")
+//                .lang("RUSSIAN")
+//                .email("kapper@kapper")
+//                .dateOfBirth(Timestamp.valueOf(LocalDateTime.of(1987, Month.APRIL, 18, 1, 45)))
 //                .dateOfRegistration(new Timestamp(System.currentTimeMillis()))
 //                .isblocked(false).build();
 //        service.addUser(user);
 
+//        JSONObject jsonObject = JsonUtil.loadFixturesByLeague(1);
+//        Map<Integer, Fixture> fixturesFromJson = JsonUtil.getFixturesFromJson(jsonObject.toString());
+//        for (Map.Entry<Integer, Fixture> entry:fixturesFromJson.entrySet()) {
+//            fService.addRecord(entry.getValue());
+//        }
         persons = service.getAll();
         model.addAttribute("persons", persons);
-        return "index1";
+        return "test";
     }
 
+    @RequestMapping(value = "/fixturesAll", method = RequestMethod.GET)
+    public String fixturesList(Model model) throws UnirestException {
+        List<Fixture> fixtures;
+        fixtures = fService.getAll();
+        model.addAttribute("fixtures", fixtures);
+        return "fixtures";
+    }
+    @RequestMapping(value = "/fixturesFinished", method = RequestMethod.GET)
+    public String fixturesListFinished(Model model) throws UnirestException {
+        List<Fixture> fixtures;
+        fixtures = fService.getAll().stream().filter(s->s.getStatus().equals("Match Finished")).collect(Collectors.toList());
+        model.addAttribute("fixtures", fixtures);
+        return "fixtures";
+    }
+    @RequestMapping(value = "/fixturesAvailable", method = RequestMethod.GET)
+    public String fixturesListAvailable(Model model) throws UnirestException {
+        List<Fixture> fixtures;
+        fixtures = fService.getAll().stream().filter(s->s.getStatus().equals("Not Started")).collect(Collectors.toList());
+        model.addAttribute("fixtures", fixtures);
+        return "fixtures";
+    }
     @RequestMapping(value = "/kapper")
     public ModelAndView kapper(@ModelAttribute("userJSP") String s) {
         ModelAndView modelAndView = new ModelAndView();
