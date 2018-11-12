@@ -10,6 +10,6 @@ primary key,
 	content varchar
 )
 ;
- alter table stat owner to postgres
+ alter table stat owner to postgres;
 create unique index stat_id_uindex
 	on stat (id);
