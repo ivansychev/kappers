@@ -1,4 +1,4 @@
-create table personal_info
+create table IF NOT EXISTS personal_info
 (
 	id serial not null
 		constraint personal_info_pkey

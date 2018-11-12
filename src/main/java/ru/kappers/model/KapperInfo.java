@@ -27,7 +27,7 @@ public class KapperInfo implements IRaiting, Serializable {
     private int id;
 
     @Column(name = "tokens")
-    private Double tokens;
+    private Integer tokens;
 
     @Column(name = "bets")
     private Integer bets;
@@ -39,7 +39,7 @@ public class KapperInfo implements IRaiting, Serializable {
     private Integer failBets;
 
     @Column(name = "blocked_tokens")
-    private Double blockedTokens;
+    private Integer blockedTokens;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "u_id")

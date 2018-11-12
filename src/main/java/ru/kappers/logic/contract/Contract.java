@@ -40,7 +40,7 @@ public class Contract implements IContract {
 	}
 
 	@Override
-	public void blockTokens(User user, double amount) {
+	public void blockTokens(User user, Integer amount) {
 
 	}
 
@@ -50,12 +50,12 @@ public class Contract implements IContract {
 	}
 
 	@Override
-	public void unblockAmount(User user, double amount) {
+	public void unblockAmount(User user, Integer amount) {
 
 	}
 
 	@Override
-	public void withdrawBlockedTokens(User user, double amount) {
+	public void withdrawBlockedTokens(User user, Integer amount) {
 
 	}
 }

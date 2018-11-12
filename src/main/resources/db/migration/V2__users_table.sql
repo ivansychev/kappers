@@ -1,4 +1,4 @@
-create table users
+create table IF NOT EXISTS users
 (
 	user_id serial not null
 		constraint users_pkey

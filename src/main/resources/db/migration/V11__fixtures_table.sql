@@ -1,4 +1,4 @@
-create table fixtures
+create table IF NOT EXISTS fixtures
 (
 	id integer not null
 		constraint fixtures_pkey

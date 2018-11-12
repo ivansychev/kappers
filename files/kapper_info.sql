@@ -5,11 +5,11 @@ create table kapper_info
 		constraint kapper_info_users_user_id_fk
 		references users
 		on delete cascade,
-	tokens numeric,
+	tokens integer,
 	bets integer,
 	success_bets integer,
 	fail_bets integer,
-	blocked_tokens numeric
+	blocked_tokens integer
 )
 ;
 

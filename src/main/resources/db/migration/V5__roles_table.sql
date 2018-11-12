@@ -1,4 +1,4 @@
-create table roles
+create table IF NOT EXISTS roles
 (
 	role_id serial not null
 		constraint roles_pkey

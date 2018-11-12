@@ -1,4 +1,5 @@
-create table history
+create table IF NOT EXISTS
+ history
 (
 	id serial not null
 		constraint history_pkey

@@ -58,9 +58,9 @@ public class KapperInfoServiceImpl implements KapperInfoService {
     }
 
     private void setInitialData(KapperInfo k) {
-        k.setTokens(500d);
+        k.setTokens(500);
         k.setBets(0);
-        k.setBlockedTokens(0d);
+        k.setBlockedTokens(0);
         k.setFailBets(0);
         k.setSuccessBets(0);
     }
