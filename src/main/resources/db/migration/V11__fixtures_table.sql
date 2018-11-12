@@ -1,6 +1,6 @@
 create table IF NOT EXISTS fixtures
 (
-	id integer not null
+	fixture_id integer not null
 		constraint fixtures_pkey
 			primary key,
 	away_team varchar(255),
@@ -10,7 +10,6 @@ create table IF NOT EXISTS fixtures
 	event_timestamp bigint,
 	final_score varchar(255),
 	first_half_start bigint,
-	fixture_id integer,
 	goals_away_team integer,
 	goals_home_team integer,
 	halftime_score varchar(255),

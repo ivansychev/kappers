@@ -23,9 +23,6 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 @Log4j
-//@RunWith(SpringRunner.class)
-//@DataJpaTest
-//////@ContextConfiguration
 @ActiveProfiles("test")
 @DirtiesContext
 @RunWith(SpringRunner.class)

@@ -2,6 +2,7 @@ package ru.kappers.logic.controller;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.log4j.Log4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,12 @@ import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
 import ru.kappers.service.FixtureService;
 import ru.kappers.service.UserService;
+import ru.kappers.util.JsonUtil;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -44,11 +48,17 @@ public class MainController {
 //                .isblocked(false).build();
 //        service.addUser(user);
 
-//        JSONObject jsonObject = JsonUtil.loadFixturesByLeague(1);
+      //  JSONObject jsonObject = JsonUtil.loadLiveFixtures();
 //        Map<Integer, Fixture> fixturesFromJson = JsonUtil.getFixturesFromJson(jsonObject.toString());
 //        for (Map.Entry<Integer, Fixture> entry:fixturesFromJson.entrySet()) {
 //            fService.addRecord(entry.getValue());
 //        }
+        JSONObject jsonObject2 = JsonUtil.loadFixturesByDate(LocalDate.of(2018,11,13));
+
+      Map<Integer, Fixture>  fixturesFromJson = JsonUtil.getFixturesFromJson(jsonObject2.toString());
+        for (Map.Entry<Integer, Fixture> entry:fixturesFromJson.entrySet()) {
+            fService.addRecord(entry.getValue());
+        }
         persons = service.getAll();
         model.addAttribute("persons", persons);
         return "test";

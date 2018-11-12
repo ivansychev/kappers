@@ -24,19 +24,19 @@ public class Fixture implements Serializable, Comparable {
 ////    private int Id;
     @Id
     @Column(name = "fixture_id",nullable = false, insertable = false, updatable = false)
-    int fixture_id;
+    Integer fixture_id;
     @Column(name="event_timestamp")
     Long event_timestamp;
     @Column(name="event_date")
     String event_date;
     @Column(name="league_id")
-    int league_id;
+    Integer league_id;
     @Column(name="round")
     String round;
     @Column(name="homeTeam_id")
-    int homeTeam_id;
+    Integer homeTeam_id;
     @Column(name="awayTeam_id")
-    int awayTeam_id;
+    Integer awayTeam_id;
     @Column(name="homeTeam")
     String homeTeam;
     @Column(name="awayTeam")
@@ -46,9 +46,9 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="statusShort")
     String statusShort;
     @Column(name="goalsHomeTeam")
-    int goalsHomeTeam;
+    Integer goalsHomeTeam;
     @Column(name="goalsAwayTeam")
-    int goalsAwayTeam;
+    Integer goalsAwayTeam;
     @Column(name="halftime_score")
     String halftime_score;
     @Column(name="final_score")
@@ -56,7 +56,7 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="penalty")
     String penalty;
     @Column(name="elapsed")
-    int elapsed;
+    Integer elapsed;
     @Column(name="firstHalfStart")
     Long firstHalfStart;
     @Column(name="secondHalfStart")
