@@ -1,11 +1,9 @@
 angular
     .module('profile')
     .factory('profileService', ['$resource', '$http', function ($resource, $http) {
-
         var service = {};
-
         service.resource = $resource(
-            '/kappers/rest/profile/:_action:_id'
+            '/rest/profile/:_action:_id'
             , {
                 id: "@_id",
                 action: "@_action"
