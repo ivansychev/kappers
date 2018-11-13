@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.kappers.model.User;
+import ru.kappers.util.DateUtil;
 
 @Controller
 @RequestMapping(value = "/rest/profile")
@@ -29,6 +30,8 @@ public class ProfileController {
                 .roleId(1)
                 .userName("vasya")
                 .email("vasya@gmail.com")
+                .dateOfBirth(DateUtil.convertDate("19850429"))
+                .dateOfRegistration(DateUtil.getCurrentTime())
                 .isblocked(false)
                 .userId(id.intValue())
                 .build();
