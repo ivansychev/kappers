@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <users user_id="1000" user_name="admin" name="админ" password="asasdgfas" currency="RUB" lang="RUSSIAN" role_id="1"/>
+    <users user_id="1001" user_name="user" name="юзер" password="assaasas" currency="RUB" lang="RUSSIAN" role_id="2"/>
+    <users user_id="1002" user_name="kapper" name="каппер" password="assaasas" currency="RUB" lang="RUSSIAN" role_id="3"/>
+</dataset>
