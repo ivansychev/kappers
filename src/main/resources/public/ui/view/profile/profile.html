@@ -1,0 +1,64 @@
+<div class="container-fluid">
+    <h2>Личный кабинет</h2>
+    <p>{{message}}</p>
+
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" ng-click="loadUser()">Rest example</button>
+        </div>
+    </div>
+
+    <div class="row" ng-show="user">
+        <div class="col-sm-4">
+            <div class="form-group row" ng-show="user.id">
+                <label for="id" class="col-2 col-form-label">ID</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="id" ng-model="user.id" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Name</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="name"
+                           ng-model="user.name" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Username</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="userName"
+                           ng-model="user.userName" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Email</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="email"
+                           ng-model="user.email" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Currency</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="currency"
+                           ng-model="user.currency" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Lang</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="lang"
+                           ng-model="user.lang" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Password</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="password"
+                           ng-model="user.password" ng-disabled="true">
+                </div>
+            </div>
+         </div>
+    </div>
+</div>

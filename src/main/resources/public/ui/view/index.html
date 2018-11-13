@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.7.5/angular-resource.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-animate.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css"
+          integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+
+    <!-- App -->
+    <link href="./ui/css/style.css" rel="stylesheet" type="text/css">
+
+    <title>Kappers Application</title>
+</head>
+<body ng-app="kappersApp">
+
+<div class="row">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <span class="glyphicon glyphicon-book"></span>
+            </a>
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ng-class="{active : currentNavigation == 'main'}">
+                    <a href ng-click="routeTo('/')">Главная</a>
+                </li>
+                <li ng-class="{active : currentNavigation == 'about'}">
+                    <a href ng-click="routeTo('/about')">О проекте</a>
+                </li>
+                <li ng-class="{active : currentNavigation == 'contacts'}">
+                    <a href ng-click="routeTo('/contacts')">Контакты</a>
+                </li>
+                <li ng-class="{active : currentNavigation == 'sign-in'}">
+                    <a href ng-click="routeTo('/sign-in')">Войти</a>
+                </li>
+                <li ng-class="{active : currentNavigation == 'sign-up'}">
+                    <a href ng-click="routeTo('/sign-up')">Зарегистрироваться</a>
+                </li>
+                <li ng-class="{active : currentNavigation == 'profile'}">
+                    <a href ng-click="routeTo('/profile')">Личный кабинет</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="container-fluid wrapper">
+        <div class="row">
+            <div class="col-sm-12">
+                <p><br><br></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div ng-view class="view-animate"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <h6>Kapper Project, November 2018</h6>
+</div>
+<!-- App Scripts -->
+<script type="text/javascript" src="./ui/js/global.js"></script>
+<script type="text/javascript" src="./ui/js/app.js"></script>
+
+<!-- Main -->
+<script type="text/javascript" src="./ui/js/main/module.js"></script>
+<script type="text/javascript" src="./ui/js/main/service.js"></script>
+<script type="text/javascript" src="./ui/js/main/controller.js"></script>
+
+<!-- About -->
+<script type="text/javascript" src="./ui/js/about/module.js"></script>
+<script type="text/javascript" src="./ui/js/about/service.js"></script>
+<script type="text/javascript" src="./ui/js/about/controller.js"></script>
+
+<!-- Contacts -->
+<script type="text/javascript" src="./ui/js/contacts/module.js"></script>
+<script type="text/javascript" src="./ui/js/contacts/service.js"></script>
+<script type="text/javascript" src="./ui/js/contacts/controller.js"></script>
+
+<!-- Profile -->
+<script type="text/javascript" src="./ui/js/profile/module.js"></script>
+<script type="text/javascript" src="./ui/js/profile/service.js"></script>
+<script type="text/javascript" src="./ui/js/profile/controller.js"></script>
+
+<!-- Sign In -->
+<script type="text/javascript" src="./ui/js/signIn/module.js"></script>
+<script type="text/javascript" src="./ui/js/signIn/service.js"></script>
+<script type="text/javascript" src="./ui/js/signIn/controller.js"></script>
+
+<!-- Sign Up -->
+<script type="text/javascript" src="./ui/js/signUp/module.js"></script>
+<script type="text/javascript" src="./ui/js/signUp/service.js"></script>
+<script type="text/javascript" src="./ui/js/signUp/controller.js"></script>
+</body>
+</html>
