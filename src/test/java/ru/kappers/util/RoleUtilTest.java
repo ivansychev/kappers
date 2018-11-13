@@ -1,13 +1,16 @@
 package ru.kappers.util;
 
+import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.ActiveProfiles;
 import ru.kappers.model.Roles;
 
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
-
+@Log4j
+@ActiveProfiles("test")
 public class RoleUtilTest {
 
     @Test

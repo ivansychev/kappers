@@ -13,6 +13,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
+import ru.kappers.model.Roles;
 import ru.kappers.model.User;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.util.DateUtil;
@@ -147,15 +148,11 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void getRole() {
-     //   userService.addUser(kapper);
-//        User user1 = userService.getByUserName("kapper");
-//        assertNotNull(user1);
-//        Roles role = userService.getRole(user1); //TODO не работает!!!
-//        assertNotNull(role);
-     //   assertTrue(user1.hasRole("ROLE_KAPPER"));
-//        assertEquals(userService.getRole(user1).getRoleName(), "ROLE_KAPPER");
-
-//todo срочно
+        User userK = userService.getByUserName(kapper.getUserName());
+        assertNotNull(userK);
+        Roles role = userService.getRole(userK);
+        assertNotNull(role);
+        assertEquals(role.getRoleName(), "ROLE_KAPPER");
     }
 
     @Test
