@@ -4,10 +4,8 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.KapperInfo;
-import ru.kappers.model.Roles;
 import ru.kappers.model.User;
 import ru.kappers.repository.KapperInfoRepository;
-import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.KapperInfoService;
 
 @Log4j

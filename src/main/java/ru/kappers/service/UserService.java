@@ -16,8 +16,8 @@ public interface UserService {
     List<User> getAllByRole(String roleName);
     boolean hasRole(User user, String roleName);
     boolean hasRole(User user, int roleId);
-    boolean hasRole(User user, Roles role);
-    Roles getRole(User user);
+    boolean hasRole(User user, Role role);
+    Role getRole(User user);
     History getHistory(User user);
     Stat getStat(User user);
     KapperInfo getKapperInfo(User user);

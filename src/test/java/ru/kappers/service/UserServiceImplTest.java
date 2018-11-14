@@ -3,6 +3,7 @@ package ru.kappers.service;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import lombok.extern.log4j.Log4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,14 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
-import ru.kappers.model.Roles;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.util.DateUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -36,6 +39,8 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     private UserService userService;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private RolesService rolesService;
 
     private User admin = User.builder()
             .userName("admin")
@@ -44,7 +49,6 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .dateOfBirth(DateUtil.convertDate("19650806"))
             .currency("RUB")
             .lang("RUSSIAN")
-            .roleId(1)
             .build();
     private User user = User.builder()
             .userName("user")
@@ -53,7 +57,6 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .dateOfBirth(DateUtil.convertDate("19650806"))
             .currency("RUB")
             .lang("RUSSIAN")
-            .roleId(2)
             .build();
     private User kapper = User.builder()
             .userName("kapper")
@@ -62,8 +65,24 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .dateOfBirth(DateUtil.convertDate("19650806"))
             .currency("RUB")
             .lang("RUSSIAN")
-            .roleId(3)
             .build();
+
+    private final Map<User, Integer> userRoleIdMap = new HashMap<>();
+    {
+        userRoleIdMap.put(admin, 1);
+        userRoleIdMap.put(user, 2);
+        userRoleIdMap.put(kapper, 3);
+    }
+
+    @Before
+    public void setUp() {
+        for (User u : userRoleIdMap.keySet()) {
+            if (u.getRole() == null) {
+                u.setRole(rolesService.getById(userRoleIdMap.get(u)));
+            }
+        }
+    }
+
 
     @Test
     public void addUsers() {
@@ -86,7 +105,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void getByUserName() {
         User user1 = userService.getByUserName("kapper");
-        System.out.println(user1.getDateOfRegistration());
+        log.info(user1.getDateOfRegistration());
         assertNotNull(user1);
         assertEquals(user1.getUserName(), kapper.getUserName());
         assertNotEquals(user1, user);
@@ -150,9 +169,9 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     public void getRole() {
         User userK = userService.getByUserName(kapper.getUserName());
         assertNotNull(userK);
-        Roles role = userService.getRole(userK);
+        Role role = userService.getRole(userK);
         assertNotNull(role);
-        assertEquals(role.getRoleName(), "ROLE_KAPPER");
+        assertEquals(role.getName(), "ROLE_KAPPER");
     }
 
     @Test

@@ -28,9 +28,9 @@ import java.util.Set;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
-    private int userId;
+    private int id;
 
     @NaturalId
     @Column(name = "user_name")
@@ -55,8 +55,8 @@ public class User implements Serializable {
     @Column(name = "date_of_registration")
     private Timestamp dateOfRegistration;
 
-    @Column(name = "isblocked")
-    private Boolean isblocked;
+    @Column(name = "isblocked", nullable = false)
+    private boolean isblocked;
 
     @Column(name = "currency")
     private String currency;
@@ -64,8 +64,10 @@ public class User implements Serializable {
     @Column(name = "lang")
     private String lang;
 
-    @Column(name = "role_id")
-    private Integer roleId;
+    /** Роль */
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
 //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -82,11 +84,11 @@ public class User implements Serializable {
 //    private Set<History> entity;
 
     public boolean hasRole(int role_id) {
-        return roleId == role_id;
+        return role.getId() == role_id;
     }
 
     public boolean hasRole(String roleName){
-        return roleName.equals(RoleUtil.getRoleNameById(roleId).getRoleName());
+        return role.getName().equals(roleName);
     }
 
 
