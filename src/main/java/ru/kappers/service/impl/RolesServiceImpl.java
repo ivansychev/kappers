@@ -8,10 +8,12 @@ import ru.kappers.repository.RolesRepository;
 import ru.kappers.service.RolesService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Log4j
 @Service
 public class RolesServiceImpl implements RolesService {
+
     private final RolesRepository repository;
 
     @Autowired
@@ -47,7 +49,13 @@ public class RolesServiceImpl implements RolesService {
 
     @Override
     public Role editRole(Role role) {
-        return null; //TODO
+        Role toRecord = repository.findById(role.getId())
+                .orElse(null);
+        Objects.requireNonNull(toRecord).setName(role.getName());
+        toRecord.setEnabled(role.isEnabled());
+        toRecord.setUsers(role.getUsers());
+        Role saved = repository.save(toRecord);
+        return saved;
     }
 
     @Override

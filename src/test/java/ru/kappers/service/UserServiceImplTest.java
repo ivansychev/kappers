@@ -163,6 +163,10 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
         assertTrue(userService.hasRole(userK, "ROLE_KAPPER"));
         assertFalse(userService.hasRole(userU, "ROLE_KAPPER"));
         assertFalse(userService.hasRole(userK, "ROLE_ADMIN"));
+        assertTrue(userService.hasRole(userU, rolesService.getRoleIdByName("ROLE_USER")));
+        assertTrue(userService.hasRole(userU, rolesService.getByName("ROLE_USER")));
+        assertTrue(userService.hasRole(userU, rolesService.getById(2)));
+        assertEquals(userK.getRole(), rolesService.getByName("ROLE_KAPPER"));
     }
 
     @Test

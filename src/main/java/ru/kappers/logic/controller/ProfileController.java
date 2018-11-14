@@ -33,8 +33,8 @@ public class ProfileController {
     public User getUserInfoExampleRest(@PathVariable Long id) {
         // return userRepository.findById(id);
         return User.builder()
-                .currency("Доллар")
-                .lang("RU")
+                .currency("USD")
+                .lang("RUSSIAN")
                 .name("Вася")
                 .password("vasya96")
                 .role(rolesService.getById(1))

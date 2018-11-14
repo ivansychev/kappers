@@ -3,20 +3,10 @@ package ru.kappers.model;
 import lombok.extern.log4j.Log4j;
 import org.hibernate.annotations.NaturalId;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.kappers.service.RolesService;
-import ru.kappers.util.RoleUtil;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Log4j
 @Data

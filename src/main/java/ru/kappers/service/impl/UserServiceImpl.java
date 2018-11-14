@@ -114,8 +114,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Role getRole(User user) {
        return user.getRole();
-
-        //TODO разобраться почему не срабатывает
     }
 
     @Override
