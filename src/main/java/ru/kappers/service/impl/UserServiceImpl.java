@@ -8,9 +8,7 @@ import ru.kappers.repository.RolesRepository;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.UserService;
 import ru.kappers.util.DateUtil;
-import ru.kappers.util.RoleUtil;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Log4j
@@ -33,17 +31,14 @@ public class UserServiceImpl implements UserService {
             if (user.getDateOfRegistration() == null) {
                 user.setDateOfRegistration(DateUtil.getCurrentTime());
             }
-            if (user.getIsblocked() == null) {
-                user.setIsblocked(false);
-            }
-            if (user.getRoleId() == null) {
-                user.setRoleId(rolesRepository.getByRoleName("ROLE_USER").getRoleId());
+            if (user.getRole() == null) {
+                user.setRole(rolesRepository.getByName("ROLE_USER"));
             }
             repository.save(user);
         } else {
             log.info("Пользователь " + user.getUserName() + " уже существует");
         }
-        return repository.getUserByName(user.getName());
+        return repository.getByName(user.getName());
     }
 
     @Override
@@ -63,26 +58,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByName(String name) {
-        return repository.getUserByName(name);
+        return repository.getByName(name);
     }
 
     @Override
     public User getById(int id) {
-        return repository.getByUserId(id);
+        return repository.findById(id)
+                .orElse(null);
     }
 
     @Override
     public User editUser(User user) {
-        User toRecord = repository.getByUserId(user.getUserId());
+        User toRecord = repository.findById(user.getId())
+                .orElse(null);
         toRecord.setCurrency(user.getCurrency());
         toRecord.setDateOfBirth(user.getDateOfBirth());
         toRecord.setDateOfRegistration(user.getDateOfRegistration());
         toRecord.setEmail(user.getEmail());
-        toRecord.setIsblocked(user.getIsblocked());
+        toRecord.setIsblocked(user.isIsblocked());
         toRecord.setLang(user.getLang());
         toRecord.setName(user.getName());
         toRecord.setPassword(user.getPassword());
-        toRecord.setRoleId(user.getRoleId());
+        toRecord.setRole(user.getRole());
         toRecord.setUserName(user.getUserName());
         repository.save(toRecord);
         return toRecord;
@@ -95,30 +92,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllByRole(String roleName) {
-        Roles role = rolesRepository.getByRoleName(roleName);
-        return repository.getAllByRoleId(role.getRoleId());
+        Role role = rolesRepository.getByName(roleName);
+        return repository.getAllByRoleId(role.getId());
     }
 
     @Override
     public boolean hasRole(User user, String roleName) {
-        return user.getRoleId() == rolesRepository.getByRoleName(roleName).getRoleId();
+        return user.hasRole(roleName);
     }
 
     @Override
     public boolean hasRole(User user, int roleId) {
-        return user.getRoleId() == roleId;
+        return user.hasRole(roleId);
     }
 
     @Override
-    public boolean hasRole(User user, Roles role) {
-        return user.getRoleId() == role.getRoleId();
+    public boolean hasRole(User user, Role role) {
+        return user.hasRole(role.getId());
     }
 
     @Override
-    public Roles getRole(User user) {
-       return rolesRepository.getByRoleId(user.getRoleId());
-
-        //TODO разобраться почему не срабатывает
+    public Role getRole(User user) {
+       return user.getRole();
     }
 
     @Override

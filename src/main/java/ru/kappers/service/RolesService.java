@@ -1,21 +1,21 @@
 package ru.kappers.service;
 
-import ru.kappers.model.Roles;
+import ru.kappers.model.Role;
 
 import java.util.List;
 
 public interface RolesService {
-    Roles addRole(Roles role);
+    Role addRole(Role role);
 
-    void delete(Roles role);
+    void delete(Role role);
 
-    Roles getByName(String roleName);
+    Role getByName(String roleName);
 
     int getRoleIdByName (String roleName);
 
-    Roles getById(int id);
+    Role getById(int id);
 
-    Roles editRole(Roles role);
+    Role editRole(Role role);
 
-    List<Roles> getAll();
+    List<Role> getAll();
 }

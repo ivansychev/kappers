@@ -1,16 +1,12 @@
 package ru.kappers.repository;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.kappers.model.User;
 
 import java.util.List;
 
-public interface UsersRepository extends CrudRepository<User, Integer> {
-    List<User> findAll();
-    User getUserByName(String name);
-    User getByUserId(int id);
+public interface UsersRepository extends JpaRepository<User, Integer> {
+    User getByName(String name);
     List<User> getAllByRoleId(int roleId);
     User getByUserName(String userName);
     void deleteByUserName(String userName);

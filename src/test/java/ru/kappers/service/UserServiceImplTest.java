@@ -1,36 +1,46 @@
 package ru.kappers.service;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import lombok.extern.log4j.Log4j;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
-import ru.kappers.model.Roles;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
+import ru.kappers.repository.UsersRepository;
 import ru.kappers.util.DateUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
 @Log4j
 @ActiveProfiles("test")
-@DirtiesContext
+@ContextConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {KappersApplication.class})
-public class UserServiceImplTest {
+@TestExecutionListeners({DbUnitTestExecutionListener.class})
+@DatabaseSetup("/data/UserServiceImplTest-users.xml")
+public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UsersRepository usersRepository;
+    @Autowired
+    private RolesService rolesService;
 
     private User admin = User.builder()
             .userName("admin")
@@ -39,7 +49,6 @@ public class UserServiceImplTest {
             .dateOfBirth(DateUtil.convertDate("19650806"))
             .currency("RUB")
             .lang("RUSSIAN")
-            .roleId(1)
             .build();
     private User user = User.builder()
             .userName("user")
@@ -48,7 +57,6 @@ public class UserServiceImplTest {
             .dateOfBirth(DateUtil.convertDate("19650806"))
             .currency("RUB")
             .lang("RUSSIAN")
-            .roleId(2)
             .build();
     private User kapper = User.builder()
             .userName("kapper")
@@ -57,42 +65,51 @@ public class UserServiceImplTest {
             .dateOfBirth(DateUtil.convertDate("19650806"))
             .currency("RUB")
             .lang("RUSSIAN")
-            .roleId(3)
             .build();
+
+    private final Map<User, Integer> userRoleIdMap = new HashMap<>();
+    {
+        userRoleIdMap.put(admin, 1);
+        userRoleIdMap.put(user, 2);
+        userRoleIdMap.put(kapper, 3);
+    }
+
+    @Before
+    public void setUp() {
+        for (User u : userRoleIdMap.keySet()) {
+            if (u.getRole() == null) {
+                u.setRole(rolesService.getById(userRoleIdMap.get(u)));
+            }
+        }
+    }
+
 
     @Test
     public void addUsers() {
+        deleteFromTables("users");
         User userA = userService.addUser(admin);
         User userU = userService.addUser(user);
         User userK = userService.addUser(kapper);
         assertEquals(userA, admin);
         assertEquals(userU, user);
         assertEquals(userK, kapper);
-        userService.delete(userA);
-        userService.delete(userU);
-        userService.delete(userK);
     }
 
-    //TODO переписать этот тест так, чтоб создавались сущности один раз, а потом с ними можно было бы поработать и в конце чтоб они удалялись. Контекст межу тестами и основной программой должен быть разный
     @Test
-    public void delete() {
-        User beforeDelete = user;
-        userService.addUser(beforeDelete);
-        userService.delete(user);
-        User afterDelete = userService.getByUserName(beforeDelete.getUserName());
-        assertNull(afterDelete);
+    public void deleteUser() {
+        final String userName = user.getUserName();
+        userService.delete(usersRepository.getByUserName(userName));
+        assertNull(usersRepository.getByUserName(userName));
     }
 
     @Test
     public void getByUserName() {
-        userService.addUser(kapper);
         User user1 = userService.getByUserName("kapper");
-        System.out.println(user1.getDateOfRegistration());
+        log.info(user1.getDateOfRegistration());
         assertNotNull(user1);
         assertEquals(user1.getUserName(), kapper.getUserName());
         assertNotEquals(user1, user);
         assertNotEquals(user1, admin);
-        userService.delete(kapper);
     }
 
     @Test
@@ -108,63 +125,57 @@ public class UserServiceImplTest {
 
     @Test
     public void editUser() {
-        userService.addUser(admin);
-        User user1 = userService.getByUserName("admin");
+        final String adminUserName = "admin";
+        User user1 = userService.getByUserName(adminUserName);
         String curr = user1.getCurrency();
         assertNotNull(user1);
         user1.setCurrency(curr.equals("USD") ? "RUB" : "USD");
         userService.editUser(user1);
-        user1 = userService.getByUserName("admin");
+        user1 = userService.getByUserName(adminUserName);
         assertNotEquals(curr, user1.getCurrency());
-        userService.delete(admin);
     }
 
     @Test
     public void getAll() {
-        User userA = userService.addUser(admin);
-        User userU = userService.addUser(user);
-        User userK = userService.addUser(kapper);
-        List<String> all = userService.getAll().stream().map(User::getUserName).collect(Collectors.toList());
-        assertTrue(all.contains(userA.getUserName()));
-        assertTrue(all.contains(userU.getUserName()));
-        assertTrue(all.contains(userK.getUserName()));
-        userService.delete(userA);
-        userService.delete(userU);
-        userService.delete(userK);
+        List<String> all = userService.getAll().stream()
+                .map(User::getUserName)
+                .collect(Collectors.toList());
+        assertTrue(all.contains(admin.getUserName()));
+        assertTrue(all.contains(user.getUserName()));
+        assertTrue(all.contains(kapper.getUserName()));
     }
 
     @Test
     public void getAllByRole() {
-//        List<User> admins = userService.getAllByRole("ROLE_ADMIN");
-//        assertNotNull(admins);
-//        assertNotEquals(0, admins.size());
-//        assertTrue(admins.contains(admin));
+        List<User> admins = userService.getAllByRole("ROLE_ADMIN");
+        assertNotNull(admins);
+        assertNotEquals(0, admins.size());
+        assertTrue(admins.stream()
+                .map(User::getUserName)
+                .collect(Collectors.toList())
+                .contains(admin.getUserName()));
     }
 
     @Test
     public void hasRole() {
-        User userA = userService.addUser(admin);
-        User userU = userService.addUser(user);
-        User userK = userService.addUser(kapper);
-        assertTrue(userService.hasRole(kapper, "ROLE_KAPPER"));
-        assertFalse(userService.hasRole(user, "ROLE_KAPPER"));
-        assertFalse(userService.hasRole(kapper, "ROLE_ADMIN"));
-        userService.delete(userA);
-        userService.delete(userU);
-        userService.delete(userK);
+        User userU = userService.getByUserName(user.getUserName());
+        User userK = userService.getByUserName(kapper.getUserName());
+        assertTrue(userService.hasRole(userK, "ROLE_KAPPER"));
+        assertFalse(userService.hasRole(userU, "ROLE_KAPPER"));
+        assertFalse(userService.hasRole(userK, "ROLE_ADMIN"));
+        assertTrue(userService.hasRole(userU, rolesService.getRoleIdByName("ROLE_USER")));
+        assertTrue(userService.hasRole(userU, rolesService.getByName("ROLE_USER")));
+        assertTrue(userService.hasRole(userU, rolesService.getById(2)));
+        assertEquals(userK.getRole(), rolesService.getByName("ROLE_KAPPER"));
     }
 
     @Test
     public void getRole() {
-     //   userService.addUser(kapper);
-//        User user1 = userService.getByUserName("kapper");
-//        assertNotNull(user1);
-//        Roles role = userService.getRole(user1); //TODO не работает!!!
-//        assertNotNull(role);
-     //   assertTrue(user1.hasRole("ROLE_KAPPER"));
-//        assertEquals(userService.getRole(user1).getRoleName(), "ROLE_KAPPER");
-
-//todo срочно
+        User userK = userService.getByUserName(kapper.getUserName());
+        assertNotNull(userK);
+        Role role = userService.getRole(userK);
+        assertNotNull(role);
+        assertEquals(role.getName(), "ROLE_KAPPER");
     }
 
     @Test

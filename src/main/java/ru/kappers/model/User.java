@@ -3,20 +3,10 @@ package ru.kappers.model;
 import lombok.extern.log4j.Log4j;
 import org.hibernate.annotations.NaturalId;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.kappers.service.RolesService;
-import ru.kappers.util.RoleUtil;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Log4j
 @Data
@@ -28,9 +18,9 @@ import java.util.Set;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
-    private int userId;
+    private int id;
 
     @NaturalId
     @Column(name = "user_name")
@@ -55,8 +45,8 @@ public class User implements Serializable {
     @Column(name = "date_of_registration")
     private Timestamp dateOfRegistration;
 
-    @Column(name = "isblocked")
-    private Boolean isblocked;
+    @Column(name = "isblocked", nullable = false)
+    private boolean isblocked;
 
     @Column(name = "currency")
     private String currency;
@@ -64,8 +54,10 @@ public class User implements Serializable {
     @Column(name = "lang")
     private String lang;
 
-    @Column(name = "role_id")
-    private Integer roleId;
+    /** Роль */
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
 //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -82,11 +74,11 @@ public class User implements Serializable {
 //    private Set<History> entity;
 
     public boolean hasRole(int role_id) {
-        return roleId == role_id;
+        return role.getId() == role_id;
     }
 
     public boolean hasRole(String roleName){
-        return roleName.equals(RoleUtil.getRoleNameById(roleId).getRoleName());
+        return role.getName().equals(roleName);
     }
 
 
