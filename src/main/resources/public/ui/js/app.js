@@ -24,7 +24,7 @@ kappersApp.config(function ($routeProvider) {
     ;
 });
 
-kappersApp.run(['$rootScope', '$location', function ($rootScope, $location) {
+kappersApp.run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
     $rootScope.routeTo = function (path) {
         switch (path) {
             case '/':
@@ -66,6 +66,16 @@ kappersApp.run(['$rootScope', '$location', function ($rootScope, $location) {
     $rootScope.toInt = function (id) {
         return parseInt(id, 10);
     };
+
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        // var restrictedPage
+        //     = $.inArray($location.path(), ['/login']) === -1;
+        var loggedIn = $window.sessionStorage.getItem('userData');
+        console.log("userData = " + JSON.stringify(loggedIn));
+        if (!loggedIn) {
+            $location.path('/sign-in');
+        }
+    });
 
     $location.path("/").replace();
 }]);
