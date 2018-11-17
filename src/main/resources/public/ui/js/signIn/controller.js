@@ -1,6 +1,6 @@
 angular
     .module('signIn')
-    .controller('signInController', function ($scope, $http, $location, $rootScope, $route, mainService, $window) {
+    .controller('signInController', function ($scope, $http, $location, $rootScope, $route, mainService, $window, signInService) {
         $scope.message = 'Войти.';
         $scope.params = $location.search();
         $scope.mode = $scope.params.mode;
@@ -19,6 +19,7 @@ angular
                     'password': $scope.vm.password
                 }
             }).then(function (response) {
+                console.log("response=" + JSON.stringify(response));
                 if (response.data) {
                     var token
                         = $window.btoa($scope.vm.username + ':' + $scope.vm.password);
@@ -37,9 +38,29 @@ angular
                 } else {
                     alert("Authentication failed.")
                 }
+            }, function errorCallback(response) {
+                alert("Authentication failed.");
+                console.log("error response=" + JSON.stringify(response));
             });
         };
 
+        $scope.logout = function() {
+            $window.sessionStorage.setItem(
+                'userData', {}
+            );
+            $http.defaults.headers.common['Authorization'] = undefined;
+            //$rootScope.currentRole = 'ROLE_ANONYMOUS';
+
+            signInService.logout(
+                function (role) {
+                    console.log("ROLE = " + role);
+                    $rootScope.currentRole = role;
+                },
+                function (error) {
+                    $rootScope.currentRole = 'ROLE_ANONYMOUS';
+                    console.error(error);
+                });
+        }
 
     });
 

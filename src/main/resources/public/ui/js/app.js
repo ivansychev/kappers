@@ -74,15 +74,37 @@ kappersApp.run(['$rootScope', '$location', '$window', 'signInService', function 
         console.log("userData = " + JSON.stringify(loggedIn));
         signInService.getUserRole(
             function (role) {
-                console.log("ROLE = " + role);
+                console.log("ROLE = " + JSON.stringify(role));
+                $rootScope.currentRole = role;
             },
             function (error) {
+                $rootScope.currentRole = 'ROLE_ANONYMOUS';
                 console.error(error);
             });
-        if (!loggedIn) {
-            $location.path('/sign-in');
-        }
+        // if (!loggedIn) {
+        //     $location.path('/sign-in');
+        // }
     });
 
     $location.path("/").replace();
 }]);
+
+
+kappersApp.directive('restrictRole', function($log, $rootScope) {
+    return {
+        restrict: 'A',
+        scope: {
+            role:"@restrictRole",
+        },
+        link: function(scope, element, attr){
+            if (scope.role) {
+                var roles = scope.role.split(",");
+                if (roles.indexOf($rootScope.currentRole.role) < 0) {
+                    element.css({
+                        display : 'none'
+                    });
+                }
+            }
+        }
+    }
+});

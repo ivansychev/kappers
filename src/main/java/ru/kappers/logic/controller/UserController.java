@@ -14,8 +14,10 @@ import ru.kappers.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Date;
 
 @Controller
 public class UserController {
@@ -72,5 +74,20 @@ public class UserController {
     public RoleDto getCurrentUserRole() {
         String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next().getAuthority();
         return new RoleDto(role);
+    }
+
+    @RequestMapping(value = "/sign-in/perform-logout", method = RequestMethod.GET)
+    @ResponseBody
+    public RoleDto logout() {
+        return new RoleDto("ROLE_ANONYMOUS");
+    }
+
+    @RequestMapping(value = "/sign-up", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public User create(@RequestBody User user) {
+        user.setDateOfBirth(new Timestamp(System.currentTimeMillis()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.addUser(user);
+        return user;
     }
 }

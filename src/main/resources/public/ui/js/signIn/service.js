@@ -20,6 +20,13 @@ angular
                     params: {
                         _action : 'get-authority'
                     }
+                },
+                logout: {
+                    method: 'GET',
+                    transformResponse: http.response.defaultTransform,
+                    params: {
+                        _action : 'perform-logout'
+                    }
                 }
             });
         service.get = function (onSuccess, onFailure) {
@@ -30,6 +37,12 @@ angular
 
         service.getUserRole = function (onSuccess, onFailure) {
             service.resource.getUserRole({}, {}, function (response) {
+                http.response.defaultResolve(response, onSuccess, onFailure);
+            });
+        };
+
+        service.logout = function (onSuccess, onFailure) {
+            service.resource.logout({}, {}, function (response) {
                 http.response.defaultResolve(response, onSuccess, onFailure);
             });
         };

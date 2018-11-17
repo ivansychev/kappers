@@ -1,4 +1,50 @@
 <div class="container-fluid">
     <h2>Зарегистрироваться</h2>
     <p>{{message}}</p>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group row" ng-show="user.id">
+                <label for="id" class="col-2 col-form-label">ID</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="id" ng-model="user.id" ng-disabled="true">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="username" class="col-2 col-form-label">Username</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="username"
+                           ng-model="user.userName">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="password" class="col-2 col-form-label">Password</label>
+                <div class="col-10">
+                    <input class="form-control" type="password" id="password"
+                           ng-model="user.password">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label">Name</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="name"
+                           ng-model="user.name">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="userroleid" class="col-2 col-form-label">Role ID</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" value="1" id="userroleid"
+                           ng-model="user.role.id">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" ng-click="save()">Create</button>
+        </div>
+    </div>
+
 </div>

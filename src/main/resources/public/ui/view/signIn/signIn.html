@@ -2,7 +2,7 @@
     <h2>Войти</h2>
     <p>{{message}}</p>
     <h2>Login</h2>
-    <form name="form" ng-submit="login()" role="form">
+    <form name="form" ng-submit="login()" role="form" restrict-role='ROLE_ANONYMOUS'>
         <div>
             <label for="username">Username</label>
             <input type="text" name="username" id="username" ng-model="vm.username" required/>
@@ -17,4 +17,9 @@
             <button type="submit" ng-disabled="form.$invalid">Login</button>
         </div>
     </form>
+    <div class="form-group row" restrict-role='ROLE_USER,ROLE_ADMIN,ROLE_KAPPER'>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
+        </div>
+    </div>
 </div>
