@@ -65,6 +65,13 @@ public class FixtureServiceImpl implements FixtureService {
     }
 
     @Override
+    public List<Fixture> getFixturesToday(String filter) {
+        Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
+        Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+        return repository.getFixturesByPeriod(from, to, filter);
+    }
+
+    @Override
     public List<Fixture> getFixturesLastWeek() {
         Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
         Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(7));
@@ -72,9 +79,23 @@ public class FixtureServiceImpl implements FixtureService {
     }
 
     @Override
+    public List<Fixture> getFixturesLastWeek(String filter) {
+        Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+        Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(7));
+        return repository.getFixturesByPeriod(from, to, filter);
+    }
+
+    @Override
     public List<Fixture> getFixturesNextWeek() {
         Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
         Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX).plusDays(7));
         return repository.getFixturesByPeriod(from, to);
+    }
+
+    @Override
+    public List<Fixture> getFixturesNextWeek(String filter) {
+        Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
+        Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX).plusDays(7));
+        return repository.getFixturesByPeriod(from, to, filter);
     }
 }

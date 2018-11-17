@@ -29,14 +29,14 @@ public class FixtureController {
 
         //Должен возвращать события со статусом Not Started и датой от сегодняшнего дня в течении 7 дней
 
-        return service.getFixturesNextWeek();
+        return service.getFixturesNextWeek("Not Started");
     }
 
     @ResponseBody
     @RequestMapping(value = "/lastweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
         //Должен возвращать события со статусом отличающемся от Not Started и датой от и на 7 дней ранее
-        return service.getFixturesLastWeek();
+        return service.getFixturesLastWeek("Match Finished");
     }
 
     @ResponseBody
@@ -55,11 +55,6 @@ public class FixtureController {
         return service.getFixturesByPeriod(new Timestamp(fromDate.getTime()), new Timestamp(toDate.getTime()));
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/getall", method = RequestMethod.GET)
-    public List<Fixture> getAllFixtures()
-    {
-        return service.getAll();
-    }
+
 
 }

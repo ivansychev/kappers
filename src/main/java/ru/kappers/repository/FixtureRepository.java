@@ -18,4 +18,9 @@ public interface FixtureRepository extends JpaRepository<Fixture, Integer> {
             value = "select * FROM fixtures WHERE event_date > ?1 and event_date < ?2",
             nativeQuery = true)
     List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to);
+
+    @Query(
+            value = "select * FROM fixtures WHERE event_date > ?1 and event_date < ?2 and status = ?3",
+            nativeQuery = true)
+    List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to, String filter);
 }

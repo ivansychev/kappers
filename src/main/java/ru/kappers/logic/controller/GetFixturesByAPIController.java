@@ -41,5 +41,10 @@ public class GetFixturesByAPIController {
         return null;
     }
 
-
+    @ResponseBody
+    @RequestMapping(value = "/getall", method = RequestMethod.GET)
+    public List<Fixture> getAllFixtures()
+    {
+        return service.getAll();
+    }
 }

@@ -16,6 +16,9 @@ public interface FixtureService {
     List<Fixture> getAll();
     List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to);
     List<Fixture> getFixturesToday();
+    List<Fixture> getFixturesToday(String filter);
     List<Fixture> getFixturesLastWeek();
+    List<Fixture> getFixturesLastWeek(String filter);
     List<Fixture> getFixturesNextWeek();
+    List<Fixture> getFixturesNextWeek(String filter);
 }
