@@ -54,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/sign-in/get-authority",
                         "/rest/dict/**"
                 ).permitAll()
+                .antMatchers("/rest/api/fixtures/twoweeks").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
 //                .and()
 //                .sessionManagement().maximumSessions(10)
