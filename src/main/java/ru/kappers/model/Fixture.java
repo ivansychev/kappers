@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 
 @Log4j
@@ -28,7 +29,7 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="event_timestamp")
     Long event_timestamp;
     @Column(name="event_date")
-    String event_date;
+    Timestamp event_date;
     @Column(name="league_id")
     Integer league_id;
     @Column(name="round")
@@ -62,6 +63,13 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="secondHalfStart")
     Long secondHalfStart;
 
+    public String getProperty(String propName) throws NoSuchFieldException, IllegalAccessException, InstantiationException {
+        Field declaredField = this.getClass().getDeclaredField(propName);
+        Class<?> targetType = declaredField.getType();
+        Object objectValue = targetType.newInstance();
+        Object value = declaredField.get(objectValue);
+        return String.valueOf(value);
+    }
    @Override
     public int compareTo(Object o) {
         return (getEvent_timestamp()).compareTo(((Fixture) o).getEvent_timestamp());
