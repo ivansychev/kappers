@@ -9,6 +9,7 @@ var kappersApp = angular.module('kappersApp',
         , 'profile'
         , 'signIn'
         , 'signUp'
+        , 'role'
     ]
 );
 
