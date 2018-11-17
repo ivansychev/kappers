@@ -21,4 +21,5 @@ public interface FixtureService {
     List<Fixture> getFixturesLastWeek(String filter);
     List<Fixture> getFixturesNextWeek();
     List<Fixture> getFixturesNextWeek(String filter);
+    Fixture getById(int id);
 }

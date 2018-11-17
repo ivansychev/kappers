@@ -55,6 +55,10 @@ public class FixtureController {
         return service.getFixturesByPeriod(new Timestamp(fromDate.getTime()), new Timestamp(toDate.getTime()));
     }
 
-
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Fixture getFixtureById(@PathVariable int id) {
+        return service.getById(id);
+    }
 
 }

@@ -98,4 +98,9 @@ public class FixtureServiceImpl implements FixtureService {
         Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX).plusDays(7));
         return repository.getFixturesByPeriod(from, to, filter);
     }
+
+    @Override
+    public Fixture getById(int id) {
+        return repository.getById(id);
+    }
 }

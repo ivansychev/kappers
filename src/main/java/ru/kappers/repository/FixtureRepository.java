@@ -11,6 +11,10 @@ import java.util.List;
 
 public interface FixtureRepository extends JpaRepository<Fixture, Integer> {
     @Query(
+            value = "select * FROM fixtures WHERE fixture_id = ?1",
+            nativeQuery = true)
+    Fixture getById(int id);
+    @Query(
             value = "delete FROM fixtures WHERE fixture_id = ?1",
             nativeQuery = true)
     void deleteById(int fixtureId);
