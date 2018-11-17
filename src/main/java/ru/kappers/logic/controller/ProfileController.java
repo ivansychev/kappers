@@ -47,6 +47,7 @@ public class ProfileController {
         SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("user = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         System.out.println("user = " + SecurityContextHolder.getContext().getAuthentication());
+        System.out.println("getName = " + SecurityContextHolder.getContext().getAuthentication().getName());
 
         return User.builder()
                 .currency("USD")
