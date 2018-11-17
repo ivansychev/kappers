@@ -10,7 +10,7 @@ angular
 
         $window.localStorage.setItem('token', '');
 
-        $scope.login = function() {
+        $scope.login = function () {
             $http({
                 url: 'http://localhost:8080/login',
                 method: "POST",
@@ -44,23 +44,34 @@ angular
             });
         };
 
-        $scope.logout = function() {
-            $window.sessionStorage.setItem(
-                'userData', {}
-            );
-            $http.defaults.headers.common['Authorization'] = undefined;
-            //$rootScope.currentRole = 'ROLE_ANONYMOUS';
+        /*$scope.login2 = function () {
+            signInService.login($scope.user,
+                function (result) {
+                    console.log("authres = " + JSON.stringify(result));
+                    if (result) {
+                        var token
+                            = $window.btoa($scope.vm.username + ':' + $scope.vm.password);
+                        var userData = {
+                            userName: $scope.vm.username,
+                            authData: token
+                        }
+                        $window.sessionStorage.setItem(
+                            'userData', JSON.stringify(userData)
+                        );
+                        $http.defaults.headers.common['Authorization']
+                            = 'Basic ' + token;
+                        console.log("Autorized2");
+                        console.log("userData2 = " + JSON.stringify(userData));
+                        $location.path('/main');
 
-            signInService.logout(
-                function (role) {
-                    console.log("ROLE = " + role);
-                    $rootScope.currentRole = role;
+                    } else {
+                        alert("Authentication failed.")
+                    }
                 },
                 function (error) {
-                    $rootScope.currentRole = 'ROLE_ANONYMOUS';
+                    $rootScope.currentRole = {role: 'ROLE_ANONYMOUS'};
                     console.error(error);
                 });
-        }
-
+        }*/
     });
 
