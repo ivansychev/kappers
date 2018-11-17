@@ -1,4 +1,25 @@
 <div class="container-fluid">
     <h2>Войти</h2>
     <p>{{message}}</p>
+    <h2>Login</h2>
+    <form name="form" ng-submit="login()" role="form" restrict-role='ROLE_ANONYMOUS'>
+        <div>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" ng-model="vm.username" required/>
+            <span ng-show="form.username.$dirty && form.username.$error.required">Username is required</span>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" ng-model="vm.password" required/>
+            <span ng-show="form.password.$dirty && form.password.$error.required">Password is required</span>
+        </div>
+        <div class="form-actions">
+            <button type="submit" ng-disabled="form.$invalid">Login</button>
+        </div>
+    </form>
+    <div class="form-group row" restrict-role='ROLE_USER,ROLE_ADMIN,ROLE_KAPPER'>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
+        </div>
+    </div>
 </div>
