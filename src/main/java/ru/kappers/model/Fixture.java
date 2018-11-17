@@ -28,7 +28,7 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="event_timestamp")
     Long event_timestamp;
     @Column(name="event_date")
-    String event_date;
+    Timestamp event_date;
     @Column(name="league_id")
     Integer league_id;
     @Column(name="round")

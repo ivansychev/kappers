@@ -6,7 +6,7 @@ create table IF NOT EXISTS fixtures
 	away_team varchar(255),
 	away_team_id integer,
 	elapsed integer,
-	event_date varchar(255),
+	event_date timestamp ,
 	event_timestamp bigint,
 	final_score varchar(255),
 	first_half_start bigint,

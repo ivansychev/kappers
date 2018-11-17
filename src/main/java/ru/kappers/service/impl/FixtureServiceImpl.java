@@ -9,6 +9,11 @@ import ru.kappers.repository.FixtureRepository;
 import ru.kappers.repository.HistoryRepository;
 import ru.kappers.service.FixtureService;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 @Log4j
@@ -33,7 +38,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     public void deleteRecordByFixtureId(int fixture_id) {
-       // repositorydeleteByFixture_id(fixture_id);
+        repository.deleteById(fixture_id);
     }
 
     @Override
@@ -45,5 +50,31 @@ public class FixtureServiceImpl implements FixtureService {
     @Override
     public List<Fixture> getAll() {
         return (List<Fixture>) repository.findAll();
+    }
+
+    @Override
+    public List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to) {
+        return repository.getFixturesByPeriod(from, to);
+    }
+
+    @Override
+    public List<Fixture> getFixturesToday() {
+        Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
+        Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+        return repository.getFixturesByPeriod(from, to);
+    }
+
+    @Override
+    public List<Fixture> getFixturesLastWeek() {
+        Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+        Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(7));
+        return repository.getFixturesByPeriod(from, to);
+    }
+
+    @Override
+    public List<Fixture> getFixturesNextWeek() {
+        Timestamp from = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
+        Timestamp to = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MAX).plusDays(7));
+        return repository.getFixturesByPeriod(from, to);
     }
 }
