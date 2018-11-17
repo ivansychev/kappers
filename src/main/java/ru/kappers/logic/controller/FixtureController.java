@@ -1,64 +1,61 @@
 package ru.kappers.logic.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.kappers.model.Fixture;
-import ru.kappers.model.User;
-import ru.kappers.service.FixtureService;
-import ru.kappers.util.DateUtil;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/rest/fixtures")
+@RequestMapping(value = "/rest/fixture")
 public class FixtureController {
-    @Autowired
-    private FixtureService service;
 
     @ResponseBody
     @RequestMapping(value = "/nextweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Fixture> getFixturesNextWeek() {
-
-        //Должен возвращать события со статусом Not Started и датой от сегодняшнего дня в течении 7 дней
-
-        return service.getFixturesNextWeek("Not Started");
+    public List<Fixture> getNextWeek() {
+        Fixture fixture = Fixture.builder()
+                .fixture_id(1000)
+                .awayTeam("awayTeam")
+                .final_score("56")
+                .homeTeam("homeTeam")
+                .league_id(1)
+                .round("3")
+                .status("status")
+                .build();
+        return Collections.singletonList(fixture);
     }
 
     @ResponseBody
     @RequestMapping(value = "/lastweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Fixture> getFixturesLastWeek() {
-        //Должен возвращать события со статусом отличающемся от Not Started и датой от и на 7 дней ранее
-        return service.getFixturesLastWeek("Match Finished");
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/today", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Fixture> getFixturesToday() {
-        //Должен возвращать все события на сегодня
-        return service.getFixturesToday();
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/period", method = RequestMethod.GET)
-    public List<Fixture> getFixturesByPeriod(
-            @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-            @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
-
-        return service.getFixturesByPeriod(new Timestamp(fromDate.getTime()), new Timestamp(toDate.getTime()));
+    public List<Fixture> getLastWeek() {
+        Fixture fixture = Fixture.builder()
+                .fixture_id(19990)
+                .awayTeam("awayTeam9")
+                .final_score("99")
+                .homeTeam("homeTea9m")
+                .league_id(15)
+                .round("3444")
+                .status("sttststtst")
+                .build();
+        return Collections.singletonList(fixture);
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Fixture getFixtureById(@PathVariable int id) {
-        return service.getById(id);
+    public Fixture getNextWeek(@PathVariable Long id) {
+        return Fixture.builder()
+                .fixture_id(id.intValue())
+                .awayTeam("awayTeam")
+                .final_score("526")
+                .homeTeam("homeTeam")
+                .league_id(1)
+                .round("32")
+                .status("status")
+                .build();
     }
-
 }
