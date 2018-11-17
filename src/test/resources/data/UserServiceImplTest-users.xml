@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <users id="1000" user_name="admin" name="админ" password="asasdgfas" currency="RUB" lang="RUSSIAN" role_id="1"/>
-    <users id="1001" user_name="user" name="юзер" password="assaasas" currency="RUB" lang="RUSSIAN" role_id="2"/>
-    <users id="1002" user_name="kapper" name="каппер" password="assaasas" currency="RUB" lang="RUSSIAN" role_id="3"/>
+    <users user_name="admin" name="админ" password="$2a$04$Ql3ut8yKr4mXdzyUKag0M.yl6/y2c5M1G3ef1/LaVttMdk53dHQ/S" currency="RUB" lang="RUSSIAN" role_id="1"/>
+    <users user_name="user" name="юзер" password="$2a$04$gnmD/AYrURjBwMrHH2FQZO4SNrpEx840o.v7oqEI7oe6riQKKXj66" currency="RUB" lang="RUSSIAN" role_id="2"/>
+    <users user_name="kapper" name="каппер" password="$2a$04$r1mkI0Krd1VV3Av5B339zOtOJEyjeCpqISvoec3IgOzpUOnVIRS2C" currency="RUB" lang="RUSSIAN" role_id="3"/>
 </dataset>
