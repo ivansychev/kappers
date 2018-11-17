@@ -41,7 +41,7 @@
                 <input class="form-control" placeholder="Final Score" type="text" ng-model="search.final_score">
             </th>
             <th scope="row" class="col-md-1 search">
-                <input class="form-control" placeholder="Elapsed" type="text" ng-model="search.elapsed">
+                <input class="form-control" placeholder="Event Date" type="text" ng-model="search.event_date">
             </th>
         </tr>
         <tr>
@@ -55,7 +55,7 @@
             <th scope="col">Away Team</th>
             <th scope="col">Status</th>
             <th scope="col">Final Score</th>
-            <th scope="col">Elapsed</th>
+            <th scope="col">Event Date</th>
         </tr>
         </thead>
         <tbody>
@@ -70,7 +70,7 @@
             <td>{{fixture.awayTeam}}</td>
             <td>{{fixture.status}}</td>
             <td>{{fixture.final_score}}</td>
-            <td>{{fixture.elapsed}}</td>
+            <td>{{fixture.event_date}}</td>
         </tr>
         </tbody>
     </table>
