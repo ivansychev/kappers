@@ -67,6 +67,12 @@
                 <li ng-class="{active : currentNavigation == 'profile'}" ng-show="currentRole.role && currentRole.role != 'ROLE_ANONYMOUS'">
                     <a href ng-click="routeTo('/profile')">Личный кабинет</a>
                 </li>
+                <li ng-class="{active : currentNavigation == 'nextweekList'}" ng-show="currentRole.role && currentRole.role != 'ROLE_ANONYMOUS'">
+                    <a href ng-click="routeTo('/nextweek/list')">Предстоящие</a>
+                </li>
+                <li ng-class="{active : currentNavigation == 'lastweekList'}" ng-show="currentRole.role && currentRole.role != 'ROLE_ANONYMOUS'">
+                    <a href ng-click="routeTo('/lastweek/list')">Результаты</a>
+                </li>
             </ul>
         </div>
         <div class="form-group" ng-show="currentRole.role && currentRole.role != 'ROLE_ANONYMOUS'" style="float: left; line-height: 50px; margin-bottom: 0px;">
@@ -132,5 +138,15 @@
 <!-- Roles -->
 <script type="text/javascript" src="./ui/js/role/module.js"></script>
 <script type="text/javascript" src="./ui/js/role/service.js"></script>
+
+<!-- Lastweek -->
+<script type="text/javascript" src="./ui/js/lastweek/module.js"></script>
+<script type="text/javascript" src="./ui/js/lastweek/service.js"></script>
+<script type="text/javascript" src="./ui/js/lastweek/controller.js"></script>
+
+<!-- NextWeek -->
+<script type="text/javascript" src="./ui/js/nextweek/module.js"></script>
+<script type="text/javascript" src="./ui/js/nextweek/service.js"></script>
+<script type="text/javascript" src="./ui/js/nextweek/controller.js"></script>
 </body>
 </html>
