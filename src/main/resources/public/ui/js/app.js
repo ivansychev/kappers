@@ -9,6 +9,9 @@ var kappersApp = angular.module('kappersApp',
         , 'profile'
         , 'signIn'
         , 'signUp'
+        , 'role'
+        , 'lastweek'
+        , 'nextweek'
     ]
 );
 
@@ -24,7 +27,7 @@ kappersApp.config(function ($routeProvider) {
     ;
 });
 
-kappersApp.run(['$rootScope', '$location', function ($rootScope, $location) {
+kappersApp.run(['$rootScope', '$location', '$window', 'signInService', '$http', function ($rootScope, $location, $window, signInService, $http) {
     $rootScope.routeTo = function (path) {
         switch (path) {
             case '/':
@@ -44,6 +47,12 @@ kappersApp.run(['$rootScope', '$location', function ($rootScope, $location) {
                 break;
             case '/sign-up':
                 $rootScope.currentNavigation = 'sign-up';
+                break;
+            case '/nextweek/list':
+                $rootScope.currentNavigation = 'nextweekList';
+                break;
+            case '/lastweek/list':
+                $rootScope.currentNavigation = 'lastweekList';
                 break;
             default :
                 path = '404';
@@ -67,5 +76,63 @@ kappersApp.run(['$rootScope', '$location', function ($rootScope, $location) {
         return parseInt(id, 10);
     };
 
-    $location.path("/").replace();
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        // var restrictedPage
+        //     = $.inArray($location.path(), ['/login']) === -1;
+        var loggedIn = $window.sessionStorage.getItem('userData');
+        console.log("userData = " + JSON.stringify(loggedIn));
+        signInService.getUserRole(
+            function (role) {
+                console.log("ROLE = " + JSON.stringify(role));
+                $rootScope.currentRole = role;
+            },
+            function (error) {
+                $rootScope.currentRole = {role : 'ROLE_ANONYMOUS'};
+                console.error(error);
+            });
+        // if (!loggedIn) {
+        //     $location.path('/sign-in');
+        // }
+    });
+
+    $rootScope.logout = function() {
+        $window.sessionStorage.setItem(
+            'userData', {}
+        );
+        $http.defaults.headers.common['Authorization'] = undefined;
+        //$rootScope.currentRole = 'ROLE_ANONYMOUS';
+
+        signInService.logout(
+            function (role) {
+                console.log("ROLE = " + role);
+                $rootScope.currentRole = role;
+                $rootScope.routeTo("/");
+            },
+            function (error) {
+                console.error(error);
+                $rootScope.currentRole = {role : 'ROLE_ANONYMOUS'};
+                $rootScope.routeTo("/");
+            });
+    }
+
+    $rootScope.currentRole = {role : 'ROLE_ANONYMOUS'};
+    $rootScope.routeTo("/");
 }]);
+
+
+kappersApp.directive('restrictRole', function($log, $rootScope) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attr){
+            //console.log("attr=" + JSON.stringify(attr.restrictRole));
+            if (attr.restrictRole) {
+                var roles = attr.restrictRole.split(",");
+                if (roles.indexOf($rootScope.currentRole.role) < 0) {
+                    element.css({
+                        display : 'none'
+                    });
+                }
+            }
+        }
+    }
+});

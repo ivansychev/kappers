@@ -11,10 +11,20 @@ angular
                 get: {
                     method: 'GET',
                     transformResponse: http.response.defaultTransform
+                },
+                save: {
+                    method: 'POST',
+                    transformResponse:  http.response.defaultTransform
                 }
             });
         service.get = function (onSuccess, onFailure) {
             this.resource.get(function (response) {
+                http.response.defaultResolve(response, onSuccess, onFailure);
+            });
+        };
+
+        service.save = function (user, onSuccess, onFailure) {
+            this.resource.save(user, function (response) {
                 http.response.defaultResolve(response, onSuccess, onFailure);
             });
         };
