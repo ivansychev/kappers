@@ -1,7 +1,10 @@
 package ru.kappers.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -9,25 +12,46 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private DataSource dataSource;
+
+//    private AuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Autowired
+    @Qualifier("dataSource")
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+//    @Autowired
+//    public void setRestAuthenticationEntryPoint(AuthenticationEntryPoint restAuthenticationEntryPoint) {
+//        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/ui/**", "/login", "/favicon.ico").permitAll()
+                .antMatchers("/", "/ui/**", "/login", "/favicon.ico", "/sign-in/**").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .sessionManagement().maximumSessions(10)
-                .expiredUrl("/login")
-                .and()
-                .invalidSessionUrl("/login")
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .and()
+//                .sessionManagement().maximumSessions(10)
+//                .expiredUrl("/login")
+//                .and()
+//                .invalidSessionUrl("/login")
+//                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .logout()
                 .permitAll()
@@ -36,20 +60,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    @Bean
     @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery(new StringBuilder()
+                        .append("select u.user_name as username, u.password, (not u.isblocked) as enabled")
+                        .append(" from users u")
+                        .append(" where u.user_name = ?")
+                        .toString())
+                .authoritiesByUsernameQuery(new StringBuilder()
+                        .append("select u.user_name as username, r.name as role")
+                        .append(" from users u inner join roles r on r.id = u.role_id")
+                        .append(" where u.user_name = ?")
+                        .toString());
     }
 
     @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(4);
     }
+//
+//    @Bean
+//    public HttpSessionEventPublisher httpSessionEventPublisher() {
+//        return new HttpSessionEventPublisher();
+//    }
 }

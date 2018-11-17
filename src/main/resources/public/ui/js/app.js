@@ -24,7 +24,7 @@ kappersApp.config(function ($routeProvider) {
     ;
 });
 
-kappersApp.run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
+kappersApp.run(['$rootScope', '$location', '$window', 'signInService', function ($rootScope, $location, $window, signInService) {
     $rootScope.routeTo = function (path) {
         switch (path) {
             case '/':
@@ -72,6 +72,13 @@ kappersApp.run(['$rootScope', '$location', '$window', function ($rootScope, $loc
         //     = $.inArray($location.path(), ['/login']) === -1;
         var loggedIn = $window.sessionStorage.getItem('userData');
         console.log("userData = " + JSON.stringify(loggedIn));
+        signInService.getUserRole(
+            function (role) {
+                console.log("ROLE = " + role);
+            },
+            function (error) {
+                console.error(error);
+            });
         if (!loggedIn) {
             $location.path('/sign-in');
         }
