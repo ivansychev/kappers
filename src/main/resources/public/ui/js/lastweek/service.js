@@ -31,7 +31,7 @@ angular
                 },
             });
 
-        service.resource = $resource(
+        service.resourceTwoWeeks = $resource(
             '/rest/api/fixtures/:_action:_id'
             ,  {
                 id: "@_id",
@@ -58,7 +58,7 @@ angular
             });
         };
         service.getLastTwoWeeks = function (onSuccess, onFailure) {
-            this.resource.getLastTwoWeeks(function (response) {
+            this.resourceTwoWeeks.getLastTwoWeeks(function (response) {
                 http.response.defaultResolve(response, onSuccess, onFailure);
             });
         };
