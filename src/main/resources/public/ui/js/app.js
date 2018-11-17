@@ -10,6 +10,8 @@ var kappersApp = angular.module('kappersApp',
         , 'signIn'
         , 'signUp'
         , 'role'
+        , 'lastweek'
+        , 'nextweek'
     ]
 );
 
@@ -45,6 +47,12 @@ kappersApp.run(['$rootScope', '$location', '$window', 'signInService', '$http', 
                 break;
             case '/sign-up':
                 $rootScope.currentNavigation = 'sign-up';
+                break;
+            case '/nextweek/list':
+                $rootScope.currentNavigation = 'nextweekList';
+                break;
+            case '/lastweek/list':
+                $rootScope.currentNavigation = 'lastweekList';
                 break;
             default :
                 path = '404';
