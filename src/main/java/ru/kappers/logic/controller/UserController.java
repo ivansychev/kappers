@@ -1,5 +1,6 @@
 package ru.kappers.logic.controller;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,10 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Base64;
-
+@Log4j
 @Controller
 public class UserController {
-
 
     private final UserService userService;
 
@@ -101,7 +101,7 @@ public class UserController {
     @RequestMapping(value = "/rest/user/get-current-authorized", method = RequestMethod.GET)
     public User getCurrentAuthUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("username = " + username);
+        log.info("username = " + username);
         User user = userService.getByUserName(username);
         if (user == null) {
             throw new IllegalStateException("Authenticated user not found in the database.");
