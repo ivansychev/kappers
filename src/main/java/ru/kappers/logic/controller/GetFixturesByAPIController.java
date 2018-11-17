@@ -13,6 +13,7 @@ import ru.kappers.service.FixtureService;
 import ru.kappers.util.JsonUtil;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +41,10 @@ public class GetFixturesByAPIController {
             } catch (UnirestException e) {
                 throw new RuntimeException(e);
             }
-
         }
-        return null;
+        return Collections.singletonList(Fixture.builder()
+                .fixture_id(1000)
+                .build());
     }
 
     /**

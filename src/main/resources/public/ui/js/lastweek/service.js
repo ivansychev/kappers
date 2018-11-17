@@ -21,8 +21,32 @@ angular
                 getById: {
                     method: 'GET',
                     transformResponse:  http.response.defaultTransform
-                }
+                },
+                getLastTwoWeeks: {
+                    method: 'GET',
+                    transformResponse: http.response.defaultTransform,
+                    params: {
+                        _action : 'lastweek'
+                    }
+                },
             });
+
+        service.resource = $resource(
+            '/rest/api/fixtures/:_action:_id'
+            ,  {
+                id: "@_id",
+                action: "@_action"
+            }
+            , {
+                getLastTwoWeeks: {
+                    method: 'GET',
+                    transformResponse: http.response.defaultTransform,
+                    params: {
+                        _action : 'twoweeks'
+                    }
+                },
+            });
+
         service.getAll = function (onSuccess, onFailure) {
             this.resource.getAll(function (response) {
                 http.response.defaultResolve(response, onSuccess, onFailure);
@@ -30,6 +54,11 @@ angular
         };
         service.getById = function (id, onSuccess, onFailure) {
             this.resource.getById({_id : id}, {}, function (response) {
+                http.response.defaultResolve(response, onSuccess, onFailure);
+            });
+        };
+        service.getLastTwoWeeks = function (onSuccess, onFailure) {
+            this.resource.getLastTwoWeeks(function (response) {
                 http.response.defaultResolve(response, onSuccess, onFailure);
             });
         };
