@@ -23,6 +23,10 @@ public class GetFixturesByAPIController {
     @Autowired
     private FixtureService service;
 
+/**
+ * Метод предназначен для обновления списка спортивных событий
+ * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
+ * */
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
@@ -40,6 +44,10 @@ public class GetFixturesByAPIController {
         }
         return null;
     }
+
+    /**
+     * Выгрузка всех событий без каких либо фильтров из БД
+     * */
 
     @ResponseBody
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
