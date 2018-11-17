@@ -6,7 +6,7 @@ angular
         $scope.mode = $scope.params.mode;
 
         $scope.loadUser = function () {
-            profileService.get(1000,
+            profileService.getCurrentAuthorizedUser(
                 function (user) {
                     $scope.user = user;
                 },
@@ -15,8 +15,8 @@ angular
                     $scope.error = error;
                 });
         }
-        /*$timeout(function () {
+        $timeout(function () {
             $scope.loadUser();
-        })*/
+        })
     });
 
