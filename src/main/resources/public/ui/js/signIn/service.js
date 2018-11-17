@@ -47,5 +47,21 @@ angular
             });
         };
 
+        /*service.loginResource = $resource(
+            '/login'
+            , {}
+            , {
+                login: {
+                    method: 'POST',
+                    transformResponse: http.response.defaultTransform,
+                }
+            });
+
+        service.login = function (user, onSuccess, onFailure) {
+            service.loginResource.login({}, {userName : user.userName, password : user.password}, function (response) {
+                http.response.defaultResolve(response, onSuccess, onFailure);
+            });
+        };*/
+
         return service;
     }])

@@ -76,6 +76,13 @@ public class UserController {
         return new RoleDto(role);
     }
 
+    @RequestMapping(value = "/sign-in/logout-success", method = RequestMethod.GET)
+    @ResponseBody
+    public RoleDto logoutSuccess() {
+        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next().getAuthority();
+        return new RoleDto(role);
+    }
+
     @RequestMapping(value = "/sign-in/perform-logout", method = RequestMethod.GET)
     @ResponseBody
     public RoleDto logout() {

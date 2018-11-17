@@ -9,6 +9,7 @@ var kappersApp = angular.module('kappersApp',
         , 'profile'
         , 'signIn'
         , 'signUp'
+        , 'role'
     ]
 );
 
@@ -24,7 +25,7 @@ kappersApp.config(function ($routeProvider) {
     ;
 });
 
-kappersApp.run(['$rootScope', '$location', '$window', 'signInService', function ($rootScope, $location, $window, signInService) {
+kappersApp.run(['$rootScope', '$location', '$window', 'signInService', '$http', function ($rootScope, $location, $window, signInService, $http) {
     $rootScope.routeTo = function (path) {
         switch (path) {
             case '/':
@@ -78,7 +79,7 @@ kappersApp.run(['$rootScope', '$location', '$window', 'signInService', function 
                 $rootScope.currentRole = role;
             },
             function (error) {
-                $rootScope.currentRole = 'ROLE_ANONYMOUS';
+                $rootScope.currentRole = {role : 'ROLE_ANONYMOUS'};
                 console.error(error);
             });
         // if (!loggedIn) {
@@ -86,19 +87,38 @@ kappersApp.run(['$rootScope', '$location', '$window', 'signInService', function 
         // }
     });
 
-    $location.path("/").replace();
+    $rootScope.logout = function() {
+        $window.sessionStorage.setItem(
+            'userData', {}
+        );
+        $http.defaults.headers.common['Authorization'] = undefined;
+        //$rootScope.currentRole = 'ROLE_ANONYMOUS';
+
+        signInService.logout(
+            function (role) {
+                console.log("ROLE = " + role);
+                $rootScope.currentRole = role;
+                $rootScope.routeTo("/");
+            },
+            function (error) {
+                console.error(error);
+                $rootScope.currentRole = {role : 'ROLE_ANONYMOUS'};
+                $rootScope.routeTo("/");
+            });
+    }
+
+    $rootScope.currentRole = {role : 'ROLE_ANONYMOUS'};
+    $rootScope.routeTo("/");
 }]);
 
 
 kappersApp.directive('restrictRole', function($log, $rootScope) {
     return {
         restrict: 'A',
-        scope: {
-            role:"@restrictRole",
-        },
         link: function(scope, element, attr){
-            if (scope.role) {
-                var roles = scope.role.split(",");
+            //console.log("attr=" + JSON.stringify(attr.restrictRole));
+            if (attr.restrictRole) {
+                var roles = attr.restrictRole.split(",");
                 if (roles.indexOf($rootScope.currentRole.role) < 0) {
                     element.css({
                         display : 'none'

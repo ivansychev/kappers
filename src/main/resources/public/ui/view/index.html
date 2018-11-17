@@ -47,7 +47,7 @@
                 <span class="icon-bar"></span>
             </a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse" style="float: left;">
             <ul class="nav navbar-nav">
                 <li ng-class="{active : currentNavigation == 'main'}">
                     <a href ng-click="routeTo('/')">Главная</a>
@@ -58,16 +58,21 @@
                 <li ng-class="{active : currentNavigation == 'contacts'}">
                     <a href ng-click="routeTo('/contacts')">Контакты</a>
                 </li>
-                <li ng-class="{active : currentNavigation == 'sign-in'}">
+                <li ng-class="{active : currentNavigation == 'sign-in'}" ng-show="!currentRole.role || currentRole.role == 'ROLE_ANONYMOUS'">
                     <a href ng-click="routeTo('/sign-in')">Войти</a>
                 </li>
-                <li ng-class="{active : currentNavigation == 'sign-up'}">
+                <li ng-class="{active : currentNavigation == 'sign-up'}" ng-show="!currentRole.role || currentRole.role == 'ROLE_ANONYMOUS'">
                     <a href ng-click="routeTo('/sign-up')">Зарегистрироваться</a>
                 </li>
-                <li ng-class="{active : currentNavigation == 'profile'}">
+                <li ng-class="{active : currentNavigation == 'profile'}" ng-show="currentRole.role && currentRole.role != 'ROLE_ANONYMOUS'">
                     <a href ng-click="routeTo('/profile')">Личный кабинет</a>
                 </li>
             </ul>
+        </div>
+        <div class="form-group" ng-show="currentRole.role && currentRole.role != 'ROLE_ANONYMOUS'" style="float: left; line-height: 50px; margin-bottom: 0px;">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
+            </div>
         </div>
     </div>
 </div>
@@ -123,5 +128,9 @@
 <script type="text/javascript" src="./ui/js/signUp/module.js"></script>
 <script type="text/javascript" src="./ui/js/signUp/service.js"></script>
 <script type="text/javascript" src="./ui/js/signUp/controller.js"></script>
+
+<!-- Roles -->
+<script type="text/javascript" src="./ui/js/role/module.js"></script>
+<script type="text/javascript" src="./ui/js/role/service.js"></script>
 </body>
 </html>

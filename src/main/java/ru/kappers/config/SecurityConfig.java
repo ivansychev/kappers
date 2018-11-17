@@ -43,7 +43,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/ui/**", "/login", "/favicon.ico", "/sign-in/**", "/sign-up/**").permitAll()
+                .antMatchers(
+                        "/",
+                        "/ui/**",
+                        "/login",
+                        "/favicon.ico",
+                        "/sign-in/**",
+                        "/sign-up/**",
+                        "/sign-in/logout-success",
+                        "/sign-in/get-authority",
+                        "/rest/dict/**"
+                ).permitAll()
                 .anyRequest().authenticated()
 //                .and()
 //                .sessionManagement().maximumSessions(10)
@@ -58,7 +68,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .and().logout()
-                .logoutUrl("/sign-in/perform-logout");
+                .logoutUrl("/sign-in/perform-logout")
+                .logoutSuccessUrl("/sign-in/logout-success")
+                .permitAll();
         ;
     }
 
