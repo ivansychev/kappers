@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+@ToString
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
