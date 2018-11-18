@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
 import ru.kappers.model.Fixture;
@@ -27,7 +28,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {KappersApplication.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
-public class FixtureServiceImplTest {
+public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private FixtureService service;
 
