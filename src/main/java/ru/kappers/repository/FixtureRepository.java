@@ -2,11 +2,9 @@ package ru.kappers.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import ru.kappers.model.Fixture;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 public interface FixtureRepository extends JpaRepository<Fixture, Integer> {

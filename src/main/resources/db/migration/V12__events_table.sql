@@ -1,21 +1,19 @@
-create table IF NOT EXISTS events
+create table events
 (
 	id serial not null,
 	u_id integer not null
-		constraint events_users_user_id_fk
-		references users
-		on delete cascade,
+		constraint events_users_id_fk
+			references users,
+	f_id integer
+		constraint events_fixtures_fixture_id_fk
+			references fixtures,
 	outcome integer,
-	coefficient float ,
+	coefficient float,
 	tokens integer,
 	price float
 )
 ;
 
-create unique index events_id_uindex
-	on kapper_info (id)
+alter table events owner to postgres
 ;
 
-create unique index events_user_id_uindex
-	on kapper_info (u_id)
-;

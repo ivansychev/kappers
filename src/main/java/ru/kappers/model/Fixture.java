@@ -1,6 +1,7 @@
 package ru.kappers.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
 
@@ -8,6 +9,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j
 @Data
@@ -62,6 +65,11 @@ public class Fixture implements Serializable, Comparable {
     Long firstHalfStart;
     @Column(name="secondHalfStart")
     Long secondHalfStart;
+    @OneToMany(mappedBy = "fixture")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Event> events = new ArrayList<>();
 
     public String getProperty(String propName) throws NoSuchFieldException, IllegalAccessException, InstantiationException {
         Field declaredField = this.getClass().getDeclaredField(propName);

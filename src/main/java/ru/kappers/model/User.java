@@ -1,5 +1,6 @@
 package ru.kappers.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.extern.log4j.Log4j;
 import org.hibernate.annotations.NaturalId;
 import lombok.*;
@@ -7,6 +8,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j
 @Data
@@ -60,7 +63,13 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-//
+    @OneToMany(mappedBy = "kapper")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Event> events = new ArrayList<>();
+
+   //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @JoinTable(name = "stat", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Stat> stat;

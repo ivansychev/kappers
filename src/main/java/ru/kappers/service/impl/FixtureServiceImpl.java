@@ -19,9 +19,9 @@ import java.util.List;
 @Log4j
 @Service
 public class FixtureServiceImpl implements FixtureService {
+    @Autowired
     private final FixtureRepository repository;
 
-    @Autowired
     public FixtureServiceImpl(FixtureRepository repository) {
         this.repository = repository;
     }

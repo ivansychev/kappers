@@ -6,6 +6,7 @@ import org.hibernate.annotations.NaturalId;
 import ru.kappers.model.utilmodel.Outcomes;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Log4j
 @Data
@@ -14,23 +15,25 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "events")
-public class Event {
+public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
-    int id;
-    @OneToOne(cascade = CascadeType.ALL)
+    private int id;
+    @ManyToOne
     @JoinColumn(name = "u_id")
-    @MapsId
-    User kapper;
+    private User kapper;
+    @ManyToOne
+    @JoinColumn(name = "f_id")
+    private Fixture fixture;
     @Column(name = "outcome")
-    Outcomes outcome;
+    private Outcomes outcome;
     @Column(name = "coefficient")
-    double coefficient;
+    private double coefficient;
     @Column(name = "tokens")
-    int tokens;
+    private int tokens;
     @Column(name = "price")
-    double price;
+    private double price;
 
 }
