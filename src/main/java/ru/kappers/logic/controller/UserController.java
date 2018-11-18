@@ -1,13 +1,15 @@
 package ru.kappers.logic.controller;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import ru.kappers.model.Role;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.kappers.model.User;
 import ru.kappers.model.dto.RoleDto;
 import ru.kappers.service.UserService;
@@ -16,12 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
-
+@Log4j
 @Controller
 public class UserController {
-
 
     private final UserService userService;
 
@@ -41,7 +40,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public boolean login(@RequestBody User user) {
-        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SecurityContextHolder.getContext().getAuthentication();
         System.out.println("user = " + user.toString());
 
         String username = user.getUserName();
@@ -95,6 +94,18 @@ public class UserController {
         user.setDateOfBirth(new Timestamp(System.currentTimeMillis()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.addUser(user);
+        return user;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/rest/user/get-current-authorized", method = RequestMethod.GET)
+    public User getCurrentAuthUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("username = " + username);
+        User user = userService.getByUserName(username);
+        if (user == null) {
+            throw new IllegalStateException("Authenticated user not found in the database.");
+        }
         return user;
     }
 }

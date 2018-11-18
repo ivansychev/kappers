@@ -2,8 +2,10 @@ package ru.kappers.logic.controller;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import lombok.extern.log4j.Log4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,17 +17,20 @@ import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
 import ru.kappers.service.FixtureService;
 import ru.kappers.service.RolesService;
+import ru.kappers.service.UserService;
 import ru.kappers.util.DateUtil;
 import ru.kappers.util.JsonUtil;
 
 import java.time.LocalDate;
 import java.util.Map;
 
+@Log4j
 @Controller
 @RequestMapping(value = "/rest/profile")
 public class ProfileController {
 
     private RolesService rolesService;
+    private UserService userService;
 
     @Autowired
     public void setRolesService(RolesService rolesService) {
@@ -45,21 +50,10 @@ public class ProfileController {
         // return userRepository.findById(id);
 
         SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("user = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-        System.out.println("user = " + SecurityContextHolder.getContext().getAuthentication());
+        log.info("user = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        log.info("user = " + SecurityContextHolder.getContext().getAuthentication());
+        log.info("getName = " + SecurityContextHolder.getContext().getAuthentication().getName());
 
-        return User.builder()
-                .currency("USD")
-                .lang("RUSSIAN")
-                .name("Вася")
-                .password("vasya96")
-                .role(rolesService.getById(1))
-                .userName("vasya")
-                .email("vasya@gmail.com")
-                .dateOfBirth(DateUtil.convertDate("19850429"))
-                .dateOfRegistration(DateUtil.getCurrentTime())
-                .isblocked(false)
-                .id(id.intValue())
-                .build();
+        return userService.getByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

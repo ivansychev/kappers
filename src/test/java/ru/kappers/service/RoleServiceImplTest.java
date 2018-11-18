@@ -35,7 +35,6 @@ public class RoleServiceImplTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void getRoleIdByName() {
-        System.out.println(rolesService);
         int roleId = rolesService.getRoleIdByName("ROLE_USER");
         Assert.assertEquals(roleId, 2);
     }

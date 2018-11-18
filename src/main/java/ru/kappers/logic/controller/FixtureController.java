@@ -6,43 +6,41 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.Fixture;
-import ru.kappers.model.User;
 import ru.kappers.service.FixtureService;
-import ru.kappers.util.DateUtil;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/rest/fixtures")
+@RequestMapping(value = "/rest/fixture")
 public class FixtureController {
     @Autowired
     private FixtureService service;
 
     @ResponseBody
     @RequestMapping(value = "/nextweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Fixture> getFixturesNextWeek() {
-
-        //Должен возвращать события со статусом Not Started и датой от сегодняшнего дня в течении 7 дней
-
+    public List<Fixture> getNextWeek() {
         return service.getFixturesNextWeek("Not Started");
     }
 
     @ResponseBody
     @RequestMapping(value = "/lastweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Fixture> getFixturesLastWeek() {
-        //Должен возвращать события со статусом отличающемся от Not Started и датой от и на 7 дней ранее
+    public List<Fixture> getLastWeek() {
         return service.getFixturesLastWeek("Match Finished");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Fixture getNextWeek(@PathVariable int id) {
+        return service.getById(id);
+
     }
 
     @ResponseBody
     @RequestMapping(value = "/today", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesToday() {
-        //Должен возвращать все события на сегодня
         return service.getFixturesToday();
     }
 
@@ -54,11 +52,4 @@ public class FixtureController {
 
         return service.getFixturesByPeriod(new Timestamp(fromDate.getTime()), new Timestamp(toDate.getTime()));
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Fixture getFixtureById(@PathVariable int id) {
-        return service.getById(id);
-    }
-
 }
