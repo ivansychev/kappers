@@ -35,8 +35,7 @@ public class JsonUtil {
     }
 
     public static JSONObject loadFixturesByDate(LocalDate date) throws UnirestException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedString = date.format(formatter);
+        String formattedString = date.format(DateTimeFormatter.ISO_DATE);
         HttpResponse<JsonNode> response = Unirest.get("https://api-football-v1.p.mashape.com/fixtures/date/" + formattedString)
                 .header("X-Mashape-Key", "4UUu9YH9M1mshzEpnUwMzCwZ7Kr9p1zShpXjsndn50fifuusMu")
                 .header("X-Mashape-Host", "api-football-v1.p.mashape.com")
