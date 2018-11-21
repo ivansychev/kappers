@@ -34,14 +34,14 @@ public class EventController {
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Odds getFixturesByPeriod(
+    public Odds getFixtureById(
             @PathVariable int id) {
         Fixture fixture = fService.getById(id);
         return new Odds(fixture);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Event submitForm(@RequestBody String content) {
+    public Event createEvent(@RequestBody String content) {
         Gson gson = new Gson();
         JsonObject jObject = gson.fromJson(content, JsonElement.class).getAsJsonObject();
         Event event = gson.fromJson(jObject, Event.class);

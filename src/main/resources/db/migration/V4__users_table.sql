@@ -13,7 +13,6 @@ create table IF NOT EXISTS users
 		references roles,
 	date_of_registration timestamp,
 	isblocked boolean not null default false,
-	currency varchar(3),
 	lang varchar(16)
 )
 ;

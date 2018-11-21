@@ -52,9 +52,6 @@ public class User implements Serializable {
     @Column(name = "isblocked", nullable = false)
     private boolean isblocked;
 
-    @Column(name = "currency")
-    private String currency;
-
     @Column(name = "lang")
     private String lang;
 

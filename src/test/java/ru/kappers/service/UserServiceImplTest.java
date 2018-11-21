@@ -55,7 +55,6 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .name("админ")
             .password("asasdgfas")
             .dateOfBirth(DateUtil.convertDate("19650806"))
-            .currency("RUB")
             .lang("RUSSIAN")
             .build();
     private User user = User.builder()
@@ -63,7 +62,6 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .name("юзер")
             .password("assaasas")
             .dateOfBirth(DateUtil.convertDate("19650806"))
-            .currency("RUB")
             .lang("RUSSIAN")
             .build();
     private User kapper = User.builder()
@@ -71,7 +69,6 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .name("каппер")
             .password("assaasas")
             .dateOfBirth(DateUtil.convertDate("19650806"))
-            .currency("RUB")
             .lang("RUSSIAN")
             .build();
 
@@ -135,12 +132,12 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     public void editUser() {
         final String adminUserName = "admin";
         User user1 = userService.getByUserName(adminUserName);
-        String curr = user1.getCurrency();
+        String curr = user1.getEmail();
         assertNotNull(user1);
-        user1.setCurrency(curr.equals("USD") ? "RUB" : "USD");
+        user1.setEmail("qwe1as@asas.ru");
         userService.editUser(user1);
         user1 = userService.getByUserName(adminUserName);
-        assertNotEquals(curr, user1.getCurrency());
+        assertNotEquals(curr, user1.getEmail());
     }
 
     @Test

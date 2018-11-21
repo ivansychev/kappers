@@ -71,7 +71,6 @@ public class UserServiceImpl implements UserService {
     public User editUser(User user) {
         User toRecord = repository.findById(user.getId())
                 .orElse(null);
-        toRecord.setCurrency(user.getCurrency());
         toRecord.setDateOfBirth(user.getDateOfBirth());
         toRecord.setDateOfRegistration(user.getDateOfRegistration());
         toRecord.setEmail(user.getEmail());

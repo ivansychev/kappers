@@ -20,42 +20,45 @@ import java.util.Map;
 @Log4j
 public class Contract implements IContract {
 
-	private UserService userService;
-	private KapperInfoService kapperService;
+    private UserService userService;
+    private KapperInfoService kapperService;
 
-	@Autowired
-	public Contract(UserService userService, KapperInfoService kapperService) {
-		this.userService = userService;
-		this.kapperService = kapperService;
-	}
+    @Autowired
+    public Contract(UserService userService, KapperInfoService kapperService) {
+        this.userService = userService;
+        this.kapperService = kapperService;
+    }
 
-	@Override
-	public KapperInfo initCapper(User user) {
-		return null;
-	}
+    @Override
+    public KapperInfo initCapper(User user) {
+        if (user != null) {
+            kapperService.initKapper(user);
+        }
+        return kapperService.getByUser(user);
+    }
 
-	@Override
-	public KapperInfo getKapperInfo(User user) {
-		return null;
-	}
+    @Override
+    public KapperInfo getKapperInfo(User user) {
+        return kapperService.getByUser(user);
+    }
 
-	@Override
-	public void blockTokens(User user, Integer amount) {
+    @Override
+    public void blockTokens(User user, Integer amount) {
 
-	}
+    }
 
-	@Override
-	public Map<User, KapperInfo> getAllInfo() {
-		return null;
-	}
+    @Override
+    public Map<User, KapperInfo> getAllInfo() {
+        return null;
+    }
 
-	@Override
-	public void unblockAmount(User user, Integer amount) {
+    @Override
+    public void unblockAmount(User user, Integer amount) {
 
-	}
+    }
 
-	@Override
-	public void withdrawBlockedTokens(User user, Integer amount) {
+    @Override
+    public void withdrawBlockedTokens(User user, Integer amount) {
 
-	}
+    }
 }
