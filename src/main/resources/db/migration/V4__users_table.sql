@@ -1,8 +1,8 @@
-create table IF NOT EXISTS users
+create table users
 (
 	id serial not null
 		constraint users_pkey
-		primary key,
+			primary key,
 	user_name varchar(128),
 	password varchar(256) not null,
 	name varchar(128),
@@ -10,10 +10,12 @@ create table IF NOT EXISTS users
 	date_of_birth timestamp,
 	role_id integer not null
 		constraint users_roles_id_fk
-		references roles,
+			references roles,
 	date_of_registration timestamp,
-	isblocked boolean not null default false,
-	lang varchar(16)
+	isblocked boolean default false not null,
+	lang varchar(16),
+	currency varchar(3),
+	balance float
 )
 ;
 
@@ -31,3 +33,4 @@ create unique index users_user_name_uindex
 create index users_role_id_index
 	on users (role_id)
 ;
+

@@ -57,4 +57,7 @@ public class GetFixturesByAPIController {
     {
         return service.getAll();
     }
+
+
+
 }

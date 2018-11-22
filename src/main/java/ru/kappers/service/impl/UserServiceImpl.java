@@ -138,4 +138,18 @@ public class UserServiceImpl implements UserService {
         //TODO
         return null;
     }
+
+    @Override
+    public void transfer(User user, User kapper, double amount, String currency) {
+        if (!user.hasRole("ROLE_USER")){
+            throw new IllegalArgumentException("User "+user.getUserName()+" has no permission to transfer money");
+        }
+        if (!kapper.hasRole("ROLE_KAPPER")){
+            throw new IllegalArgumentException("The operation is forbidden. Money can be transfered only from user to kapper");
+        }
+        if (user.getBalance()<amount){
+            throw new IllegalArgumentException("The user "+user.getUserName()+" doesnt have enough money. On balance "+user.getBalance()+" "+user.getCurrency());
+        }
+
+    }
 }
