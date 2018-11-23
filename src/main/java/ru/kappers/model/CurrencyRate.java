@@ -1,12 +1,10 @@
 package ru.kappers.model;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Log4j
 @Data
