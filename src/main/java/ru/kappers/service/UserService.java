@@ -22,6 +22,6 @@ public interface UserService {
     Stat getStat(User user);
     KapperInfo getKapperInfo(User user);
     PersonalInfo getInfo(User user);
-    void transfer (User user, User kapper, double amount, String currency);
+    void transfer (User user, User kapper, double amount);
     //TODO getEventList, getActiveEvents etc... когда евенты сделаем
 }

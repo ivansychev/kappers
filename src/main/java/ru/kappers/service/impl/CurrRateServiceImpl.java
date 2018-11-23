@@ -17,7 +17,11 @@ public class CurrRateServiceImpl implements CurrRateService {
 
     @Override
     public CurrencyRate save(CurrencyRate rate) {
-        return repository.save(rate);
+        CurrencyRate cRate = repository.getCurrencyRateByDateAndCharCode(rate.getDate(), rate.getCharCode());
+        if (cRate == null) {
+            return repository.save(rate);
+        } else
+            return update(rate);
     }
 
     @Override
@@ -41,9 +45,9 @@ public class CurrRateServiceImpl implements CurrRateService {
         CurrencyRate cRate = repository.getCurrencyRateByDateAndCharCode(rate.getDate(), rate.getCharCode());
         if (cRate != null) {
             cRate.setValue(rate.getValue());
-            return save(cRate);
+            return repository.save(cRate);
         }
-        throw new IllegalArgumentException("Currency " + rate.getCharCode() + " is not found for date " + rate.getDate());
+        return repository.save(rate);
     }
 
     @Override

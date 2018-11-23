@@ -30,7 +30,6 @@ public class DateUtil {
 		dateString = dateString.substring(0, dateString.indexOf("+"));
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		java.util.Date date = format.parse(dateString);
-		//java.util.Date date = format.parse("2018-11-21T12:00:00");
 		Date sqlDate = new Date(date.getTime());
 		return sqlDate;
 	}

@@ -1,9 +1,7 @@
 package ru.kappers.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import lombok.*;
 import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
@@ -19,6 +17,7 @@ public class CurrencyRate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private int id;
     @Column(name="date")
     private Date date;
@@ -32,4 +31,6 @@ public class CurrencyRate {
     private double value;
     @Column(name="nominal")
     private int nominal;
+
+
 }
