@@ -43,8 +43,11 @@ public class Contract implements IContract {
     }
 
     @Override
-    public void blockTokens(User user, Integer amount) {
-
+    public synchronized void blockTokens(User user, Integer amount) {
+        KapperInfo kapperInfo = getKapperInfo(user);
+        int blocked = kapperInfo.getBlockedTokens();
+        blocked+=amount;
+        kapperInfo.setBlockedTokens(blocked);
     }
 
     @Override
@@ -53,8 +56,18 @@ public class Contract implements IContract {
     }
 
     @Override
-    public void unblockAmount(User user, Integer amount) {
-
+    public synchronized void unblockAmount(User user, Integer amount) {
+        KapperInfo kapperInfo = getKapperInfo(user);
+        int blocked = kapperInfo.getBlockedTokens();
+        if (blocked<=amount){
+        blocked-=amount;
+        } else {
+            String message = "У каппера "+user.getUserName()+" нет заблокированных токенов в количестве "+amount;
+            log.error(message);
+            throw new IllegalArgumentException(message);
+        }
+        kapperInfo.setBlockedTokens(blocked);
+        kapperInfo.setTokens(kapperInfo.getTokens() + amount);
     }
 
     @Override
