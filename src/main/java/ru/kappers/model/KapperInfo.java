@@ -22,9 +22,9 @@ import java.io.Serializable;
 public class KapperInfo implements IRaiting, Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, insertable = true, updatable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "tokens")
     private Integer tokens;

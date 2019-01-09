@@ -11,11 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.KapperInfo;
 import ru.kappers.model.User;
 import ru.kappers.model.utilmodel.Odds;
 import ru.kappers.model.utilmodel.Outcomes;
 import ru.kappers.service.EventService;
 import ru.kappers.service.FixtureService;
+import ru.kappers.service.KapperInfoService;
 import ru.kappers.service.UserService;
 
 import java.sql.Timestamp;
@@ -31,6 +33,8 @@ public class EventController {
     private EventService eService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private KapperInfoService kapperService;
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,10 +50,17 @@ public class EventController {
         JsonObject jObject = gson.fromJson(content, JsonElement.class).getAsJsonObject();
         Event event = gson.fromJson(jObject, Event.class);
         User u = userService.getByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
-        event.setKapper(u);
-        Fixture fixture = fService.getById(jObject.get("f_id").getAsInt());
-        event.setFixture(fixture);
-        Event result = eService.addEvent(event);
-        return result;
+        KapperInfo kapper = kapperService.getByUser(u);
+        if (u.hasRole("ROLE_KAPPER") &&
+                kapper != null &&
+                kapper.getTokens() >= event.getTokens()) {
+            event.setKapper(u);
+            Fixture fixture = fService.getById(jObject.get("f_id").getAsInt());
+            event.setFixture(fixture);
+            Event result = eService.addEvent(event);
+            return result;
+        } else {
+            throw new IllegalArgumentException("The user " + u.getUserName() + " is not kapper");
+        }
     }
 }
