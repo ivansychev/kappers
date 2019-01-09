@@ -50,14 +50,17 @@ public class EventController {
         JsonObject jObject = gson.fromJson(content, JsonElement.class).getAsJsonObject();
         Event event = gson.fromJson(jObject, Event.class);
         User u = userService.getByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+        Integer price = event.getTokens();
         KapperInfo kapper = kapperService.getByUser(u);
         if (u.hasRole("ROLE_KAPPER") &&
                 kapper != null &&
-                kapper.getTokens() >= event.getTokens()) {
+                kapper.getTokens()-kapper.getBlockedTokens() >= price) {
             event.setKapper(u);
             Fixture fixture = fService.getById(jObject.get("f_id").getAsInt());
             event.setFixture(fixture);
+            kapper.setBlockedTokens(kapper.getBlockedTokens() + price);
             Event result = eService.addEvent(event);
+            kapperService.editKapper(kapper);
             return result;
         } else {
             throw new IllegalArgumentException("The user " + u.getUserName() + " is not kapper");
