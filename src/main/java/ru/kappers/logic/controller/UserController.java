@@ -41,14 +41,10 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public boolean login(@RequestBody User user) {
         SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("user = " + user.toString());
-
         String username = user.getUserName();
         String password = user.getPassword();
 
         user = userService.getByUserName(username);
-
-        System.out.println("user2 = " + user.toString());
 
         boolean result = false;
 

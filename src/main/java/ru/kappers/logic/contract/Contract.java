@@ -48,6 +48,7 @@ public class Contract implements IContract {
         int blocked = kapperInfo.getBlockedTokens();
         blocked+=amount;
         kapperInfo.setBlockedTokens(blocked);
+        kapperService.editKapper(kapperInfo);
     }
 
     @Override
@@ -68,6 +69,8 @@ public class Contract implements IContract {
         }
         kapperInfo.setBlockedTokens(blocked);
         kapperInfo.setTokens(kapperInfo.getTokens() + amount);
+        kapperService.editKapper(kapperInfo);
+
     }
 
     @Override

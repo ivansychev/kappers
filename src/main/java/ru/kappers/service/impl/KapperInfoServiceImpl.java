@@ -27,6 +27,7 @@ public class KapperInfoServiceImpl implements KapperInfoService {
             if (kapper == null) {
                 kapper = KapperInfo.builder().user(user).build();
                 setInitialData(kapper);
+                editKapper(kapper);
                 return kapper;
             } else {
                 String message = "The user " + user.getUserName() + " has already been initialized as Kapper.";
