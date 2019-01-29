@@ -22,7 +22,7 @@ import java.util.List;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", insertable = true, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     private int id;
 
@@ -74,7 +74,7 @@ public class User implements Serializable {
     private String currency;
 
     @Column(name = "balance")
-    private double balance;
+    private Double balance;
 
     //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -9,10 +9,7 @@ import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
 import ru.kappers.service.FixtureService;
@@ -25,7 +22,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Log4j
-@Controller
+@RestController
 @RequestMapping(value = "/rest/profile")
 public class ProfileController {
 

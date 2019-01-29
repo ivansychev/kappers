@@ -10,5 +10,5 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     List<User> getAllByRoleId(int roleId);
     User getByUserName(String userName);
     void deleteByUserName(String userName);
-    void delete(User user);
+    void delete(User userName);
 }

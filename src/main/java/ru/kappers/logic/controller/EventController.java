@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(value = "/rest/events")
 public class EventController {
     @Autowired
@@ -43,7 +43,18 @@ public class EventController {
         Fixture fixture = fService.getById(id);
         return new Odds(fixture);
     }
-
+/**
+ * Пример JSON для создания евента:
+ *
+ * {
+ * 	"outcome":"GUESTTEAMWIN", //в этом случае ставка на гостевую команду
+ * 	"coefficient":"1.35", //кэф пока берем от балды
+ * 	"tokens":"50", //сколько токенов ставим
+ * 	"price":"500",  //какую цену назначаем за открыте евента юзерами
+ * 	"f_id":"37743" //айди фиксчи
+ * }
+ *
+ * */
     @RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public Event createEvent(@RequestBody String content) {
         Gson gson = new Gson();
