@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
 import ru.kappers.service.UserService;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-@Controller
+@RestController
 @RequestMapping(value = "/rest/raiting")
 public class RaitingCotroller {
     @Autowired

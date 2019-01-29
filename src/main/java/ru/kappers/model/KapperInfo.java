@@ -41,10 +41,10 @@ public class KapperInfo implements IRaiting, Serializable {
     @Column(name = "blocked_tokens")
     private Integer blockedTokens;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "u_id")
     @MapsId
-    @NaturalId
+   // @NaturalId
     private User user;
 
     @Override

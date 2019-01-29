@@ -2,7 +2,6 @@ package ru.kappers.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.extern.log4j.Log4j;
-import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.NaturalId;
 import lombok.*;
 
@@ -23,7 +22,7 @@ import java.util.List;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     private int id;
 
@@ -75,7 +74,7 @@ public class User implements Serializable {
     private String currency;
 
     @Column(name = "balance")
-    private double balance;
+    private Double balance;
 
     //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -98,6 +97,8 @@ public class User implements Serializable {
     public boolean hasRole(String roleName) {
         return role.getName().equals(roleName);
     }
-
-
+    @ToString.Exclude
+    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private KapperInfo kapperInfo;
 }

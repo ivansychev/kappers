@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(value = "/rest/fixture")
 public class FixtureController {
     @Autowired
