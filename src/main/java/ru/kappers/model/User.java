@@ -22,25 +22,27 @@ import java.util.List;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     private int id;
 
     @NaturalId
     @Column(name = "user_name")
-  //  @NotEmpty(message = "*Please provide user name")
+    //  @NotEmpty(message = "*Please provide user name")
     private String userName;
 
     @Column(name = "password")
- //   @Length(min = 5, message = "*Your password must have at least 5 characters")
-  //  @NotEmpty(message = "*Please provide your password")
+    @ToString.Exclude
+    //  @JsonIgnore
+    //   @Length(min = 5, message = "*Your password must have at least 5 characters")
+    //  @NotEmpty(message = "*Please provide your password")
     private String password;
 
     @Column(name = "name")
     private String name;
     @Column(name = "email")
 //    @Email(message = "*Please provide a valid Email")
- //   @NotEmpty(message = "*Please provide an email")
+    //   @NotEmpty(message = "*Please provide an email")
     private String email;
 
     @Column(name = "date_of_birth")
@@ -52,13 +54,12 @@ public class User implements Serializable {
     @Column(name = "isblocked", nullable = false)
     private boolean isblocked;
 
-    @Column(name = "currency")
-    private String currency;
-
     @Column(name = "lang")
     private String lang;
 
-    /** Роль */
+    /**
+     * Роль
+     */
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -69,7 +70,13 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
-   //
+    @Column(name = "currency")
+    private String currency;
+
+    @Column(name = "balance")
+    private Double balance;
+
+    //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @JoinTable(name = "stat", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Stat> stat;
@@ -87,9 +94,11 @@ public class User implements Serializable {
         return role.getId() == role_id;
     }
 
-    public boolean hasRole(String roleName){
+    public boolean hasRole(String roleName) {
         return role.getName().equals(roleName);
     }
-
-
+    @ToString.Exclude
+    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private KapperInfo kapperInfo;
 }

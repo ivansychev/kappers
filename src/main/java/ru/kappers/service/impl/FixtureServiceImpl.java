@@ -38,7 +38,8 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     public void deleteRecordByFixtureId(int fixture_id) {
-        repository.deleteById(fixture_id);
+        Fixture byId = repository.getById(fixture_id);
+        repository.delete(byId);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     public List<Fixture> getAll() {
-        return (List<Fixture>) repository.findAll();
+        return repository.findAll();
     }
 
     @Override

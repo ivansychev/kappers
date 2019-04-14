@@ -2,13 +2,20 @@ package ru.kappers.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.*;
 import ru.kappers.repository.RolesRepository;
 import ru.kappers.repository.UsersRepository;
+import ru.kappers.service.CurrRateService;
+import ru.kappers.service.RolesService;
 import ru.kappers.service.UserService;
+import ru.kappers.util.CurrencyUtil;
 import ru.kappers.util.DateUtil;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -16,12 +23,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UsersRepository repository;
-    private final RolesRepository rolesRepository;
+    private final RolesService rolesService;
+    private final CurrRateService currService;
 
     @Autowired
-    public UserServiceImpl(UsersRepository repository, RolesRepository rolesRepository) {
+    public UserServiceImpl(UsersRepository repository, RolesService rolesService, CurrRateService currService) {
         this.repository = repository;
-        this.rolesRepository = rolesRepository;
+        this.rolesService = rolesService;
+        this.currService = currService;
     }
 
     @Override
@@ -36,7 +45,7 @@ public class UserServiceImpl implements UserService {
             user.setDateOfRegistration(DateUtil.getCurrentTime());
         }
         if (user.getRole() == null) {
-            user.setRole(rolesRepository.getByName("ROLE_USER"));
+            user.setRole(rolesService.getByName("ROLE_USER"));
         }
         return repository.save(user);
     }
@@ -79,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllByRole(String roleName) {
-        Role role = rolesRepository.getByName(roleName);
+        Role role = rolesService.getByName(roleName);
         return repository.getAllByRoleId(role.getId());
     }
 
@@ -100,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Role getRole(User user) {
-       return user.getRole();
+        return user.getRole();
     }
 
     @Override
@@ -125,5 +134,51 @@ public class UserServiceImpl implements UserService {
     public PersonalInfo getInfo(User user) {
         //TODO
         return null;
+    }
+
+    @Override
+    @Transactional
+    public synchronized void transfer(User user, User kapper, double amount) {
+        if (!user.hasRole("ROLE_USER")) {
+            throw new IllegalArgumentException("User " + user.getUserName() + " has no permission to transfer money");
+        }
+        if (!kapper.hasRole("ROLE_KAPPER")) {
+            throw new IllegalArgumentException("The operation is forbidden. Money can be transfered only from user to kapper");
+        }
+        if (user.getBalance() < amount) {
+            throw new IllegalArgumentException("The user " + user.getUserName() + " doesnt have enough money. On balance " + user.getBalance() + " " + user.getCurrency());
+        }
+        try {
+            if (user.getCurrency().equals(kapper.getCurrency())) {
+                user.setBalance(user.getBalance() - amount);
+                kapper.setBalance(kapper.getBalance() + amount);
+            } else {
+                user.setBalance(user.getBalance() - amount);
+                amount = exchange(user.getCurrency(), kapper.getCurrency(), amount);
+                kapper.setBalance(kapper.getBalance() + amount);
+                editUser(user);
+                editUser(kapper);
+            }
+            log.info("User " + user.getUserName() + " transfered " + amount + " " + kapper.getCurrency() + " to kapper " + kapper.getUserName());
+        } catch (Exception e) {
+            log.error("Couldn't transfer money from " + user.getUserName() + " to " + kapper.getUserName());
+        }
+    }
+
+    public double exchange(String fromCurr, String toCurr, double amount) {
+        if (fromCurr.equals(toCurr)) {
+            return amount;
+        } else if (fromCurr.equals("RUB")) {
+            CurrencyRate rate = currService.getCurrByDate(Date.valueOf(LocalDate.now()), toCurr);
+            return amount / rate.getValue() * rate.getNominal();
+        } else if (toCurr.equals("RUB")) {
+            CurrencyRate rate = currService.getCurrByDate(Date.valueOf(LocalDate.now()), fromCurr);
+            return amount * rate.getValue() * rate.getNominal();
+        } else {
+            CurrencyRate from = currService.getCurrByDate(Date.valueOf(LocalDate.now()), fromCurr);
+            CurrencyRate to = currService.getCurrByDate(Date.valueOf(LocalDate.now()), toCurr);
+            double amountInRub = amount * from.getValue() * from.getNominal();
+            return amountInRub / to.getValue() * to.getNominal();
+        }
     }
 }

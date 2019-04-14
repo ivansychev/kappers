@@ -22,9 +22,9 @@ import java.io.Serializable;
 public class KapperInfo implements IRaiting, Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, insertable = true, updatable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "tokens")
     private Integer tokens;
@@ -41,10 +41,10 @@ public class KapperInfo implements IRaiting, Serializable {
     @Column(name = "blocked_tokens")
     private Integer blockedTokens;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "u_id")
     @MapsId
-    @NaturalId
+   // @NaturalId
     private User user;
 
     @Override

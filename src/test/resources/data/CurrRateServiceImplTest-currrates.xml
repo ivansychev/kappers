@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <currency_rate date="2018-11-21" charcode="GLD" numcode="999" name="Золото" nominal="1" value="2000"/>
+</dataset>

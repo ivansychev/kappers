@@ -6,10 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.User;
 import ru.kappers.model.dto.RoleDto;
 import ru.kappers.service.UserService;
@@ -19,7 +16,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Base64;
 @Log4j
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
@@ -41,14 +38,10 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public boolean login(@RequestBody User user) {
         SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("user = " + user.toString());
-
         String username = user.getUserName();
         String password = user.getPassword();
 
         user = userService.getByUserName(username);
-
-        System.out.println("user2 = " + user.toString());
 
         boolean result = false;
 
