@@ -1,6 +1,6 @@
 package ru.kappers.service.impl;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.*;
@@ -11,7 +11,7 @@ import ru.kappers.util.DateUtil;
 
 import java.util.List;
 
-@Log4j
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,19 +26,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        User byUserId = repository.getByUserName(user.getUserName());
-        if (byUserId == null) {
-            if (user.getDateOfRegistration() == null) {
-                user.setDateOfRegistration(DateUtil.getCurrentTime());
-            }
-            if (user.getRole() == null) {
-                user.setRole(rolesRepository.getByName("ROLE_USER"));
-            }
-            repository.save(user);
-        } else {
-            log.info("Пользователь " + user.getUserName() + " уже существует");
+        final String userName = user.getUserName();
+        User byUserId = repository.getByUserName(userName);
+        if (byUserId != null) {
+            log.info("Пользователь {} уже существует", userName);
+            return byUserId;
         }
-        return repository.getByName(user.getName());
+        if (user.getDateOfRegistration() == null) {
+            user.setDateOfRegistration(DateUtil.getCurrentTime());
+        }
+        if (user.getRole() == null) {
+            user.setRole(rolesRepository.getByName("ROLE_USER"));
+        }
+        return repository.save(user);
     }
 
     @Override
@@ -69,20 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User editUser(User user) {
-        User toRecord = repository.findById(user.getId())
-                .orElse(null);
-        toRecord.setCurrency(user.getCurrency());
-        toRecord.setDateOfBirth(user.getDateOfBirth());
-        toRecord.setDateOfRegistration(user.getDateOfRegistration());
-        toRecord.setEmail(user.getEmail());
-        toRecord.setIsblocked(user.isIsblocked());
-        toRecord.setLang(user.getLang());
-        toRecord.setName(user.getName());
-        toRecord.setPassword(user.getPassword());
-        toRecord.setRole(user.getRole());
-        toRecord.setUserName(user.getUserName());
-        repository.save(toRecord);
-        return toRecord;
+        return repository.save(user);
     }
 
     @Override
