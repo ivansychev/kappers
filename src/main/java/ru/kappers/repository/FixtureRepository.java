@@ -15,7 +15,7 @@ public interface FixtureRepository extends JpaRepository<Fixture, Integer> {
     @Query(
             value = "delete FROM fixtures WHERE fixture_id = ?1",
             nativeQuery = true)
-    void deleteById(int fixtureId);
+    Fixture deleteById(int fixtureId);
     @Query(
             value = "select * FROM fixtures WHERE event_date > ?1 and event_date < ?2",
             nativeQuery = true)

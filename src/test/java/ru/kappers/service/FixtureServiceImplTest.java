@@ -20,7 +20,6 @@ import ru.kappers.service.FixtureService;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -76,15 +75,16 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
         Fixture fixture = Fixture.builder().fixture_id(54552).event_date(Timestamp.valueOf(LocalDateTime.now())).build();
         service.addRecord(fixture);
         Fixture byId = service.getById(54552);
-        Assert.assertNotNull(byId);
+        assertNotNull(byId);
     }
 
 
     @Test
     public void addRecord() {
         Fixture record = service.addRecord(tomorrow);
-        Assert.assertNotNull(record);
-        Assert.assertEquals((long)record.getFixture_id(), (long)112);
+        assertNotNull(record);
+        assertEquals((long)record.getFixture_id(), (long)112);
+        service.deleteRecord(record);
     }
 
     @Test
@@ -92,14 +92,21 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
         Fixture record = service.addRecord(today);
         Assert.assertNotNull(record);
         Fixture byId = service.getById(111);
-        Assert.assertEquals(byId, record);
+        assertEquals(byId, record);
         service.deleteRecord(today);
         byId = service.getById(111);
-        Assert.assertNull(byId);
+        assertNull(byId);
     }
 
     @Test
     public void deleteRecordByFixtureId() {
+        Fixture record = service.addRecord(today);
+        assertNotNull(record);
+        Fixture byId = service.getById(111);
+        assertEquals(byId, record);
+        service.deleteRecordByFixtureId(111);
+        byId = service.getById(111);
+        assertNull(byId);
     }
 
     @Test
@@ -127,7 +134,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void getFixturesLastWeek1() {
+    public void getFixturesLastWeekFiltered() {
     }
 
     @Test
@@ -135,6 +142,6 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void getFixturesNextWeek1() {
+    public void getFixturesNextWeekFiltered() {
     }
 }
