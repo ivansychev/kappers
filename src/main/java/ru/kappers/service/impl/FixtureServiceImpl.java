@@ -49,7 +49,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     public List<Fixture> getAll() {
-        return (List<Fixture>) repository.findAll();
+        return repository.findAll();
     }
 
     @Override
