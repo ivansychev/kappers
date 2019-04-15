@@ -2,22 +2,20 @@ package ru.kappers.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.*;
-import ru.kappers.repository.RolesRepository;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.CurrRateService;
 import ru.kappers.service.RolesService;
 import ru.kappers.service.UserService;
-import ru.kappers.util.CurrencyUtil;
 import ru.kappers.util.DateUtil;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+//TODO нужно обязательно пересмотреть все пересчёты сумм, по возможности переписать на использование java.math.BigDecimal
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
