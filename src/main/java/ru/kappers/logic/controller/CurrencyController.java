@@ -71,7 +71,7 @@ public class CurrencyController {
                     .name(value.get("Name").getAsString())
                     .date(date)
                     .nominal(value.get("Nominal").getAsInt())
-                    .value(value.get("Value").getAsDouble())
+                    .value(value.get("Value").getAsBigDecimal())
                     .build();
             service.save(rate);
         }

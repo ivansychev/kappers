@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,11 +71,13 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
+    /** Валюта */
     @Column(name = "currency")
     private String currency;
 
+    /** Баланс, по умолчанию 0.0 */
     @Column(name = "balance")
-    private Double balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

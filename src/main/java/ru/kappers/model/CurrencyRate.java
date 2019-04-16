@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Log4j
@@ -26,7 +27,7 @@ public class CurrencyRate {
     @Column(name="name")
     private String name;
     @Column(name="value")
-    private double value;
+    private BigDecimal value;
     @Column(name="nominal")
     private int nominal;
 
