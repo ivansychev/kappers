@@ -2,6 +2,7 @@ package ru.kappers.service;
 
 import ru.kappers.model.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserService {
@@ -22,6 +23,6 @@ public interface UserService {
     Stat getStat(User user);
     KapperInfo getKapperInfo(User user);
     PersonalInfo getInfo(User user);
-    void transfer (User user, User kapper, double amount);
+    void transfer (User user, User kapper, BigDecimal amount);
     //TODO getEventList, getActiveEvents etc... когда евенты сделаем
 }

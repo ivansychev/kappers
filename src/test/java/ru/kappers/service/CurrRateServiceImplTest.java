@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
 import ru.kappers.model.CurrencyRate;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
@@ -38,9 +39,10 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     public void save() {
+        final BigDecimal expectedValue = new BigDecimal("4650.00");
         CurrencyRate rate = CurrencyRate.builder()
                 .nominal(1)
-                .value(4650)
+                .value(expectedValue)
                 .date(Date.valueOf("2018-11-23"))
                 .charCode("BTC")
                 .numCode("000")
@@ -48,7 +50,7 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
                 .build();
         CurrencyRate save = service.save(rate);
         assertNotNull(save);
-        assertEquals(save.getValue(), 4650.00d, 0.001);
+        assertEquals(save.getValue(), expectedValue);
         assertEquals(save.getNominal(), 1);
         assertEquals(save.getCharCode(), "BTC");
         assertEquals(save.getName(), "Bitcoin");
@@ -81,10 +83,12 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
     public void update() {
         CurrencyRate gld = service.getCurrByDate(Date.valueOf("2018-11-21"), "GLD");
         assertNotNull(gld);
-        assertEquals(gld.getValue(), 2000.00d, 0.001);
-        gld.setValue(3000);
+        assertEquals(gld.getValue(), new BigDecimal("2000.0000"));
+
+        final BigDecimal expectedValue = BigDecimal.valueOf(3000);
+        gld.setValue(expectedValue);
         CurrencyRate update = service.update(gld);
-        assertEquals(update.getValue(), 3000, 0.001);
+        assertEquals(update.getValue(), expectedValue);
     }
 
     @Test
