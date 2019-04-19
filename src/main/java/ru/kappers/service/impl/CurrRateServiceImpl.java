@@ -1,7 +1,9 @@
 package ru.kappers.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.repository.CurrRateRepository;
 import ru.kappers.service.CurrRateService;
@@ -10,39 +12,51 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Реализация сервиса курсов валют
+ */
+@Slf4j
 @Service
+@Transactional
 public class CurrRateServiceImpl implements CurrRateService {
+
+    private final CurrRateRepository repository;
+
     @Autowired
-    private CurrRateRepository repository;
+    public CurrRateServiceImpl(CurrRateRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public CurrencyRate save(CurrencyRate rate) {
-        CurrencyRate cRate = repository.getCurrencyRateByDateAndCharCode(rate.getDate(), rate.getCharCode());
-        if (cRate == null) {
-            return repository.save(rate);
-        } else
-            return update(rate);
+        log.debug("save(rate: {})...", rate);
+        return update(rate);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isExist(Date date, String currLiteral) {
-        CurrencyRate rate = repository.getCurrencyRateByDateAndCharCode(date, currLiteral);
-        return rate != null;
+        log.debug("isExist(date: {}, currLiteral: {})...", date, currLiteral);
+        return getCurrByDate(date, currLiteral) != null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CurrencyRate getCurrByDate(Date date, String currLiteral) {
+        log.debug("getCurrByDate(date: {}, currLiteral: {})...", date, currLiteral);
         return repository.getCurrencyRateByDateAndCharCode(date, currLiteral);
     }
 
     @Override
     public void clear() {
+        log.debug("clear()...");
         repository.deleteAll();
     }
 
     @Override
     public CurrencyRate update(CurrencyRate rate) {
-        CurrencyRate cRate = repository.getCurrencyRateByDateAndCharCode(rate.getDate(), rate.getCharCode());
+        log.debug("update(rate: {})...", rate);
+        CurrencyRate cRate = getCurrByDate(rate.getDate(), rate.getCharCode());
         if (cRate != null) {
             cRate.setValue(rate.getValue());
             return repository.save(cRate);
@@ -51,17 +65,23 @@ public class CurrRateServiceImpl implements CurrRateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CurrencyRate getToday(String literal) {
-        return repository.getCurrencyRateByDateAndCharCode(Date.valueOf(LocalDate.now()), literal);
+        log.debug("getToday(literal: {})...", literal);
+        return getCurrByDate(Date.valueOf(LocalDate.now()), literal);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CurrencyRate> getAllToday() {
-        return repository.getAllByDate(Date.valueOf(LocalDate.now()));
+        log.debug("getAllToday()...");
+        return getAllByDate(Date.valueOf(LocalDate.now()));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CurrencyRate> getAllByDate(Date date) {
+        log.debug("getAllByDate(date: {})...", date);
         return repository.getAllByDate(date);
     }
 }

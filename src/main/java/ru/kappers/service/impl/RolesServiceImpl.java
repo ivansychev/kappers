@@ -11,6 +11,9 @@ import ru.kappers.service.RolesService;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Реализация сервиса роли пользователя
+ */
 @Slf4j
 @Service
 @Transactional
