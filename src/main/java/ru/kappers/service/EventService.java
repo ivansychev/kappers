@@ -5,6 +5,9 @@ import ru.kappers.model.User;
 
 import java.util.List;
 
+/**
+ * Интерфейс сервиса событий (спортивных)
+ */
 public interface EventService {
     Event addEvent(Event record);
     void delete(Event record);
