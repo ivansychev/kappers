@@ -15,9 +15,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
 import ru.kappers.model.Fixture;
-import ru.kappers.service.FixtureService;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,52 +35,52 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
     private FixtureService service;
     private Timestamp nowTstmp = new Timestamp(System.currentTimeMillis());
     private Fixture today = Fixture.builder()
-            .fixture_id(111)
-            .event_date(nowTstmp)
-            .event_timestamp(nowTstmp.getTime())
+            .id(111)
+            .eventDate(nowTstmp)
+            .eventTimestamp(nowTstmp.getTime())
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
-            .league_id(87)
+            .leagueId(87)
             .status(STATUS_NOT_STARTED)
             .build();
 
     private Fixture tomorrow = Fixture.builder()
-            .fixture_id(112)
-            .event_date(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000))
-            .event_timestamp(nowTstmp.getTime() + 24 * 3600 * 1000)
+            .id(112)
+            .eventDate(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000))
+            .eventTimestamp(nowTstmp.getTime() + 24 * 3600 * 1000)
             .awayTeam("Manchester United")
             .homeTeam("FC Liverpool")
-            .league_id(2)
+            .leagueId(2)
             .status(STATUS_NOT_STARTED)
             .build();
 
     private Fixture yesterday = Fixture.builder()
-            .fixture_id(110)
-            .event_date(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000))
-            .event_timestamp(nowTstmp.getTime() - 24 * 3600 * 1000)
+            .id(110)
+            .eventDate(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000))
+            .eventTimestamp(nowTstmp.getTime() - 24 * 3600 * 1000)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
-            .league_id(4)
+            .leagueId(4)
             .status(STATUS_MATCH_FINISHED)
             .build();
 
     private Fixture nextWeek = Fixture.builder()
-            .fixture_id(111)
-            .event_date(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7))
-            .event_timestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7)
+            .id(111)
+            .eventDate(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7))
+            .eventTimestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7)
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
-            .league_id(87)
+            .leagueId(87)
             .status(STATUS_NOT_STARTED)
             .build();
 
     private Fixture lastWeek = Fixture.builder()
-            .fixture_id(110)
-            .event_date(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7))
-            .event_timestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7)
+            .id(110)
+            .eventDate(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7))
+            .eventTimestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
-            .league_id(4)
+            .leagueId(4)
             .status(STATUS_MATCH_FINISHED)
             .build();
 
@@ -95,7 +93,10 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
 
     @Test
     public void getById() {
-        Fixture fixture = Fixture.builder().fixture_id(54552).event_date(Timestamp.valueOf(LocalDateTime.now())).build();
+        Fixture fixture = Fixture.builder()
+                .id(54552)
+                .eventDate(Timestamp.valueOf(LocalDateTime.now()))
+                .build();
         service.addRecord(fixture);
         Fixture byId = service.getById(54552);
         assertNotNull(byId);
@@ -106,7 +107,7 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
     public void addRecord() {
         Fixture record = service.addRecord(tomorrow);
         assertNotNull(record);
-        assertEquals((long) record.getFixture_id(), (long) 112);
+        assertEquals((long) record.getId(), (long) 112);
         service.deleteRecord(record);
     }
 
@@ -127,7 +128,7 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
         assertNotNull(record);
         Fixture byId = service.getById(111);
         assertEquals(byId, record);
-        service.deleteRecordByFixtureId(111);
+        service.deleteRecordById(111);
         byId = service.getById(111);
         assertNull(byId);
     }
@@ -135,10 +136,10 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
     @Test
     public void updateFixture() {
         service.addRecord(tomorrow);
-        Fixture fixture = service.getById(tomorrow.getFixture_id());
+        Fixture fixture = service.getById(tomorrow.getId());
         fixture.setStatus(STATUS_MATCH_FINISHED);
         service.updateFixture(fixture);
-        Fixture updated = service.getById(tomorrow.getFixture_id());
+        Fixture updated = service.getById(tomorrow.getId());
         assertEquals(updated.getStatus(), STATUS_MATCH_FINISHED);
         service.deleteRecord(updated);
     }

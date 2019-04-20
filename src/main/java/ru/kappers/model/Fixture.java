@@ -31,19 +31,19 @@ public class Fixture implements Serializable, Comparable {
 ////    private int Id;
     @Id
     @Column(name = "fixture_id",nullable = false, insertable = false, updatable = false)
-    Integer fixture_id;
+    Integer id;
     @Column(name="event_timestamp")
-    Long event_timestamp;
+    Long eventTimestamp;
     @Column(name="event_date")
-    Timestamp event_date;
+    Timestamp eventDate;
     @Column(name="league_id")
-    Integer league_id;
+    Integer leagueId;
     @Column(name="round")
     String round;
     @Column(name="homeTeam_id")
-    Integer homeTeam_id;
+    Integer homeTeamId;
     @Column(name="awayTeam_id")
-    Integer awayTeam_id;
+    Integer awayTeamId;
     @Column(name="homeTeam")
     String homeTeam;
     @Column(name="awayTeam")
@@ -57,9 +57,9 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="goalsAwayTeam")
     Integer goalsAwayTeam;
     @Column(name="halftime_score")
-    String halftime_score;
+    String halftimeScore;
     @Column(name="final_score")
-    String final_score;
+    String finalScore;
     @Column(name="penalty")
     String penalty;
     @Column(name="elapsed")
@@ -81,8 +81,9 @@ public class Fixture implements Serializable, Comparable {
         Object value = declaredField.get(objectValue);
         return String.valueOf(value);
     }
-   @Override
+
+    @Override
     public int compareTo(Object o) {
-        return (getEvent_timestamp()).compareTo(((Fixture) o).getEvent_timestamp());
+        return eventTimestamp.compareTo(((Fixture) o).eventTimestamp);
     }
 }
