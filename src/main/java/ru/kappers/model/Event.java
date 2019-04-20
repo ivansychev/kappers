@@ -1,14 +1,16 @@
 package ru.kappers.model;
 
 import lombok.*;
-import lombok.extern.log4j.Log4j;
-import org.hibernate.annotations.NaturalId;
+import lombok.extern.slf4j.Slf4j;
 import ru.kappers.model.utilmodel.Outcomes;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Log4j
+/**
+ * JPA-сущность Заведенное событие
+ */
+@Slf4j
 @Data
 @Builder
 @AllArgsConstructor
