@@ -136,10 +136,10 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
     @Test
     public void updateFixture() {
         service.addRecord(tomorrow);
-        Fixture fixture = service.getById(tomorrow.getFixture_id());
+        Fixture fixture = service.getById(tomorrow.getId());
         fixture.setStatus(STATUS_MATCH_FINISHED);
         service.updateFixture(fixture);
-        Fixture updated = service.getById(tomorrow.getFixture_id());
+        Fixture updated = service.getById(tomorrow.getId());
         assertEquals(updated.getStatus(), STATUS_MATCH_FINISHED);
         service.deleteRecord(updated);
     }
