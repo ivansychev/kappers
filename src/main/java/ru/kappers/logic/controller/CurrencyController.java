@@ -1,14 +1,12 @@
 package ru.kappers.logic.controller;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.service.CurrRateService;
@@ -16,48 +14,41 @@ import ru.kappers.util.DateUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Контроллер валют
+ */
+@Slf4j
 @RestController
 @RequestMapping(value = "/rest/admin/curr")
 public class CurrencyController {
-    @Autowired
-    private CurrRateService service;
+    private final CurrRateService service;
 
-    @ResponseBody
+    @Autowired
+    public CurrencyController(CurrRateService service) {
+        this.service = service;
+    }
+
+    //TODO думаю стоит метод переименовать во что то более соответствующее реализации, например, refreshCurrencyRatesForToday. И реализацию стоит перенести в сам сервис
+    //TODO кстати, данный метод собирались в будущем вызывать по расписанию, это возможно будет настроено как раз в самом методе сервиса или отдельной конфигурации Spring контекста
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
-    public void getCurrToday() throws ParseException {
-        URL url;
-        InputStream stream = null;
-        BufferedReader reader = null;
+    public void getCurrToday() throws ParseException, MalformedURLException {
+        URL url = new URL("https://www.cbr-xml-daily.ru/daily_json.js");
         StringBuilder sb = new StringBuilder();
-        try {
-            url = new URL("https://www.cbr-xml-daily.ru/daily_json.js");
-            stream = url.openStream();
-            reader = new BufferedReader(new InputStreamReader(stream));
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
             String s;
             while ((s = reader.readLine()) != null) {
                 sb.append(s);
             }
         } catch (IOException e) {
+            log.error("CBR daily JSON reading error", e);
             throw new RuntimeException(e);
-        } finally {
-            try {
-                stream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(sb.toString());
