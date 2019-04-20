@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface FixtureService {
     Fixture addRecord(Fixture fixture);
-    void deleteRecord(Fixture id);
-    void deleteRecordByFixtureId(int fixture_id);
+    void deleteRecord(Fixture fixture);
+    void deleteRecordById(int id);
     Fixture updateFixture (Fixture fixture);
     List<Fixture> getAll();
     List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to);

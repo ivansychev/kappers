@@ -2,27 +2,19 @@ package ru.kappers.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.kappers.model.Fixture;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * Репозиторий для спортивных событий
+ */
 public interface FixtureRepository extends JpaRepository<Fixture, Integer> {
-    @Query(
-            value = "select * FROM fixtures WHERE fixture_id = ?1",
-            nativeQuery = true)
-    Fixture getById(int id);
-    @Query(
-            value = "delete FROM fixtures WHERE fixture_id = ?1",
-            nativeQuery = true)
-    Fixture deleteById(int fixtureId);
-    @Query(
-            value = "select * FROM fixtures WHERE event_date > ?1 and event_date < ?2",
-            nativeQuery = true)
-    List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to);
+    @Query(value = "select f FROM Fixture f WHERE f.eventDate > :from and f.eventDate < :to")
+    List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to);
 
-    @Query(
-            value = "select * FROM fixtures WHERE event_date > ?1 and event_date < ?2 and status = ?3",
-            nativeQuery = true)
-    List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to, String filter);
+    @Query(value = "select f FROM Fixture f WHERE f.eventDate > :from and f.eventDate < :to and f.status = :filter")
+    List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to, @Param("filter") String filter);
 }

@@ -42,9 +42,9 @@ public class FixtureServiceImpl implements FixtureService {
     }
 
     @Override
-    public void deleteRecordByFixtureId(int fixture_id) {
-        log.debug("deleteRecordByFixtureId(fixture_id: {})...", fixture_id);
-        deleteRecord(getById(fixture_id));
+    public void deleteRecordById(int id) {
+        log.debug("deleteRecordById(id: {})...", id);
+        deleteRecord(getById(id));
     }
 
     @Override
@@ -141,6 +141,6 @@ public class FixtureServiceImpl implements FixtureService {
     @Transactional(readOnly = true)
     public Fixture getById(int id) {
         log.debug("getById(id: {})...", id);
-        return repository.getById(id);
+        return repository.findById(id).orElse(null);
     }
 }
