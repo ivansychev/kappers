@@ -20,6 +20,7 @@ import ru.kappers.service.FixtureService;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -30,6 +31,8 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = {KappersApplication.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
 public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringContextTests {
+private static final String STATUS_NOT_STARTED = "Not Started";
+private static final String STATUS_MATCH_FINISHED = "Match Finished";
     @Autowired
     private FixtureService service;
     private Timestamp nowTstmp = new Timestamp(System.currentTimeMillis());
@@ -40,7 +43,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .league_id(87)
-            .status("Not Started")
+            .status(STATUS_NOT_STARTED)
             .build();
 
     private Fixture tomorrow = Fixture.builder()
@@ -50,7 +53,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
             .awayTeam("Manchester United")
             .homeTeam("FC Liverpool")
             .league_id(2)
-            .status("Not Started")
+            .status(STATUS_NOT_STARTED)
             .build();
 
     private Fixture yesterday = Fixture.builder()
@@ -60,14 +63,34 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .league_id(4)
-            .status("Match Finished")
+            .status(STATUS_MATCH_FINISHED)
+            .build();
+
+    private Fixture nextWeek = Fixture.builder()
+            .fixture_id(111)
+            .event_date(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7))
+            .event_timestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7)
+            .awayTeam("Real Madrid")
+            .homeTeam("FC Barselona")
+            .league_id(87)
+            .status(STATUS_NOT_STARTED)
+            .build();
+
+    private Fixture lastWeek = Fixture.builder()
+            .fixture_id(110)
+            .event_date(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7))
+            .event_timestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7)
+            .awayTeam("Paris Saint Germain")
+            .homeTeam("Lyon")
+            .league_id(4)
+            .status(STATUS_MATCH_FINISHED)
             .build();
 
     @Before
     public void setUp() {
-        System.out.println(today);
-        System.out.println(tomorrow);
-        System.out.println(yesterday);
+        logger.debug(today);
+        logger.debug(tomorrow);
+        logger.debug(yesterday);
     }
 
     @Test
@@ -83,7 +106,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     public void addRecord() {
         Fixture record = service.addRecord(tomorrow);
         assertNotNull(record);
-        assertEquals((long)record.getFixture_id(), (long)112);
+        assertEquals((long) record.getFixture_id(), (long) 112);
         service.deleteRecord(record);
     }
 
@@ -111,26 +134,74 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void updateFixture() {
+        service.addRecord(tomorrow);
+        Fixture fixture = service.getById(tomorrow.getFixture_id());
+        fixture.setStatus(STATUS_MATCH_FINISHED);
+        service.updateFixture(fixture);
+        Fixture updated = service.getById(tomorrow.getFixture_id());
+        assertEquals(updated.getStatus(), STATUS_MATCH_FINISHED);
+        service.deleteRecord(updated);
     }
 
     @Test
     public void getAll() {
+        service.addRecord(today);
+        service.addRecord(tomorrow);
+        service.addRecord(yesterday);
+        List<Fixture> all = service.getAll();
+        assertNotNull(all);
+        assertNotEquals(all.size(), 0);
+        boolean containsToday = all.contains(today);
+        boolean containsTomorrow = all.contains(tomorrow);
+        boolean containsYesterday = all.contains(yesterday);
+        assertTrue(containsToday);
+        assertTrue(containsTomorrow);
+        assertTrue(containsYesterday);
+        service.deleteRecord(today);
+        service.deleteRecord(tomorrow);
+        service.deleteRecord(yesterday);
     }
 
     @Test
     public void getFixturesByPeriod() {
+        service.addRecord(today);
+        service.addRecord(tomorrow);
+        service.addRecord(yesterday);
+        List<Fixture> todaysFixtures = service.getFixturesByPeriod(new Timestamp(System.currentTimeMillis() - 8 * 3600 * 1000), new Timestamp(System.currentTimeMillis() + 8 * 3600 * 1000));
+        assertTrue(todaysFixtures.contains(today));
+        assertFalse(todaysFixtures.contains(yesterday));
+        assertFalse(todaysFixtures.contains(tomorrow));
+        service.deleteRecord(tomorrow);
+        service.deleteRecord(yesterday);
+        service.deleteRecord(today);
+
     }
 
     @Test
     public void getFixturesToday() {
+        service.addRecord(today);
+        List<Fixture> fixturesToday = service.getFixturesToday();
+        assertTrue(fixturesToday.contains(today));
+        assertFalse(fixturesToday.contains(yesterday));
+        assertFalse(fixturesToday.contains(tomorrow));
+        service.deleteRecord(today);
     }
 
     @Test
-    public void getFixturesToday1() {
+    public void getFixturesTodayFiltered() {
+        service.addRecord(today);
+        List<Fixture> fixturesToday = service.getFixturesToday(STATUS_NOT_STARTED);
+        assertTrue(fixturesToday.contains(today));
+        List<Fixture> fixturesToday2 = service.getFixturesToday(STATUS_MATCH_FINISHED);
+        assertFalse(fixturesToday2.contains(today));
+        service.deleteRecord(today);
+
+
     }
 
     @Test
     public void getFixturesLastWeek() {
+
     }
 
     @Test
