@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.*;
 import ru.kappers.repository.UsersRepository;
@@ -17,8 +18,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Реализация сервиса пользователя
+ */
 @Slf4j
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UsersRepository repository;
@@ -34,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
+        log.debug("addUser(user: {})...", user);
         final String userName = user.getUserName();
         User byUserId = repository.getByUserName(userName);
         if (byUserId != null) {
@@ -51,94 +57,123 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteByUserName(String userName) {
+        log.debug("deleteByUserName(userName: {})...", userName);
         repository.deleteByUserName(userName);
     }
 
     @Override
     public void delete(User user) {
+        log.debug("delete(user: {})...", user);
         repository.delete(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getByUserName(String name) {
+        log.debug("getByUserName(name: {})...", name);
         return repository.getByUserName(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getByName(String name) {
+        log.debug("getByName(name: {})...", name);
         return repository.getByName(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getById(int id) {
+        log.debug("getById(id: {})...", id);
         return repository.findById(id)
                 .orElse(null);
     }
 
     @Override
     public User editUser(User user) {
+        log.debug("editUser(user: {})...", user);
         return repository.save(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAll() {
+        log.debug("getAll()...");
         return repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllByRole(String roleName) {
+        log.debug("getAllByRole(roleName: {})...", roleName);
         Role role = rolesService.getByName(roleName);
         return repository.getAllByRoleId(role.getId());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean hasRole(User user, String roleName) {
+        log.debug("hasRole(user: {}, roleName: {})...", user, roleName);
         return user.hasRole(roleName);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean hasRole(User user, int roleId) {
+        log.debug("hasRole(user: {}, roleId: {})...", user, roleId);
         return user.hasRole(roleId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean hasRole(User user, Role role) {
+        log.debug("hasRole(user: {}, role: {})...", user, role);
         return user.hasRole(role.getId());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Role getRole(User user) {
+        log.debug("getRole(user: {})...", user);
         return user.getRole();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public History getHistory(User user) {
+        log.debug("getHistory(user: {})...", user);
         //TODO
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Stat getStat(User user) {
+        log.debug("getStat(user: {})...", user);
         //TODO
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public KapperInfo getKapperInfo(User user) {
+        log.debug("getKapperInfo(user: {})...", user);
         //TODO
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PersonalInfo getInfo(User user) {
+        log.debug("getInfo(user: {})...", user);
         //TODO
         return null;
     }
 
     //TODO написать unit-тесты для transfer и exchange
     @Override
-    @Transactional
     public synchronized void transfer(User user, User kapper, BigDecimal amount) {
+        log.debug("transfer(user: {}, kapper: {}, amount: {})...", user, kapper, amount);
         Preconditions.checkArgument(user.hasRole("ROLE_USER"), "User %s has no permission to transfer money", user.getUserName());
         Preconditions.checkArgument(kapper.hasRole("ROLE_KAPPER"), "The operation is forbidden. Money can be transfered only from user to kapper");
         Preconditions.checkArgument(user.getBalance().compareTo(amount) >= 0, "The user %s doesnt have enough money. On balance %s %s",
@@ -159,7 +194,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount) {
+        log.debug("exchange(fromCurr: {}, toCurr: {}, amount: {})...", fromCurr, toCurr, amount);
         if (fromCurr.equals(toCurr)) {
             return amount;
         }

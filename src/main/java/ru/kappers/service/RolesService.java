@@ -4,6 +4,9 @@ import ru.kappers.model.Role;
 
 import java.util.List;
 
+/**
+ * Интерфейс сервиса роли пользователя
+ */
 public interface RolesService {
     Role addRole(Role role);
 
