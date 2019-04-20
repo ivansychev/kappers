@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * JPA-сущность Спортивное событие
@@ -31,43 +33,47 @@ public class Fixture implements Serializable, Comparable {
 ////    private int Id;
     @Id
     @Column(name = "fixture_id",nullable = false, insertable = false, updatable = false)
-    Integer id;
+    private Integer id;
     @Column(name="event_timestamp")
-    Long eventTimestamp;
+    private Long eventTimestamp;
     @Column(name="event_date")
-    Timestamp eventDate;
+    private Timestamp eventDate;
     @Column(name="league_id")
-    Integer leagueId;
+    private Integer leagueId;
     @Column(name="round")
-    String round;
+    private String round;
     @Column(name="homeTeam_id")
-    Integer homeTeamId;
+    private Integer homeTeamId;
     @Column(name="awayTeam_id")
-    Integer awayTeamId;
+    private Integer awayTeamId;
     @Column(name="homeTeam")
-    String homeTeam;
+    private String homeTeam;
     @Column(name="awayTeam")
-    String awayTeam;
+    private String awayTeam;
+    /** Статус */
     @Column(name="status")
-    String status;
+    @Convert(converter = StatusConverter.class)
+    private Status status;
+    /** Сокращенный статус */
     @Column(name="statusShort")
-    String statusShort;
+    @Convert(converter = ShortStatusConverter.class)
+    private ShortStatus statusShort;
     @Column(name="goalsHomeTeam")
-    Integer goalsHomeTeam;
+    private Integer goalsHomeTeam;
     @Column(name="goalsAwayTeam")
-    Integer goalsAwayTeam;
+    private Integer goalsAwayTeam;
     @Column(name="halftime_score")
-    String halftimeScore;
+    private String halftimeScore;
     @Column(name="final_score")
-    String finalScore;
+    private String finalScore;
     @Column(name="penalty")
-    String penalty;
+    private String penalty;
     @Column(name="elapsed")
-    Integer elapsed;
+    private Integer elapsed;
     @Column(name="firstHalfStart")
-    Long firstHalfStart;
+    private Long firstHalfStart;
     @Column(name="secondHalfStart")
-    Long secondHalfStart;
+    private Long secondHalfStart;
     @OneToMany(mappedBy = "fixture")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -85,5 +91,99 @@ public class Fixture implements Serializable, Comparable {
     @Override
     public int compareTo(Object o) {
         return eventTimestamp.compareTo(((Fixture) o).eventTimestamp);
+    }
+
+    /**
+     * Статус спортивного события
+     */
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    public enum Status {
+        /** Спортивное событие не началось */
+        NOT_STARTED("Not Started"),
+        /** Матч закончен */
+        MATCH_FINISHED("Match Finished");
+
+        /** Значение статуса */
+        private final String value;
+
+        /**
+         * Найти статус по значению
+         * @param value значение статуса
+         * @return найденный статус или {@literal null}
+         */
+        @Nullable
+        public static Status byValue(String value) {
+            for (Status val : Status.values()) {
+                if (Objects.equals(value, val.value)) {
+                    return val;
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Сокращенный статус спортивного события
+     */
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    public enum ShortStatus {
+        /** Спортивное событие не началось */
+        NOT_STARTED("NS"),
+        /** Матч закончен */
+        MATCH_FINISHED("FT");
+
+        /** Значение статуса */
+        private final String value;
+
+        /**
+         * Найти статус по значению
+         * @param value значение статуса
+         * @return найденный статус или {@literal null}
+         */
+        @Nullable
+        public static ShortStatus byValue(String value) {
+            for (ShortStatus val : ShortStatus.values()) {
+                if (Objects.equals(value, val.value)) {
+                    return val;
+                }
+            }
+            return null;
+        }
+    }
+
+    @Converter
+    public static class StatusConverter implements AttributeConverter<Status, String> {
+        @Override
+        public String convertToDatabaseColumn(Status attribute) {
+            if (attribute == null) {
+                return null;
+            }
+            return attribute.getValue();
+        }
+
+        @Override
+        public Status convertToEntityAttribute(String dbData) {
+            return Status.byValue(dbData);
+        }
+    }
+
+    @Converter
+    public static class ShortStatusConverter implements AttributeConverter<ShortStatus, String> {
+        @Override
+        public String convertToDatabaseColumn(ShortStatus attribute) {
+            if (attribute == null) {
+                return null;
+            }
+            return attribute.getValue();
+        }
+
+        @Override
+        public ShortStatus convertToEntityAttribute(String dbData) {
+            return ShortStatus.byValue(dbData);
+        }
     }
 }

@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.Fixture.ShortStatus;
+import ru.kappers.model.Fixture.Status;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -29,8 +31,6 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = {KappersApplication.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
 public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringContextTests {
-private static final String STATUS_NOT_STARTED = "Not Started";
-private static final String STATUS_MATCH_FINISHED = "Match Finished";
     @Autowired
     private FixtureService service;
     private Timestamp nowTstmp = new Timestamp(System.currentTimeMillis());
@@ -41,7 +41,8 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .leagueId(87)
-            .status(STATUS_NOT_STARTED)
+            .status(Status.NOT_STARTED)
+            .statusShort(ShortStatus.NOT_STARTED)
             .build();
 
     private Fixture tomorrow = Fixture.builder()
@@ -51,7 +52,8 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
             .awayTeam("Manchester United")
             .homeTeam("FC Liverpool")
             .leagueId(2)
-            .status(STATUS_NOT_STARTED)
+            .status(Status.NOT_STARTED)
+            .statusShort(ShortStatus.NOT_STARTED)
             .build();
 
     private Fixture yesterday = Fixture.builder()
@@ -61,7 +63,8 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
-            .status(STATUS_MATCH_FINISHED)
+            .status(Status.MATCH_FINISHED)
+            .statusShort(ShortStatus.MATCH_FINISHED)
             .build();
 
     private Fixture nextWeek = Fixture.builder()
@@ -71,7 +74,8 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .leagueId(87)
-            .status(STATUS_NOT_STARTED)
+            .status(Status.NOT_STARTED)
+            .statusShort(ShortStatus.NOT_STARTED)
             .build();
 
     private Fixture lastWeek = Fixture.builder()
@@ -81,7 +85,8 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
-            .status(STATUS_MATCH_FINISHED)
+            .status(Status.MATCH_FINISHED)
+            .statusShort(ShortStatus.MATCH_FINISHED)
             .build();
 
     @Before
@@ -108,7 +113,6 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
         Fixture record = service.addRecord(tomorrow);
         assertNotNull(record);
         assertEquals((long) record.getId(), (long) 112);
-        service.deleteRecord(record);
     }
 
     @Test
@@ -137,10 +141,10 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
     public void updateFixture() {
         service.addRecord(tomorrow);
         Fixture fixture = service.getById(tomorrow.getId());
-        fixture.setStatus(STATUS_MATCH_FINISHED);
+        fixture.setStatus(Status.MATCH_FINISHED);
         service.updateFixture(fixture);
         Fixture updated = service.getById(tomorrow.getId());
-        assertEquals(updated.getStatus(), STATUS_MATCH_FINISHED);
+        assertEquals(updated.getStatus(), Status.MATCH_FINISHED);
         service.deleteRecord(updated);
     }
 
@@ -158,9 +162,6 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
         assertTrue(containsToday);
         assertTrue(containsTomorrow);
         assertTrue(containsYesterday);
-        service.deleteRecord(today);
-        service.deleteRecord(tomorrow);
-        service.deleteRecord(yesterday);
     }
 
     @Test
@@ -172,10 +173,7 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
         assertTrue(todaysFixtures.contains(today));
         assertFalse(todaysFixtures.contains(yesterday));
         assertFalse(todaysFixtures.contains(tomorrow));
-        service.deleteRecord(tomorrow);
-        service.deleteRecord(yesterday);
-        service.deleteRecord(today);
-
+        // вообще то нет необходимости возвращать к исходному состоянию, должна в каждом тесте откатываться транзакция
     }
 
     @Test
@@ -185,19 +183,15 @@ private static final String STATUS_MATCH_FINISHED = "Match Finished";
         assertTrue(fixturesToday.contains(today));
         assertFalse(fixturesToday.contains(yesterday));
         assertFalse(fixturesToday.contains(tomorrow));
-        service.deleteRecord(today);
     }
 
     @Test
     public void getFixturesTodayFiltered() {
         service.addRecord(today);
-        List<Fixture> fixturesToday = service.getFixturesToday(STATUS_NOT_STARTED);
+        List<Fixture> fixturesToday = service.getFixturesToday(Status.NOT_STARTED);
         assertTrue(fixturesToday.contains(today));
-        List<Fixture> fixturesToday2 = service.getFixturesToday(STATUS_MATCH_FINISHED);
+        List<Fixture> fixturesToday2 = service.getFixturesToday(Status.MATCH_FINISHED);
         assertFalse(fixturesToday2.contains(today));
-        service.deleteRecord(today);
-
-
     }
 
     @Test

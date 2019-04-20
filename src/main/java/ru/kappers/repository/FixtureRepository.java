@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.Fixture.Status;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -16,5 +17,5 @@ public interface FixtureRepository extends JpaRepository<Fixture, Integer> {
     List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to);
 
     @Query(value = "select f FROM Fixture f WHERE f.eventDate > :from and f.eventDate < :to and f.status = :filter")
-    List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to, @Param("filter") String filter);
+    List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to, @Param("filter") Status filter);
 }

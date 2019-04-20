@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.Fixture.Status;
 import ru.kappers.repository.FixtureRepository;
 import ru.kappers.service.FixtureService;
 
@@ -76,7 +77,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, String filter) {
+    public List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter) {
         log.debug("getFixturesByPeriod(from: {}, to: {}, filter: {})...", from, to, filter);
         return repository.getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), filter);
     }
@@ -99,7 +100,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Fixture> getFixturesToday(String filter) {
+    public List<Fixture> getFixturesToday(Status filter) {
         log.debug("getFixturesToday(filter: {})...", filter);
         final LocalDate now = LocalDate.now();
         return getFixturesByPeriod(getFromNow(now), getToNow(now), filter);
@@ -115,7 +116,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Fixture> getFixturesLastWeek(String filter) {
+    public List<Fixture> getFixturesLastWeek(Status filter) {
         log.debug("getFixturesLastWeek(filter: {})...", filter);
         final LocalDate now = LocalDate.now();
         return getFixturesByPeriod(getFromNow(now).minusDays(7), getToNow(now), filter);
@@ -131,7 +132,7 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Fixture> getFixturesNextWeek(String filter) {
+    public List<Fixture> getFixturesNextWeek(Status filter) {
         log.debug("getFixturesNextWeek(filter: {})...", filter);
         final LocalDate now = LocalDate.now();
         return getFixturesByPeriod(getFromNow(now), getToNow(now).plusDays(7), filter);
