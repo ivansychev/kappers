@@ -6,7 +6,7 @@ import ru.kappers.model.Fixture;
 
 import java.util.EnumMap;
 import java.util.Map;
-//Пока что генерируем случайные коэифценты
+//Пока что генерируем случайные коэифценты. В будущем будем парсить с сайта букмекера
 @Data
 @Log4j
 public class Odds {

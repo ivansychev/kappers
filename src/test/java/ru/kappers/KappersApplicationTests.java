@@ -7,11 +7,8 @@ import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
-import ru.kappers.service.HistoryServiceImplTest;
-import ru.kappers.service.KapperInfoServiceImplTest;
-import ru.kappers.service.UserServiceImplTest;
+import ru.kappers.service.*;
 import ru.kappers.util.DateUtilTest;
-import ru.kappers.service.RoleServiceImplTest;
 
 @RunWith(Suite.class)
 @SpringBootTest(classes = { KappersApplication.class})
@@ -22,7 +19,8 @@ import ru.kappers.service.RoleServiceImplTest;
 		DateUtilTest.class,
 		UserServiceImplTest.class,
 		KapperInfoServiceImplTest.class,
-		HistoryServiceImplTest.class
+		HistoryServiceImplTest.class,
+		FixtureServiceImplTest.class
 })
 public class KappersApplicationTests {
 
