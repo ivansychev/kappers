@@ -20,7 +20,8 @@ import ru.kappers.util.DateUtilTest;
 		UserServiceImplTest.class,
 		KapperInfoServiceImplTest.class,
 		HistoryServiceImplTest.class,
-		FixtureServiceImplTest.class
+		FixtureServiceImplTest.class,
+        CurrRateServiceImplTest.class
 })
 public class KappersApplicationTests {
 
