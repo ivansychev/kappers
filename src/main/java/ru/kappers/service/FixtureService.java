@@ -1,6 +1,7 @@
 package ru.kappers.service;
 
 import ru.kappers.model.Fixture;
+import ru.kappers.model.Fixture.Status;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,12 +18,12 @@ public interface FixtureService {
     List<Fixture> getAll();
     List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to);
     List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to);
-    List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, String filter);
+    List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter);
     List<Fixture> getFixturesToday();
-    List<Fixture> getFixturesToday(String filter);
+    List<Fixture> getFixturesToday(Status filter);
     List<Fixture> getFixturesLastWeek();
-    List<Fixture> getFixturesLastWeek(String filter);
+    List<Fixture> getFixturesLastWeek(Status filter);
     List<Fixture> getFixturesNextWeek();
-    List<Fixture> getFixturesNextWeek(String filter);
+    List<Fixture> getFixturesNextWeek(Status filter);
     Fixture getById(int id);
 }
