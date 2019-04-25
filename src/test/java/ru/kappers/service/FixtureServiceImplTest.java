@@ -68,9 +68,9 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
             .build();
 
     private Fixture nextWeek = Fixture.builder()
-            .id(111)
-            .eventDate(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7))
-            .eventTimestamp(nowTstmp.getTime() + 24 * 3600 * 1000*7)
+            .id(113)
+            .eventDate(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000 * 7))
+            .eventTimestamp(nowTstmp.getTime() + 24 * 3600 * 1000 * 7)
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .leagueId(87)
@@ -79,9 +79,9 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
             .build();
 
     private Fixture lastWeek = Fixture.builder()
-            .id(110)
-            .eventDate(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7))
-            .eventTimestamp(nowTstmp.getTime() - 24 * 3600 * 1000*7)
+            .id(114)
+            .eventDate(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000 * 7))
+            .eventTimestamp(nowTstmp.getTime() - 24 * 3600 * 1000 * 7)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
@@ -196,18 +196,60 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void getFixturesLastWeek() {
+        service.addRecord(nextWeek);
+        service.addRecord(lastWeek);
+        service.addRecord(yesterday);
+        service.addRecord(tomorrow);
+        List<Fixture> fixturesLastWeek = service.getFixturesLastWeek();
+        assertTrue(fixturesLastWeek.contains(lastWeek));
+        assertTrue(fixturesLastWeek.contains(yesterday));
+        assertFalse(fixturesLastWeek.contains(tomorrow));
+        assertFalse(fixturesLastWeek.contains(nextWeek));
+        service.deleteRecord(nextWeek);
+        service.deleteRecord(lastWeek);
+        service.deleteRecord(yesterday);
+        service.deleteRecord(tomorrow);
 
     }
 
     @Test
     public void getFixturesLastWeekFiltered() {
+        yesterday.setStatus(Status.NOT_STARTED);
+        service.addRecord(lastWeek);
+        service.addRecord(yesterday);
+        List<Fixture> fixturesLastWeek = service.getFixturesLastWeek(Status.MATCH_FINISHED);
+        assertTrue(fixturesLastWeek.contains(lastWeek));
+        assertFalse(fixturesLastWeek.contains(yesterday));
+        service.deleteRecord(lastWeek);
+        service.deleteRecord(yesterday);
     }
 
     @Test
     public void getFixturesNextWeek() {
+        service.addRecord(nextWeek);
+        service.addRecord(lastWeek);
+        service.addRecord(yesterday);
+        service.addRecord(tomorrow);
+        List<Fixture> fixturesNextWeek = service.getFixturesNextWeek();
+        assertFalse(fixturesNextWeek.contains(lastWeek));
+        assertFalse(fixturesNextWeek.contains(yesterday));
+        assertTrue(fixturesNextWeek.contains(tomorrow));
+        assertTrue(fixturesNextWeek.contains(nextWeek));
+        service.deleteRecord(nextWeek);
+        service.deleteRecord(lastWeek);
+        service.deleteRecord(yesterday);
+        service.deleteRecord(tomorrow);
     }
 
     @Test
     public void getFixturesNextWeekFiltered() {
+        nextWeek.setStatus(Status.MATCH_FINISHED);
+        service.addRecord(nextWeek);
+        service.addRecord(tomorrow);
+        List<Fixture> fixturesNextWeek = service.getFixturesNextWeek(Status.NOT_STARTED);
+        assertTrue(fixturesNextWeek.contains(tomorrow));
+        assertFalse(fixturesNextWeek.contains(nextWeek));
+        service.deleteRecord(nextWeek);
+        service.deleteRecord(tomorrow);
     }
 }
