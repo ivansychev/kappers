@@ -99,6 +99,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
         assertEquals(userA, admin);
         assertEquals(userU, user);
         assertEquals(userK, kapper);
+        assertNotNull(userK.getKapperInfo());
     }
 
     @Test
@@ -199,7 +200,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
         User kapp = userService.getByUserName("kapper");
         KapperInfo kapperInfo = kapp.getKapperInfo();
         assertNotNull(kapperInfo);
-        //TODO
+        //TODO починить тест, kapper сам добавляется только в addUser
     }
 
     @Test

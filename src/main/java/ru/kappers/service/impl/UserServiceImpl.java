@@ -54,10 +54,12 @@ public class UserServiceImpl implements UserService {
         if (user.getRole() == null) {
             user.setRole(rolesService.getByName("ROLE_USER"));
         }
-        if (user.getRole().equals(rolesService.getByName("ROLE_KAPPER"))){
-            kapperInfoService.initKapper(user);
+        User savedUser = repository.save(user);
+        if (savedUser.getRole().equals(rolesService.getByName("ROLE_KAPPER"))){
+            kapperInfoService.initKapper(savedUser);
+            savedUser = repository.getOne(savedUser.getId());
         }
-        return repository.save(user);
+        return savedUser;
     }
 
     @Override

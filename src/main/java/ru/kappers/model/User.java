@@ -100,8 +100,9 @@ public class User implements Serializable {
     public boolean hasRole(String roleName) {
         return role.getName().equals(roleName);
     }
+
     @ToString.Exclude
-    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @EqualsAndHashCode.Exclude
+    @OneToOne (mappedBy = "user")
     private KapperInfo kapperInfo;
 }
