@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(User user) {
         log.debug("addUser(user: {})...", user);
+        Role role = user.getRole();
+        if ( role!=null && role.getName()==null){
+            role.setName(rolesService.getById(role.getId()).getName());
+        }
+        user.setRole(role);
         final String userName = user.getUserName();
         User byUserId = repository.getByUserName(userName);
         if (byUserId != null) {

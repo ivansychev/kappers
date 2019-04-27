@@ -54,6 +54,7 @@ public class JsonUtil {
     }
 
     public static Map<Integer, Fixture> getFixturesFromJson(String object) {
+        //TODO проставление id перенести сюда
         Gson gson = new Gson();
         Type itemsMapType = new TypeToken<Map<Integer, Fixture>>() {
         }.getType();
