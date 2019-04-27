@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.*;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.CurrRateService;
+import ru.kappers.service.KapperInfoService;
 import ru.kappers.service.RolesService;
 import ru.kappers.service.UserService;
 import ru.kappers.util.DateUtil;
@@ -29,12 +30,13 @@ public class UserServiceImpl implements UserService {
     private final UsersRepository repository;
     private final RolesService rolesService;
     private final CurrRateService currService;
-
+    private final KapperInfoService kapperInfoService;
     @Autowired
-    public UserServiceImpl(UsersRepository repository, RolesService rolesService, CurrRateService currService) {
+    public UserServiceImpl(UsersRepository repository, RolesService rolesService, CurrRateService currService, KapperInfoService kapperInfoService) {
         this.repository = repository;
         this.rolesService = rolesService;
         this.currService = currService;
+        this.kapperInfoService = kapperInfoService;
     }
 
     @Override
@@ -52,19 +54,31 @@ public class UserServiceImpl implements UserService {
         if (user.getRole() == null) {
             user.setRole(rolesService.getByName("ROLE_USER"));
         }
+        if (user.getRole().equals(rolesService.getByName("ROLE_KAPPER"))){
+            kapperInfoService.initKapper(user);
+        }
         return repository.save(user);
     }
 
     @Override
     public void deleteByUserName(String userName) {
         log.debug("deleteByUserName(userName: {})...", userName);
-        repository.deleteByUserName(userName);
+        User user = getByUserName(userName);
+        if (user.hasRole("ROLE_KAPPER")) {
+            kapperInfoService.delete(user);
+        } else {
+            repository.deleteByUserName(userName);
+        }
     }
 
     @Override
     public void delete(User user) {
         log.debug("delete(user: {})...", user);
-        repository.delete(user);
+        if (user.hasRole("ROLE_KAPPER")) {
+            kapperInfoService.delete(user);
+        } else {
+            repository.delete(user);
+        }
     }
 
     @Override
@@ -158,7 +172,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public KapperInfo getKapperInfo(User user) {
         log.debug("getKapperInfo(user: {})...", user);
-        //TODO
+        if (user.hasRole("ROLE_KAPPER")){
+            return user.getKapperInfo();
+        }
         return null;
     }
 
@@ -172,6 +188,7 @@ public class UserServiceImpl implements UserService {
 
     //TODO написать unit-тесты для transfer и exchange
     @Override
+    @Transactional(readOnly = true)
     public synchronized void transfer(User user, User kapper, BigDecimal amount) {
         log.debug("transfer(user: {}, kapper: {}, amount: {})...", user, kapper, amount);
         Preconditions.checkArgument(user.hasRole("ROLE_USER"), "User %s has no permission to transfer money", user.getUserName());

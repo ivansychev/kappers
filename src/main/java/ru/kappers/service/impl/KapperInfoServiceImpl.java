@@ -3,22 +3,26 @@ package ru.kappers.service.impl;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.KapperInfo;
 import ru.kappers.model.User;
 import ru.kappers.repository.KapperInfoRepository;
+import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.KapperInfoService;
 
 @Log4j
 @Service
 public class KapperInfoServiceImpl implements KapperInfoService {
     private final KapperInfoRepository kapperRepository;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public KapperInfoServiceImpl(KapperInfoRepository kapperRepository) {
-
+    public KapperInfoServiceImpl(KapperInfoRepository kapperRepository, UsersRepository usersRepository) {
         this.kapperRepository = kapperRepository;
+        this.usersRepository = usersRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public KapperInfo initKapper(User user) {
         KapperInfo kapper = null;
@@ -44,8 +48,10 @@ public class KapperInfoServiceImpl implements KapperInfoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void delete(User user) {
         kapperRepository.deleteByUser(user);
+        usersRepository.delete(user);
     }
 
     @Override
@@ -54,6 +60,7 @@ public class KapperInfoServiceImpl implements KapperInfoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public KapperInfo editKapper(KapperInfo kapperInfo) {
         return kapperRepository.save(kapperInfo);
     }

@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringRunner;
 import org.threeten.bp.LocalDateTime;
 import ru.kappers.KappersApplication;
+import ru.kappers.model.KapperInfo;
 import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.repository.UsersRepository;
@@ -195,6 +196,9 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void getKapperInfo() {
+        User kapp = userService.getByUserName("kapper");
+        KapperInfo kapperInfo = kapp.getKapperInfo();
+        assertNotNull(kapperInfo);
         //TODO
     }
 
@@ -202,6 +206,16 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     public void getInfo() {
         //TODO
     }
+
+
+    @Test
+    public void transfer() {
+    }
+
+    @Test
+    public void exchange() {
+    }
+
 
 //    @Test
 //    public void DCoreExample() {
