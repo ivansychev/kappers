@@ -20,10 +20,10 @@
                 <button type="submit" class="btn btn-primary" ng-click="clearSearch()">Clear</button>
             </th>-->
             <th scope="row" class="col-md-1 search">
-                <input class="form-control" placeholder="Fixture ID" type="text" ng-model="search.fixture_id">
+                <input class="form-control" placeholder="Fixture ID" type="text" ng-model="search.id">
             </th>
             <th scope="row" class="col-md-1 search">
-                <input class="form-control" placeholder="League ID" type="text" ng-model="search.league_id">
+                <input class="form-control" placeholder="League ID" type="text" ng-model="search.leagueId">
             </th>
             <th scope="row" class="col-md-2 search">
                 <input class="form-control" placeholder="Round" type="text" ng-model="search.round">
@@ -38,10 +38,10 @@
                 <input class="form-control" placeholder="Status" type="text" ng-model="search.status">
             </th>
             <th scope="row" class="col-md-1 search">
-                <input class="form-control" placeholder="Final Score" type="text" ng-model="search.final_score">
+                <input class="form-control" placeholder="Final Score" type="text" ng-model="search.finalScore">
             </th>
             <th scope="row" class="col-md-1 search">
-                <input class="form-control" placeholder="Event Date" type="text" ng-model="search.event_date">
+                <input class="form-control" placeholder="Event Date" type="text" ng-model="search.eventDate">
             </th>
         </tr>
         <tr>
@@ -63,14 +63,14 @@
             <!--<th scope="row">
                 <input for="{{employee.id}}" type="checkbox" ng-model="selection.ids[employee.id]" name="group" id="check_{{employee.id}}" />
             </th>-->
-            <td><a href ng-click="card('view', fixture.fixture_id)">{{fixture.fixture_id}}</a></td>
-            <td>{{fixture.league_id}}</td>
+            <td><a href ng-click="card('view', fixture.id)">{{fixture.id}}</a></td>
+            <td>{{fixture.leagueId}}</td>
             <td>{{fixture.round}}</td>
             <td>{{fixture.homeTeam}}</td>
             <td>{{fixture.awayTeam}}</td>
             <td>{{fixture.status}}</td>
-            <td>{{fixture.final_score}}</td>
-            <td>{{fixture.event_date}}</td>
+            <td>{{fixture.finalScore}}</td>
+            <td>{{fixture.eventDate}}</td>
         </tr>
         </tbody>
     </table>
