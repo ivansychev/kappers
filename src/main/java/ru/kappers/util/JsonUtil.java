@@ -11,6 +11,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.pojo.FixturePojo;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -54,9 +55,8 @@ public class JsonUtil {
     }
 
     public static Map<Integer, Fixture> getFixturesFromJson(String object) {
-        //TODO проставление id перенести сюда
         Gson gson = new Gson();
-        Type itemsMapType = new TypeToken<Map<Integer, Fixture>>() {
+        Type itemsMapType = new TypeToken<Map<Integer, FixturePojo>>() {
         }.getType();
         JsonElement element = new JsonParser().parse(object);
         if (((JsonObject) element).get("body") != null) {
@@ -64,11 +64,15 @@ public class JsonUtil {
         }
         JsonObject allResults = ((JsonObject) element).get("api").getAsJsonObject();
         JsonObject fixtures = (JsonObject) allResults.get("fixtures");
-        Map<Integer, Fixture> elements;
+        Map<Integer, FixturePojo> elements;
         String replaceEmpties = fixtures.toString().replace("\"\"", "null");
      //   fixtures = gson.fromJson(replaceEmpties,JsonObject.class);
         elements = gson.fromJson(replaceEmpties, itemsMapType);
-        return elements;
+        Map<Integer, Fixture> result = new HashMap<>();
+        for (Map.Entry<Integer, FixturePojo> record:elements.entrySet()) {
+         result.put(record.getKey(), Fixture.getFixtureFromPojo(record.getValue()));
+        }
+        return result;
     }
 
     public static Map<Integer, Fixture> getFixturesFromFile(String filePath) {

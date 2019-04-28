@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 @Log4j
 public class DateUtil {
@@ -21,8 +22,8 @@ public class DateUtil {
 	 * @return новый Timestamp
 	 */
 	public static Timestamp convertDate(String date) {
-		LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.BASIC_ISO_DATE);
-		return Timestamp.valueOf(localDate.atStartOfDay());
+		LocalDateTime localDate = LocalDateTime.parse(date.substring(0,19));
+		return Timestamp.valueOf(localDate.toLocalDate().atStartOfDay());
 	}
 
 	public static Date getSqlDateFromTimeStamp(String formated) throws ParseException {
