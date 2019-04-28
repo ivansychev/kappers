@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.service.CurrRateService;
+import ru.kappers.util.CurrencyUtil;
 import ru.kappers.util.DateUtil;
 
 import java.io.BufferedReader;
@@ -39,32 +40,7 @@ public class CurrencyController {
     //TODO кстати, данный метод собирались в будущем вызывать по расписанию, это возможно будет настроено как раз в самом методе сервиса или отдельной конфигурации Spring контекста
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public void getCurrToday() throws ParseException, MalformedURLException {
-        URL url = new URL("https://www.cbr-xml-daily.ru/daily_json.js");
-        StringBuilder sb = new StringBuilder();
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
-            String s;
-            while ((s = reader.readLine()) != null) {
-                sb.append(s);
-            }
-        } catch (IOException e) {
-            log.error("CBR daily JSON reading error", e);
-            throw new RuntimeException(e);
-        }
-        JsonParser parser = new JsonParser();
-        JsonObject object = (JsonObject) parser.parse(sb.toString());
-        Date date = DateUtil.getSqlDateFromTimeStamp(object.get("Date").getAsString());
-        JsonObject valutes = object.get("Valute").getAsJsonObject();
-        for (Map.Entry<String, JsonElement> entries : valutes.entrySet()) {
-            JsonObject value = entries.getValue().getAsJsonObject();
-            CurrencyRate rate = CurrencyRate.builder()
-                    .numCode(value.get("NumCode").getAsString())
-                    .charCode(value.get("CharCode").getAsString())
-                    .name(value.get("Name").getAsString())
-                    .date(date)
-                    .nominal(value.get("Nominal").getAsInt())
-                    .value(value.get("Value").getAsBigDecimal())
-                    .build();
-            service.save(rate);
-        }
+        CurrencyUtil currencyUtil = new CurrencyUtil(service);
+        currencyUtil.getCurrencyRatesForToday();
     }
 }

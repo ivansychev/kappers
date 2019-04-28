@@ -40,13 +40,12 @@ public class KapperInfoServiceImpl implements KapperInfoService {
             } else {
                 String message = "The user " + user.getUserName() + " has already been initialized as Kapper.";
                 log.error(message);
-                throw new IllegalArgumentException(message);
             }
         } else {
             String message = "The user " + user.getUserName() + " doesn't have KAPPER role, but it is being tried to initialize as KAPPER.";
             log.error(message);
-            throw new IllegalArgumentException(message);
         }
+        return null;
     }
 
     @Override

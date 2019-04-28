@@ -198,9 +198,12 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void getKapperInfo() {
         User kapp = userService.getByUserName("kapper");
+        userService.addUser(kapp);
         KapperInfo kapperInfo = kapp.getKapperInfo();
         assertNotNull(kapperInfo);
-        //TODO починить тест, kapper сам добавляется только в addUser
+        User user = userService.getByUserName("user");
+        KapperInfo userInfo = user.getKapperInfo();
+        assertNull(userInfo);
     }
 
     @Test

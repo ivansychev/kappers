@@ -60,15 +60,6 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     public void isExist() {
-//        CurrencyRate rate = CurrencyRate.builder()
-//                .nominal(1)
-//                .value(4650)
-//                .date(Date.valueOf("2018-11-23"))
-//                .charCode("BTC")
-//                .numCode("000")
-//                .name("Bitcoin")
-//                .build();
-//        service.save(rate);
         assertTrue(service.isExist(Date.valueOf("2018-11-21"), "GLD"));
     }
 
@@ -93,10 +84,12 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     public void getToday() {
+        //TODO
     }
 
     @Test
     public void getAllToday() {
+        //TODO
     }
 
     @Test
