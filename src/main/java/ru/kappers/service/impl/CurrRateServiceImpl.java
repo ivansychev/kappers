@@ -37,6 +37,7 @@ public class CurrRateServiceImpl implements CurrRateService {
     @Transactional(readOnly = true)
     public boolean isExist(Date date, String currLiteral) {
         log.debug("isExist(date: {}, currLiteral: {})...", date, currLiteral);
+        if (currLiteral.equals("RUB")) return true;
         return getCurrByDate(date, currLiteral) != null;
     }
 

@@ -3,6 +3,8 @@ package ru.kappers.service;
 import ru.kappers.model.*;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -65,6 +67,6 @@ public interface UserService {
     Stat getStat(User user);
     KapperInfo getKapperInfo(User user);
     PersonalInfo getInfo(User user);
-    void transfer (User user, User kapper, BigDecimal amount);
+    void transfer (User user, User kapper, BigDecimal amount) throws MalformedURLException, ParseException;
     //TODO getEventList, getActiveEvents etc... когда евенты сделаем
 }

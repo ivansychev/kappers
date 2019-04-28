@@ -31,12 +31,14 @@ public class GetFixturesByAPIController {
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
-        for (long i = -1; i < 7; i++) {
+        for (long i = -1; i < 1; i++) {
             try {
                 JSONObject jsonObject = JsonUtil.loadFixturesByDate(LocalDate.now().plusDays(i));
                 Map<Integer, Fixture> fixturesFromJson = JsonUtil.getFixturesFromJson(jsonObject.toString());
                 for (Map.Entry<Integer, Fixture> entry : fixturesFromJson.entrySet()) {
-                    service.addRecord(entry.getValue());
+                    Fixture value = entry.getValue();
+                    value.setId(entry.getKey());
+                    service.addRecord(value);
                 }
             } catch (UnirestException e) {
                 throw new RuntimeException(e);
