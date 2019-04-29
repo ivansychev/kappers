@@ -14,12 +14,10 @@ import ru.kappers.service.KapperInfoService;
 import ru.kappers.service.RolesService;
 import ru.kappers.service.UserService;
 import ru.kappers.util.CurrencyUtil;
-import ru.kappers.util.DateUtil;
+import ru.kappers.util.DateTimeUtil;
 
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.sql.Date;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
             return userByUserName;
         }
         if (user.getDateOfRegistration() == null) {
-            user.setDateOfRegistration(DateUtil.getCurrentTime());
+            user.setDateOfRegistration(DateTimeUtil.getCurrentTime());
         }
         if (user.getRole() == null) {
             user.setRole(rolesService.getByName("ROLE_USER"));

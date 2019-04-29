@@ -16,8 +16,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * Утилитный класс валют
+ */
+//todo сделать Spring Bean для данного класса и внедрять его в нужном месте вместо явного создания экземпляра
 @Slf4j
-public class CurrencyUtil {
+public final class CurrencyUtil {
 
     private final CurrRateService service;
 
@@ -40,7 +44,7 @@ public class CurrencyUtil {
             }
             JsonParser parser = new JsonParser();
             JsonObject object = (JsonObject) parser.parse(sb.toString());
-            Date date = DateUtil.getSqlDateFromTimeStamp(object.get("Date").getAsString());
+            Date date = DateTimeUtil.parseSqlDateFromZonedDateTime(object.get("Date").getAsString());
             JsonObject valutes = object.get("Valute").getAsJsonObject();
             for (Map.Entry<String, JsonElement> entries : valutes.entrySet()) {
                 JsonObject value = entries.getValue().getAsJsonObject();

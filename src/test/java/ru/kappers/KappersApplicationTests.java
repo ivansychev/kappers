@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import ru.kappers.service.*;
-import ru.kappers.util.DateUtilTest;
+import ru.kappers.util.DateTimeUtilTest;
 
 @RunWith(Suite.class)
 @SpringBootTest(classes = { KappersApplication.class})
@@ -16,7 +16,7 @@ import ru.kappers.util.DateUtilTest;
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
 @Suite.SuiteClasses({
 		RoleServiceImplTest.class,
-		DateUtilTest.class,
+		DateTimeUtilTest.class,
 		UserServiceImplTest.class,
 		KapperInfoServiceImplTest.class,
 		HistoryServiceImplTest.class,

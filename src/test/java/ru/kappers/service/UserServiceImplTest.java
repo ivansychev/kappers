@@ -1,20 +1,11 @@
 package ru.kappers.service;
 
-import ch.decent.sdk.DCoreApi;
-import ch.decent.sdk.DCoreSdk;
-import ch.decent.sdk.crypto.Credentials;
-import ch.decent.sdk.model.*;
-import ch.decent.sdk.net.TrustAllCerts;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import kotlin.Pair;
 import lombok.extern.log4j.Log4j;
-import okhttp3.OkHttpClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,13 +13,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.threeten.bp.LocalDateTime;
 import ru.kappers.KappersApplication;
 import ru.kappers.model.KapperInfo;
 import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.repository.UsersRepository;
-import ru.kappers.util.DateUtil;
+import ru.kappers.util.DateTimeUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,21 +45,21 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .userName("admin")
             .name("админ")
             .password("asasdgfas")
-            .dateOfBirth(DateUtil.convertDate("19650806"))
+            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
             .build();
     private User user = User.builder()
             .userName("user")
             .name("юзер")
             .password("assaasas")
-            .dateOfBirth(DateUtil.convertDate("19650806"))
+            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
             .build();
     private User kapper = User.builder()
             .userName("kapper")
             .name("каппер")
             .password("assaasas")
-            .dateOfBirth(DateUtil.convertDate("19650806"))
+            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
             .build();
 
