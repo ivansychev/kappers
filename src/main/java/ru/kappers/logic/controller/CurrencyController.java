@@ -1,26 +1,15 @@
 package ru.kappers.logic.controller;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kappers.model.CurrencyRate;
 import ru.kappers.service.CurrRateService;
 import ru.kappers.util.CurrencyUtil;
-import ru.kappers.util.DateUtil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Date;
 import java.text.ParseException;
-import java.util.*;
 
 /**
  * Контроллер валют

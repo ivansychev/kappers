@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.kappers.model.pojo.FixturePojo;
-import ru.kappers.util.DateUtil;
+import ru.kappers.util.DateTimeUtil;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -32,7 +32,7 @@ public class Fixture implements Serializable, Comparable {
         Fixture fixture = new Fixture();
         fixture.id = pojo.getFixture_id();
         fixture.eventTimestamp = pojo.getEvent_timestamp();
-        fixture.eventDate = DateUtil.convertDate(pojo.getEvent_date());
+        fixture.eventDate = DateTimeUtil.parseTimestampFromDate(pojo.getEvent_date());
         fixture.leagueId = pojo.getLeague_id();
         fixture.round = pojo.getRound();
         fixture.homeTeamId = pojo.getHomeTeam_id();
