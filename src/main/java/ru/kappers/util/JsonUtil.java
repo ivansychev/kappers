@@ -11,7 +11,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 import ru.kappers.model.Fixture;
-import ru.kappers.model.pojo.FixturePojo;
+import ru.kappers.model.dto.FixtureDTO;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -19,11 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class JsonUtil {
     public static JSONObject loadFixturesByLeague(int leagueId) throws UnirestException {
@@ -56,7 +52,7 @@ public class JsonUtil {
 
     public static Map<Integer, Fixture> getFixturesFromJson(String object) {
         Gson gson = new Gson();
-        Type itemsMapType = new TypeToken<Map<Integer, FixturePojo>>() {
+        Type itemsMapType = new TypeToken<Map<Integer, FixtureDTO>>() {
         }.getType();
         JsonElement element = new JsonParser().parse(object);
         if (((JsonObject) element).get("body") != null) {
@@ -64,13 +60,13 @@ public class JsonUtil {
         }
         JsonObject allResults = ((JsonObject) element).get("api").getAsJsonObject();
         JsonObject fixtures = (JsonObject) allResults.get("fixtures");
-        Map<Integer, FixturePojo> elements;
+        Map<Integer, FixtureDTO> elements;
         String replaceEmpties = fixtures.toString().replace("\"\"", "null");
      //   fixtures = gson.fromJson(replaceEmpties,JsonObject.class);
         elements = gson.fromJson(replaceEmpties, itemsMapType);
         Map<Integer, Fixture> result = new HashMap<>();
-        for (Map.Entry<Integer, FixturePojo> record:elements.entrySet()) {
-         result.put(record.getKey(), Fixture.getFixtureFromPojo(record.getValue()));
+        for (Map.Entry<Integer, FixtureDTO> record:elements.entrySet()) {
+         result.put(record.getKey(), Fixture.getFixtureFromDTO(record.getValue()));
         }
         return result;
     }
