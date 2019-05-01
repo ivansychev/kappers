@@ -4,8 +4,6 @@ package ru.kappers.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import ru.kappers.model.pojo.FixturePojo;
-import ru.kappers.util.DateTimeUtil;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -28,29 +26,6 @@ import java.util.Objects;
 @Table(name = "fixtures")
 public class Fixture implements Serializable, Comparable {
 
-    public static Fixture getFixtureFromPojo(FixturePojo pojo){
-        Fixture fixture = new Fixture();
-        fixture.id = pojo.getFixture_id();
-        fixture.eventTimestamp = pojo.getEvent_timestamp();
-        fixture.eventDate = DateTimeUtil.parseTimestampFromDate(pojo.getEvent_date());
-        fixture.leagueId = pojo.getLeague_id();
-        fixture.round = pojo.getRound();
-        fixture.homeTeamId = pojo.getHomeTeam_id();
-        fixture.awayTeamId = pojo.getAwayTeam_id();
-        fixture.homeTeam = pojo.getHomeTeam();
-        fixture.awayTeam = pojo.getAwayTeam();
-        fixture.status = Status.byValue(pojo.getStatus());
-        fixture.statusShort = ShortStatus.byValue(pojo.getStatusShort());
-        fixture.goalsHomeTeam = pojo.getGoalsHomeTeam();
-        fixture.goalsAwayTeam = pojo.getGoalsAwayTeam();
-        fixture.halftimeScore = pojo.getHalftime_score();
-        fixture.finalScore = pojo.getFinal_score();
-        fixture.penalty = pojo.getPenalty();
-        fixture.elapsed = pojo.getElapsed();
-        fixture.firstHalfStart = pojo.getFirstHalfStart();
-        fixture.secondHalfStart = pojo.getSecondHalfStart();
-        return fixture;
-    }
 //    @Id
 ////    @GeneratedValue(strategy = GenerationType.AUTO)
 ////    @Column(name = "id", nullable = false, insertable = false, updatable = false)
