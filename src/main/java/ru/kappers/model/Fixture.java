@@ -4,8 +4,6 @@ package ru.kappers.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import ru.kappers.model.dto.FixtureDTO;
-import ru.kappers.util.DateTimeUtil;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -28,29 +26,6 @@ import java.util.Objects;
 @Table(name = "fixtures")
 public class Fixture implements Serializable, Comparable {
 
-    public static Fixture getFixtureFromDTO(FixtureDTO dto){
-        Fixture fixture = new Fixture();
-        fixture.id = dto.getFixture_id();
-        fixture.eventTimestamp = dto.getEvent_timestamp();
-        fixture.eventDate = DateTimeUtil.parseTimestampFromDate(dto.getEvent_date());
-        fixture.leagueId = dto.getLeague_id();
-        fixture.round = dto.getRound();
-        fixture.homeTeamId = dto.getHomeTeam_id();
-        fixture.awayTeamId = dto.getAwayTeam_id();
-        fixture.homeTeam = dto.getHomeTeam();
-        fixture.awayTeam = dto.getAwayTeam();
-        fixture.status = Status.byValue(dto.getStatus());
-        fixture.statusShort = ShortStatus.byValue(dto.getStatusShort());
-        fixture.goalsHomeTeam = dto.getGoalsHomeTeam();
-        fixture.goalsAwayTeam = dto.getGoalsAwayTeam();
-        fixture.halftimeScore = dto.getHalftime_score();
-        fixture.finalScore = dto.getFinal_score();
-        fixture.penalty = dto.getPenalty();
-        fixture.elapsed = dto.getElapsed();
-        fixture.firstHalfStart = dto.getFirstHalfStart();
-        fixture.secondHalfStart = dto.getSecondHalfStart();
-        return fixture;
-    }
 //    @Id
 ////    @GeneratedValue(strategy = GenerationType.AUTO)
 ////    @Column(name = "id", nullable = false, insertable = false, updatable = false)
