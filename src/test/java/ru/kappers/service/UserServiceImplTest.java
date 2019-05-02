@@ -206,10 +206,9 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     public void transfer() {
     }
 
-    @Test
-    public void exchange() {
-    }
-
+/*
+* Ниже фрагмент кода закомментирован для отключения взаимодействия с блокчейном на период разработки.
+* */
 
 //    @Test
 //    public void DCoreExample() {

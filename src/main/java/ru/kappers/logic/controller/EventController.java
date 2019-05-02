@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ru.kappers.exceptions.UserNotHaveKapperRoleException;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.KapperInfo;
@@ -60,6 +61,7 @@ public class EventController {
         Gson gson = new Gson();
         JsonObject jObject = gson.fromJson(content, JsonElement.class).getAsJsonObject();
         Event event = gson.fromJson(jObject, Event.class);
+        event.setClosed(false);
         User u = userService.getByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
         Integer price = event.getTokens();
         KapperInfo kapper = kapperService.getByUser(u);
@@ -74,7 +76,7 @@ public class EventController {
             kapperService.editKapper(kapper);
             return result;
         } else {
-            throw new IllegalArgumentException("The user " + u.getUserName() + " is not kapper");
+            throw new UserNotHaveKapperRoleException("The user " + u.getUserName() + " is not kapper");
         }
     }
 }

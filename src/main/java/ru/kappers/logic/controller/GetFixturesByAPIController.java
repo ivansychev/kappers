@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
+import ru.kappers.service.EventService;
 import ru.kappers.service.FixtureService;
+import ru.kappers.service.KapperInfoService;
+import ru.kappers.service.UserService;
 import ru.kappers.util.JsonUtil;
 
 import java.time.LocalDate;
@@ -24,6 +28,14 @@ public class GetFixturesByAPIController {
     @Autowired
     private FixtureService service;
 
+    @Autowired
+    private EventService eventService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private KapperInfoService kapperService;
 /**
  * Метод предназначен для обновления списка спортивных событий
  * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
@@ -38,15 +50,22 @@ public class GetFixturesByAPIController {
                 for (Map.Entry<Integer, Fixture> entry : fixturesFromJson.entrySet()) {
                     Fixture value = entry.getValue();
                     value.setId(entry.getKey());
+                    Event event = eventService.getById(entry.getKey());
                     service.addRecord(value);
+                    if (event!=null){
+                        completeEventData(event, value);
+                    }
                 }
             } catch (UnirestException e) {
                 throw new RuntimeException(e);
             }
         }
-        return Collections.singletonList(Fixture.builder()
-                .id(1000)
-                .build());
+        return null;
+    }
+
+    private void completeEventData(Event event, Fixture value) {
+       //TODO сравнить результат, закрыть евент
+
     }
 
     /**

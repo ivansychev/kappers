@@ -37,5 +37,7 @@ public class Event implements Serializable {
     private int tokens;
     @Column(name = "price")
     private double price;
+    @Column (name="isclosed")
+    private boolean isClosed;
 
 }
