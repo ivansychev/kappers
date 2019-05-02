@@ -220,7 +220,8 @@ public class UserServiceImpl implements UserService {
                 log.debug("Kapper {} got {} {}", kapper.getUserName(), amount, kapper.getCurrency());
 
             } else {
-                BigDecimal resultAmount = exchange(user.getCurrency(), kapper.getCurrency(), amount);
+                CurrencyUtil currUtil = new CurrencyUtil(currService);
+                BigDecimal resultAmount = currUtil.exchange(user.getCurrency(), kapper.getCurrency(), amount);
                 kapper.setBalance(kapper.getBalance().add(resultAmount));
                 log.debug("Kapper {} got {} {}", kapper.getUserName(), resultAmount, kapper.getCurrency());
             }
@@ -233,33 +234,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount){
-        log.debug("exchange(fromCurr: {}, toCurr: {}, amount: {})...", fromCurr, toCurr, amount);
-        if (fromCurr.equals(toCurr)) {
-            return amount;
-        }
-        Date date = Date.valueOf(LocalDate.now());
-        CurrencyUtil util = new CurrencyUtil(currService);
-        if (!currService.isExist(date, fromCurr) || !currService.isExist(date, toCurr)) {
-            util.getCurrencyRatesForToday();
-            date = util.getActualCurrRateDate(date, fromCurr, toCurr, false);
-
-        }
-        if (fromCurr.equals("RUB")) {
-            CurrencyRate rate = currService.getCurrByDate(date, toCurr);
-            return amount.divide(rate.getValue())
-                    .multiply(BigDecimal.valueOf(rate.getNominal()));
-        } else if (toCurr.equals("RUB")) {
-            CurrencyRate rate = currService.getCurrByDate(date, fromCurr);
-            return amount.multiply(rate.getValue())
-                    .multiply(BigDecimal.valueOf(rate.getNominal()));
-        }
-        CurrencyRate from = currService.getCurrByDate(date, fromCurr);
-        CurrencyRate to = currService.getCurrByDate(date, toCurr);
-        BigDecimal amountInRub = amount.multiply(from.getValue())
-                .multiply(BigDecimal.valueOf(from.getNominal()));
-        return amountInRub.divide(to.getValue())
-                .multiply(BigDecimal.valueOf(to.getNominal()));
-    }
 }
