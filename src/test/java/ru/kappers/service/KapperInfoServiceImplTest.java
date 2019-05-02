@@ -5,36 +5,105 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
+import ru.kappers.exceptions.UserNotHaveKapperRoleException;
+import ru.kappers.model.KapperInfo;
+import ru.kappers.model.User;
+import ru.kappers.util.DateTimeUtil;
 
 import static org.junit.Assert.*;
+
 @Log4j
 @ActiveProfiles("test")
 @ContextConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {KappersApplication.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
-public class KapperInfoServiceImplTest {
+public class KapperInfoServiceImplTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-	@Test
-	public void initKapper() {
+    private User user = User.builder()
+            .userName("user1")
+            .name("юзер")
+            .password("assaasas")
+            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .lang("RUSSIAN")
+            .build();
+    private User kapper = User.builder()
+            .userName("kapper1")
+            .name("каппер")
+            .password("assaasas")
+            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .lang("RUSSIAN")
+            .build();
 
-	}
 
-	@Test
-	public void delete() {
-	}
+    @Autowired
+    private KapperInfoService kapperInfoService;
 
-	@Test
-	public void getByUser() {
-	}
+    @Autowired
+    private UserService userService;
 
-	@Test
-	public void editKapper() {
-	}
+    @Test
+    public void initKapper() {
+        userService.addUser(kapper);
+        User kapper1 = userService.getByUserName(kapper.getUserName());
+        assertNotNull(kapper1);
+        KapperInfo kapperInfo = kapper1.getKapperInfo();
+        assertNotNull(kapperInfo);
+        assertEquals((int)kapperInfo.getTokens(), 500);
+        assertEquals((int)kapperInfo.getBets(), 0);
+        assertEquals((int)kapperInfo.getBlockedTokens(), 0);
+        assertEquals((int)kapperInfo.getSuccessBets(), 0);
+        assertEquals(kapperInfo.getUser(), kapper1);
+    }
+
+    @Test(expected = UserNotHaveKapperRoleException.class)
+    public void initNotKapper() {
+        userService.addUser(user);
+        User user1 = userService.getByUserName(user.getUserName());
+        assertNotNull(user1);
+        kapperInfoService.initKapper(user1);
+    }
+
+    @Test
+    public void delete() {
+        userService.addUser(kapper);
+        User kapper1 = userService.getByUserName(kapper.getUserName());
+        assertNotNull(kapper1);
+        KapperInfo kapperInfo = kapper1.getKapperInfo();
+        assertNotNull(kapperInfo);
+        kapperInfoService.delete(kapper1);
+        KapperInfo byUser = kapperInfoService.getByUser(kapper1);
+        assertNull(byUser);
+        kapper1 = userService.getByUserName(kapper.getUserName());
+        assertNull(kapper1);
+    }
+
+    @Test
+    public void getByUser() {
+        kapper = userService.addUser(kapper);
+        user = userService.addUser(user);
+
+        assertNotNull(kapperInfoService.getByUser(kapper));
+        assertNull(kapperInfoService.getByUser(user));
+    }
+
+    @Test
+    public void editKapper() {
+        kapper = userService.addUser(kapper);
+        KapperInfo kapperInfo = kapperInfoService.getByUser(kapper);
+        assertEquals((int)kapperInfo.getTokens(), 500);
+        kapperInfo.setBlockedTokens(25);
+        kapperInfo.setTokens(kapperInfo.getTokens()-25);
+        kapperInfo = kapperInfoService.editKapper(kapperInfo);
+        assertEquals((int)kapperInfo.getTokens(), 475);
+        assertEquals((int)kapperInfo.getBlockedTokens(), 25);
+    }
 }

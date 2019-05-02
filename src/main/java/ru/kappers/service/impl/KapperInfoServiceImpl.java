@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kappers.exceptions.UserNotHaveKapperRoleException;
 import ru.kappers.model.KapperInfo;
 import ru.kappers.model.User;
 import ru.kappers.repository.KapperInfoRepository;
@@ -40,18 +41,19 @@ public class KapperInfoServiceImpl implements KapperInfoService {
             } else {
                 String message = "The user " + user.getUserName() + " has already been initialized as Kapper.";
                 log.error(message);
+                return kapper;
             }
         } else {
             String message = "The user " + user.getUserName() + " doesn't have KAPPER role, but it is being tried to initialize as KAPPER.";
             log.error(message);
+            throw new UserNotHaveKapperRoleException(message);
         }
-        return null;
     }
 
     @Override
     public void delete(User user) {
         kapperRepository.deleteByUser(user);
-        usersRepository.delete(user);
+  //      usersRepository.delete(user);
     }
 
     @Override
