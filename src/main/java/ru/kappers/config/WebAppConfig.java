@@ -6,23 +6,32 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.dto.EventDTO;
 import ru.kappers.model.dto.FixtureDTO;
 
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
 
     private Converter<FixtureDTO, Fixture> fixtureDTOToFixtureConverter;
+    private Converter<EventDTO, Event> eventDTOEventConverter;
 
     @Autowired
     public void setFixtureDTOToFixtureConverter(Converter<FixtureDTO, Fixture> fixtureDTOToFixtureConverter) {
         this.fixtureDTOToFixtureConverter = fixtureDTOToFixtureConverter;
     }
 
+    @Autowired
+    public void setEventDTOEventConverter(Converter<EventDTO, Event> eventDTOEventConverter) {
+        this.eventDTOEventConverter = eventDTOEventConverter;
+    }
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         // регистрируем FixtureDTOToFixtureConverter в системе конвертаций Spring
         registry.addConverter(fixtureDTOToFixtureConverter);
+        registry.addConverter(eventDTOEventConverter);
     }
 
     @Override

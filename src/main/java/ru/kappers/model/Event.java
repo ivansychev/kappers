@@ -6,6 +6,7 @@ import ru.kappers.model.utilmodel.Outcomes;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * JPA-сущность Заведенное событие
@@ -32,11 +33,11 @@ public class Event implements Serializable {
     @Column(name = "outcome")
     private Outcomes outcome;
     @Column(name = "coefficient")
-    private double coefficient;
+    private BigDecimal coefficient;
     @Column(name = "tokens")
     private int tokens;
     @Column(name = "price")
-    private double price;
+    private BigDecimal price;
     @Column (name="isclosed")
     private boolean isClosed;
 
