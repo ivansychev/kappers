@@ -29,8 +29,8 @@ import ru.kappers.service.UserService;
     @MockBean(FixtureService.class),
     @MockBean(EventService.class),
     @MockBean(UserService.class),
-    @MockBean(KapperInfoService.class),
-    //@MockBean(ConversionService.class)
+//    @MockBean(KapperInfoService.class),
+//    @MockBean(ConversionService.class)
 })
 public class EventControllerTest {
 
