@@ -15,6 +15,7 @@ import java.util.List;
 
 @Slf4j
 public class LeonBetParser implements BetParser<LeonOddsDTO> {
+
     private static final String LEON_ADDRESS = "https://www.leon.ru";
 
     /**
@@ -34,6 +35,39 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
         }
         return urlsOfEvents;
     }
+
+    /**
+     * Метод возвращает список событий конкретного турнира
+     *
+     * @param urls - список линков, по которым нужно итерироваться и получать спортивные события
+     */
+    @Override
+    public List<LeonOddsDTO> getEventsWithOdds(List<String> urls) {
+        List<LeonOddsDTO> results = new ArrayList<>();
+        for (String url : urls) {
+            LeonOddsDTO leonOddsDTO = loadEventOdds(url);
+            if (leonOddsDTO != null) {
+                results.add(leonOddsDTO);
+                //TODO сохранение в БД
+            }
+        }
+        return results;
+    }
+
+    /**
+     * Метод возвращает DTO сущность, полученную из веб страницы конкретного евента
+     *
+     * @param url - линк веб страницы евента, который нужно распарсить
+     */
+    @Override
+    public LeonOddsDTO loadEventOdds(String url) {
+        log.info("loadEventOdds {}", url);
+        JsonArray arr = getArrayOfEventsByURL(url);
+        JsonObject object = arr.get(0).getAsJsonObject();
+        Gson gson = new Gson();
+        return gson.fromJson(object, LeonOddsDTO.class);
+    }
+
 
     /**
      * Метод возвращает массив объектов JSON, полученных в результате парсинга веб страницы указанного урла
@@ -76,17 +110,4 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
         return (JsonArray) ((JsonObject) element).get("initialEvents").getAsJsonObject().get("events");
     }
 
-    /**
-     * Метод возвращает DTO сущность, полученную из веб страницы конкретного евента
-     *
-     * @param url - линк веб страницы евента, который нужно распарсить
-     */
-    @Override
-    public LeonOddsDTO loadEventOdds(String url) {
-        log.info("loadEventOdds {}", url);
-        JsonArray arr = getArrayOfEventsByURL(url);
-        JsonObject object = arr.get(0).getAsJsonObject();
-        Gson gson = new Gson();
-        return gson.fromJson(object, LeonOddsDTO.class);
-    }
 }
