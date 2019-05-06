@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.Event;
@@ -54,26 +55,30 @@ public class EventController {
         Fixture fixture = fService.getById(id);
         return new Odds(fixture);
     }
-/**
- * Создать {@link Event} от имени текущего пользователя
- * Пример JSON для создания евента:
- *
- * {
- * 	"outcome":"GUESTTEAMWIN", //в этом случае ставка на гостевую команду
- * 	"coefficient":"1.35", //кэф пока берем от балды
- * 	"tokens":"50", //сколько токенов ставим
- * 	"price":"500",  //какую цену назначаем за открыте евента юзерами
- * 	"f_id":"37743" //айди фиксчи
- * }
- *
- * */
+    /**
+     * Создать {@link Event} от имени текущего пользователя
+     * Пример JSON для создания евента:
+     *
+     * {
+     * 	"outcome":"GUESTTEAMWIN", //в этом случае ставка на гостевую команду
+     * 	"coefficient":"1.35", //кэф пока берем от балды
+     * 	"tokens":"50", //сколько токенов ставим
+     * 	"price":"500",  //какую цену назначаем за открыте евента юзерами
+     * 	"f_id":"37743" //айди фиксчи
+     * }
+     *
+     * */
     @RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Event createEvent(@RequestBody String content) {
         log.debug("createEvent(content: {})...", content);
         EventDTO eventDTO = GSON.fromJson(content, EventDTO.class);
         Event event = conversionService.convert(eventDTO, Event.class);
-        User u = userService.getByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+        User u = userService.getByUserName(getCurrentAuthentication().getName());
         return eService.createEventByUser(event, u);
+    }
+
+    public Authentication getCurrentAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 }
