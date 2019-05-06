@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+<!--    <users user_name="admin" name="админ" password="$2a$04$Ql3ut8yKr4mXdzyUKag0M.yl6/y2c5M1G3ef1/LaVttMdk53dHQ/S" lang="RUSSIAN" role_id="1" currency="RUB"/>-->
+<!--    <users user_name="user" name="юзер" password="$2a$04$gnmD/AYrURjBwMrHH2FQZO4SNrpEx840o.v7oqEI7oe6riQKKXj66" lang="RUSSIAN" role_id="2" currency="USD"/>-->
+    <users user_name="kapper" name="каппер" password="$2a$04$r1mkI0Krd1VV3Av5B339zOtOJEyjeCpqISvoec3IgOzpUOnVIRS2C" lang="RUSSIAN" role_id="3" currency="EUR"/>
+<!--    <fixtures fixture_id="101" />-->
+<!--    <kapper_info id="20000" u_id="10002" />-->
+</dataset>

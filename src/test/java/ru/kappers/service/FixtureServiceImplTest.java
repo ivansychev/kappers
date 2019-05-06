@@ -17,6 +17,7 @@ import ru.kappers.KappersApplication;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.Fixture.ShortStatus;
 import ru.kappers.model.Fixture.Status;
+import ru.kappers.util.DateTimeUtil;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -47,8 +48,8 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     private Fixture tomorrow = Fixture.builder()
             .id(112)
-            .eventDate(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000))
-            .eventTimestamp(nowTstmp.getTime() + 24 * 3600 * 1000)
+            .eventDate(new Timestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_DAY))
+            .eventTimestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_DAY)
             .awayTeam("Manchester United")
             .homeTeam("FC Liverpool")
             .leagueId(2)
@@ -58,8 +59,8 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     private Fixture yesterday = Fixture.builder()
             .id(110)
-            .eventDate(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000))
-            .eventTimestamp(nowTstmp.getTime() - 24 * 3600 * 1000)
+            .eventDate(new Timestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_DAY))
+            .eventTimestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_DAY)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
@@ -69,8 +70,8 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     private Fixture nextWeek = Fixture.builder()
             .id(113)
-            .eventDate(new Timestamp(nowTstmp.getTime() + 24 * 3600 * 1000 * 7))
-            .eventTimestamp(nowTstmp.getTime() + 24 * 3600 * 1000 * 7)
+            .eventDate(new Timestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_WEEK))
+            .eventTimestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_WEEK)
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .leagueId(87)
@@ -80,8 +81,8 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     private Fixture lastWeek = Fixture.builder()
             .id(114)
-            .eventDate(new Timestamp(nowTstmp.getTime() - 24 * 3600 * 1000 * 7))
-            .eventTimestamp(nowTstmp.getTime() - 24 * 3600 * 1000 * 7)
+            .eventDate(new Timestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_WEEK))
+            .eventTimestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_WEEK)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
