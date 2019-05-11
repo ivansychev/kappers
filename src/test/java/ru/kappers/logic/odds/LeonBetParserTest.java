@@ -1,7 +1,7 @@
 package ru.kappers.logic.odds;
 
 import org.junit.Test;
-import ru.kappers.model.dto.leon.LeonOddsDTO;
+import ru.kappers.model.dto.leon.OddsLeonDTO;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class LeonBetParserTest {
     public void loadEventUrlsOfTournament() {
         BetParser parser = new LeonBetParser();
         List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710675-Europe-UEFA-Champions-League");
-        List <LeonOddsDTO> eventsWithOdds = parser.getEventsWithOdds(list);
+        List <OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
 
     }
 

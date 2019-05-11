@@ -3,7 +3,7 @@ package ru.kappers.logic.odds;
 import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.kappers.exceptions.BetParserException;
-import ru.kappers.model.dto.leon.LeonOddsDTO;
+import ru.kappers.model.dto.leon.OddsLeonDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class LeonBetParser implements BetParser<LeonOddsDTO> {
+public class LeonBetParser implements BetParser<OddsLeonDTO> {
 
     private static final String LEON_ADDRESS = "https://www.leon.ru"; //TODO после заведения справочника, вынести в системный параметр
 
@@ -42,12 +42,12 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
      * @param urls - список линков, по которым нужно итерироваться и получать спортивные события
      */
     @Override
-    public List<LeonOddsDTO> getEventsWithOdds(List<String> urls) {
-        List<LeonOddsDTO> results = new ArrayList<>();
+    public List<OddsLeonDTO> getEventsWithOdds(List<String> urls) {
+        List<OddsLeonDTO> results = new ArrayList<>();
         for (String url : urls) {
-            LeonOddsDTO leonOddsDTO = loadEventOdds(url);
-            if (leonOddsDTO != null) {
-                results.add(leonOddsDTO);
+            OddsLeonDTO oddsLeonDTO = loadEventOdds(url);
+            if (oddsLeonDTO != null) {
+                results.add(oddsLeonDTO);
                 //TODO сохранение в БД
             }
         }
@@ -55,17 +55,17 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
     }
 
     /**
-     * Метод возвращает {@link LeonOddsDTO} сущность, полученную из веб страницы конкретного евента
+     * Метод возвращает {@link OddsLeonDTO} сущность, полученную из веб страницы конкретного евента
      *
      * @param url - линк веб страницы евента, который нужно распарсить
      */
     @Override
-    public LeonOddsDTO loadEventOdds(String url) {
+    public OddsLeonDTO loadEventOdds(String url) {
         log.info("loadEventOdds {}", url);
         JsonArray arr = getArrayOfEventsByURL(url);
         JsonObject object = arr.get(0).getAsJsonObject();
         Gson gson = new Gson();
-        return gson.fromJson(object, LeonOddsDTO.class);
+        return gson.fromJson(object, OddsLeonDTO.class);
     }
 
 

@@ -4,16 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-/**
- * DTO сущность для парсинга лиг от беттера
- * */
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeagueDTO {
+public class SportLeonDTO {
     private long id;
     private String name;
-    private SportDTO sport;
-    private String url;
+    private BetLineLeonDTO betline;
+    private int weight;
+    private String family;
 }

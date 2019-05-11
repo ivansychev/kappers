@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 /**
- * DTO сущность команд, соревнующихся в евенте
+ * DTO сущность для парсинга лиг от беттера
  * */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompetitorDTO {
+public class LeagueLeonDTO {
     private long id;
     private String name;
-    private String homeAway;
-    private String type;
-    private String logo;
+    private SportLeonDTO sport;
+    private String url;
 }

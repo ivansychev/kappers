@@ -14,16 +14,16 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeonOddsDTO {
+public class OddsLeonDTO {
     private long id;
     private String name;
-    private List<CompetitorDTO> competitors;
+    private List<CompetitorLeonDTO> competitors;
     private long kickoff;
     private long lastUpdated;
-    private LeagueDTO league;
+    private LeagueLeonDTO league;
     private boolean open;
     private int marketsCount;
     private String url;
-    private List<MarketDTO> markets;
+    private List<MarketLeonDTO> markets;
 
 }

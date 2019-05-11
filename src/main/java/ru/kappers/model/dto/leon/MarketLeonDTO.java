@@ -11,10 +11,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MarketDTO {
+public class MarketLeonDTO {
     private long id;
     private String name;
-    private List<RunnerDTO> runners;
+    private List<RunnerLeonDTO> runners;
     private boolean open;
     private String family;
     private String primary;

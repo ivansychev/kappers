@@ -5,14 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SportDTO {
+public class RunnerLeonDTO {
     private long id;
     private String name;
-    private BetLineDTO betline;
-    private int weight;
-    private String family;
+    private boolean open;
+    private int r;
+    private int c;
+    private List<String> tags;
+    private double price;
 }
