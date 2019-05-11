@@ -44,7 +44,7 @@ public class GetFixturesByAPIController {
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
-       log.info("getFixturesLastWeek()");
+       log.debug("getFixturesLastWeek()");
         for (long i = -5; i < 5; i++) {
             try {
                 JSONObject jsonObject = JsonUtil.loadFixturesByDate(LocalDate.now().plusDays(i));

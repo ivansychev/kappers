@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 public class LeonBetParser implements BetParser<LeonOddsDTO> {
 
-    private static final String LEON_ADDRESS = "https://www.leon.ru";
+    private static final String LEON_ADDRESS = "https://www.leon.ru"; //TODO после заведения справочника, вынести в системный параметр
 
     /**
      * Метод возвращает список урлов доступных спортивных событий конкретного турнира
