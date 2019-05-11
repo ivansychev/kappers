@@ -1,4 +1,4 @@
-package ru.kappers.model.dto;
+package ru.kappers.model.dto.rapidapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FixtureDTO {
+public class FixtureRapidDTO {
     Integer fixture_id;
     Long event_timestamp;
     String event_date;

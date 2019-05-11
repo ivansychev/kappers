@@ -1,4 +1,4 @@
-package ru.kappers.model.dto;
+package ru.kappers.model.dto.rapidapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
