@@ -1,6 +1,7 @@
 package ru.kappers.logic.controller;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @RestController
 @RequestMapping(value = "/rest/api/fixtures")
 public class GetFixturesByAPIController {
@@ -43,6 +44,7 @@ public class GetFixturesByAPIController {
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
+       log.info("getFixturesLastWeek()");
         for (long i = -5; i < 5; i++) {
             try {
                 JSONObject jsonObject = JsonUtil.loadFixturesByDate(LocalDate.now().plusDays(i));

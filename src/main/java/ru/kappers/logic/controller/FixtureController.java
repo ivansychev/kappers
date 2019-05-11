@@ -33,7 +33,7 @@ public class FixtureController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Fixture getNextWeek(@PathVariable int id) {
+    public Fixture getFixtureById(@PathVariable int id) {
         return service.getById(id);
     }
 
