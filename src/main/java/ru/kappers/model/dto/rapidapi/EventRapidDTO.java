@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
+public class EventRapidDTO {
     /** Fixture ID */
     private int f_id;
     /** возможный исход */

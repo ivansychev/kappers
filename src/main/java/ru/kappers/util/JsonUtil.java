@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import org.springframework.core.convert.converter.Converter;
 import ru.kappers.convert.FixtureDTOToFixtureConverter;
 import ru.kappers.model.Fixture;
-import ru.kappers.model.dto.FixtureDTO;
+import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -27,31 +27,37 @@ import java.util.Map;
 public class JsonUtil {
 
     //todo Наличие утилитных классов и статических методов снижает эффект от наличия Spring Framework. Надо бы уменьшить количество статических реализаций и внедрять Spring бины, и лучше внедрять уже ConversionService из Spring Core
-    private static final Converter<FixtureDTO, Fixture> fixtureDTOToFixtureConverter = new FixtureDTOToFixtureConverter();
+    private static final Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter = new FixtureDTOToFixtureConverter();
 
     public static JSONObject loadFixturesByLeague(int leagueId) throws UnirestException {
-        HttpResponse<JsonNode> response = Unirest.get("https://api-football-v1.p.mashape.com/fixtures/league/" + leagueId)
-                .header("X-Mashape-Key", "4UUu9YH9M1mshzEpnUwMzCwZ7Kr9p1zShpXjsndn50fifuusMu")
-                .header("X-Mashape-Host", "api-football-v1.p.mashape.com")
-                .asJson();
-        JsonNode body = response.getBody();
-        return body.getObject();
+        return getObjectsFromRapidAPI("https://api-football-v1.p.mashape.com/fixtures/league/" + leagueId);
     }
 
     public static JSONObject loadFixturesByDate(LocalDate date) throws UnirestException {
         String formattedString = date.format(DateTimeFormatter.ISO_DATE);
-        HttpResponse<JsonNode> response = Unirest.get("https://api-football-v1.p.mashape.com/fixtures/date/" + formattedString)
-                .header("X-Mashape-Key", "4UUu9YH9M1mshzEpnUwMzCwZ7Kr9p1zShpXjsndn50fifuusMu")
-                .header("X-Mashape-Host", "api-football-v1.p.mashape.com")
-                .asJson();
-        JsonNode body = response.getBody();
-        return body.getObject();
+        return getObjectsFromRapidAPI("https://api-football-v1.p.mashape.com/fixtures/date/" + formattedString);
     }
 
     public static JSONObject loadLiveFixtures() throws UnirestException {
-        HttpResponse<JsonNode> response = Unirest.get("https://api-football-v1.p.mashape.com/fixtures/live")
-                .header("X-Mashape-Key", "4UUu9YH9M1mshzEpnUwMzCwZ7Kr9p1zShpXjsndn50fifuusMu")
-                .header("X-Mashape-Host", "api-football-v1.p.mashape.com")
+        return getObjectsFromRapidAPI("https://api-football-v1.p.mashape.com/fixtures/live");
+    }
+
+    public static JSONObject loadTeamsByLeague(Integer leagueId) throws UnirestException {
+        return getObjectsFromRapidAPI("https://api-football-v1.p.rapidapi.com/teams/league/" + leagueId);
+    }
+
+    public static JSONObject loadLeagues() throws UnirestException {
+        return getObjectsFromRapidAPI("https://api-football-v1.p.rapidapi.com/leagues");
+    }
+
+
+    public static JSONObject loadLeaguesOfSeason(String year) throws UnirestException {
+        return getObjectsFromRapidAPI("https://api-football-v1.p.rapidapi.com/leagues/season/"+year);
+    }
+    private static JSONObject getObjectsFromRapidAPI(String link) throws UnirestException {
+        HttpResponse<JsonNode> response = Unirest.get(link)
+                .header("X-RapidAPI-Host", "api-football-v1.p.rapidapi.com")
+                .header("X-RapidAPI-Key", "4UUu9YH9M1mshzEpnUwMzCwZ7Kr9p1zShpXjsndn50fifuusMu")
                 .asJson();
         JsonNode body = response.getBody();
         return body.getObject();
@@ -59,7 +65,7 @@ public class JsonUtil {
 
     public static Map<Integer, Fixture> getFixturesFromJson(String object) {
         Gson gson = new Gson();
-        Type itemsMapType = new TypeToken<Map<Integer, FixtureDTO>>() {
+        Type itemsMapType = new TypeToken<Map<Integer, FixtureRapidDTO>>() {
         }.getType();
         JsonElement element = new JsonParser().parse(object);
         if (((JsonObject) element).get("body") != null) {
@@ -67,12 +73,12 @@ public class JsonUtil {
         }
         JsonObject allResults = ((JsonObject) element).get("api").getAsJsonObject();
         JsonObject fixtures = (JsonObject) allResults.get("fixtures");
-        Map<Integer, FixtureDTO> elements;
+        Map<Integer, FixtureRapidDTO> elements;
         String replaceEmpties = fixtures.toString().replace("\"\"", "null");
-     //   fixtures = gson.fromJson(replaceEmpties,JsonObject.class);
+        //   fixtures = gson.fromJson(replaceEmpties,JsonObject.class);
         elements = gson.fromJson(replaceEmpties, itemsMapType);
         Map<Integer, Fixture> result = new HashMap<>();
-        for (Map.Entry<Integer, FixtureDTO> record : elements.entrySet()) {
+        for (Map.Entry<Integer, FixtureRapidDTO> record : elements.entrySet()) {
             result.put(record.getKey(), fixtureDTOToFixtureConverter.convert(record.getValue()));
         }
         return result;

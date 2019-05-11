@@ -40,6 +40,7 @@ public class GetFixturesByAPIController {
 /**
  * Метод предназначен для обновления списка спортивных событий
  * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
+ * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
  * */
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -3,20 +3,20 @@ package ru.kappers.convert;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.Fixture;
-import ru.kappers.model.dto.FixtureDTO;
+import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 import ru.kappers.util.DateTimeUtil;
 
 import javax.annotation.Nullable;
 
 /**
- * Конвертер из {@link FixtureDTO} в {@link Fixture}
+ * Конвертер из {@link FixtureRapidDTO} в {@link Fixture}
  */
 @Service
-public class FixtureDTOToFixtureConverter implements Converter<FixtureDTO, Fixture> {
+public class FixtureDTOToFixtureConverter implements Converter<FixtureRapidDTO, Fixture> {
 
     @Nullable
     @Override
-    public Fixture convert(@Nullable FixtureDTO dto) {
+    public Fixture convert(@Nullable FixtureRapidDTO dto) {
         if (dto == null) {
             return null;
         }

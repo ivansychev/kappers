@@ -8,22 +8,22 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
-import ru.kappers.model.dto.EventDTO;
-import ru.kappers.model.dto.FixtureDTO;
+import ru.kappers.model.dto.rapidapi.EventRapidDTO;
+import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
 
-    private Converter<FixtureDTO, Fixture> fixtureDTOToFixtureConverter;
-    private Converter<EventDTO, Event> eventDTOEventConverter;
+    private Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter;
+    private Converter<EventRapidDTO, Event> eventDTOEventConverter;
 
     @Autowired
-    public void setFixtureDTOToFixtureConverter(Converter<FixtureDTO, Fixture> fixtureDTOToFixtureConverter) {
+    public void setFixtureDTOToFixtureConverter(Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter) {
         this.fixtureDTOToFixtureConverter = fixtureDTOToFixtureConverter;
     }
 
     @Autowired
-    public void setEventDTOEventConverter(Converter<EventDTO, Event> eventDTOEventConverter) {
+    public void setEventDTOEventConverter(Converter<EventRapidDTO, Event> eventDTOEventConverter) {
         this.eventDTOEventConverter = eventDTOEventConverter;
     }
 

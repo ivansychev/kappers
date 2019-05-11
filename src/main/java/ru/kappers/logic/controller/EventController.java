@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
-import ru.kappers.model.dto.EventDTO;
+import ru.kappers.model.dto.rapidapi.EventRapidDTO;
 import ru.kappers.model.utilmodel.Odds;
 import ru.kappers.service.EventService;
 import ru.kappers.service.FixtureService;
@@ -72,7 +72,7 @@ public class EventController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Event createEvent(@RequestBody String content) {
         log.debug("createEvent(content: {})...", content);
-        EventDTO eventDTO = GSON.fromJson(content, EventDTO.class);
+        EventRapidDTO eventDTO = GSON.fromJson(content, EventRapidDTO.class);
         Event event = conversionService.convert(eventDTO, Event.class);
         User u = userService.getByUserName(getCurrentAuthentication().getName());
         return eService.createEventByUser(event, u);
