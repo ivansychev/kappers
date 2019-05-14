@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 /**
- * DTO сущность команд, соревнующихся в евенте
+ * DTO сущность участника соревнования в событии
  * */
 @Data
 @Builder

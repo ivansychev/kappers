@@ -18,11 +18,6 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
 
     private static final String LEON_ADDRESS = "https://www.leon.ru"; //TODO после заведения справочника, вынести в системный параметр
 
-    /**
-     * Метод возвращает список урлов доступных спортивных событий конкретного турнира
-     *
-     * @param url - линк веб страницы турнира, из котогрого нужно получить список событий
-     */
     @Override
     public List<String> loadEventUrlsOfTournament(String url) {
         log.info("loadEventUrlsOfTournament {}", url);
@@ -36,11 +31,6 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
         return urlsOfEvents;
     }
 
-    /**
-     * Метод возвращает список событий конкретного турнира
-     *
-     * @param urls - список линков, по которым нужно итерироваться и получать спортивные события
-     */
     @Override
     public List<LeonOddsDTO> getEventsWithOdds(List<String> urls) {
         List<LeonOddsDTO> results = new ArrayList<>();
@@ -54,11 +44,6 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
         return results;
     }
 
-    /**
-     * Метод возвращает {@link LeonOddsDTO} сущность, полученную из веб страницы конкретного евента
-     *
-     * @param url - линк веб страницы евента, который нужно распарсить
-     */
     @Override
     public LeonOddsDTO loadEventOdds(String url) {
         log.info("loadEventOdds {}", url);
