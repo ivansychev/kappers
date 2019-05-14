@@ -1,6 +1,7 @@
 package ru.kappers.logic.odds;
 
 import com.google.gson.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.kappers.exceptions.BetParserException;
 import ru.kappers.model.dto.leon.LeonOddsDTO;
@@ -13,14 +14,33 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Парсер сайта ООО "Леон"
+ */
 @Slf4j
 public class LeonBetParser implements BetParser<LeonOddsDTO> {
 
-    private static final String LEON_ADDRESS = "https://www.leon.ru"; //TODO после заведения справочника, вынести в системный параметр
+    @Getter
+    /** ссылка на сайт ООО "Леон" */
+    private final String leonAddress; //TODO после заведения справочника, вынести в системный параметр
+    private final Gson GSON = new Gson();
+    private final JsonParser JSON_PARSER = new JsonParser();
+
+    public LeonBetParser() {
+        this("https://www.leon.ru");
+    }
+
+    /**
+     * Создать парсер сайта ООО "Леон"
+     * @param leonAddress ссылка на сайт ООО "Леон"
+     */
+    public LeonBetParser(String leonAddress) {
+        this.leonAddress = leonAddress;
+    }
 
     @Override
     public List<String> loadEventUrlsOfTournament(String url) {
-        log.info("loadEventUrlsOfTournament {}", url);
+        log.debug("loadEventUrlsOfTournament(url: {})...", url);
         List<String> urlsOfEvents = new ArrayList<>();
         JsonArray arr = getArrayOfEventsByURL(url);
         for (int i = 0; i < arr.size(); i++) {
@@ -33,12 +53,12 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
 
     @Override
     public List<LeonOddsDTO> getEventsWithOdds(List<String> urls) {
+        log.debug("getEventsWithOdds(urls: {})...", urls);
         List<LeonOddsDTO> results = new ArrayList<>();
         for (String url : urls) {
             LeonOddsDTO leonOddsDTO = loadEventOdds(url);
             if (leonOddsDTO != null) {
                 results.add(leonOddsDTO);
-                //TODO сохранение в БД
             }
         }
         return results;
@@ -46,11 +66,10 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
 
     @Override
     public LeonOddsDTO loadEventOdds(String url) {
-        log.info("loadEventOdds {}", url);
+        log.debug("loadEventOdds(url: {})...", url);
         JsonArray arr = getArrayOfEventsByURL(url);
         JsonObject object = arr.get(0).getAsJsonObject();
-        Gson gson = new Gson();
-        return gson.fromJson(object, LeonOddsDTO.class);
+        return GSON.fromJson(object, LeonOddsDTO.class);
     }
 
 
@@ -63,36 +82,43 @@ public class LeonBetParser implements BetParser<LeonOddsDTO> {
 
         URL address = null;
         try {
-            address = new URL(LEON_ADDRESS + url);
+            address = new URL(leonAddress + url);
         } catch (MalformedURLException e) {
-            log.error("Не удалось сформировать URL", e);
-            throw new BetParserException("Не удалось сформировать URL", e);
+            String msg = "Не удалось сформировать URL";
+            log.error(msg, e);
+            throw new BetParserException(msg, e);
         }
         StringBuilder sb = new StringBuilder();
 
-        try (InputStreamReader is = new InputStreamReader(address.openConnection().getInputStream());
-             BufferedReader br = new BufferedReader(is)) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                address.openConnection().getInputStream()))) {
             String s;
             while ((s = br.readLine()) != null) {
                 sb.append(s);
             }
         } catch (IOException e) {
-            log.error("Не удалось получить страницу. Возможно передан некорректный URL", e);
-            throw new BetParserException("Ошибка ввода/вывода во время загрузки данных со страницы " + url, e);
+            String msg = "Ошибка ввода/вывода во время загрузки данных со страницы " + url
+                     + ". Возможно передан некорректный URL";
+            log.error(msg, e);
+            throw new BetParserException(msg, e);
         }
         StringBuilder object = new StringBuilder();
         String obj = "";
-        if (sb.toString().contains("initialEvents:")) {
-            object.append(sb.toString().substring(sb.toString().indexOf("initialEvents:")));
+        String sbStr = sb.toString();
+        int idx = sbStr.indexOf("initialEvents:");
+        if (idx > -1) {
+            object.append(sbStr.substring(idx));
             obj = object.substring(0, object.indexOf("</script>"))
                     .replace("initialEvents", "{\"initialEvents\"")
                     .substring(0, object.indexOf("refreshTimeout"))
                     .trim();
             obj = obj.substring(0, obj.length() - 1).concat("}");
         }
-        log.info(obj);
-        JsonElement element = new JsonParser().parse(obj);
-        return (JsonArray) ((JsonObject) element).get("initialEvents").getAsJsonObject().get("events");
+        log.debug("obj: {}", obj);
+        JsonObject jsonObject = (JsonObject) JSON_PARSER.parse(obj);
+        return (JsonArray) jsonObject.get("initialEvents")
+                .getAsJsonObject()
+                .get("events");
     }
 
 }
