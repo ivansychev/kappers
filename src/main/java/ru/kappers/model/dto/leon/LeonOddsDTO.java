@@ -17,9 +17,12 @@ import java.util.List;
 public class LeonOddsDTO {
     private long id;
     private String name;
+    /** участники соревнования */
     private List<CompetitorDTO> competitors;
     private long kickoff;
+    /** это дата/время последнего изменения? */
     private long lastUpdated;
+    /** лига */
     private LeagueDTO league;
     private boolean open;
     private int marketsCount;
