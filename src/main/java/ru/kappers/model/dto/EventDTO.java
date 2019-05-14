@@ -1,4 +1,4 @@
-package ru.kappers.model.dto.rapidapi;
+package ru.kappers.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventRapidDTO {
+public class EventDTO {
     /** Fixture ID */
     private int f_id;
     /** возможный исход */
