@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.Event;
-import ru.kappers.model.dto.rapidapi.EventRapidDTO;
+import ru.kappers.model.dto.EventDTO;
 import ru.kappers.service.FixtureService;
 
 import javax.annotation.Nullable;
 
 /**
- * Конвертер из {@link EventRapidDTO} в {@link Event}
+ * Конвертер из {@link EventDTO} в {@link Event}
  */
 @Service
-public class EventDTOToEventConverter implements Converter<EventRapidDTO, Event> {
+public class EventDTOToEventConverter implements Converter<EventDTO, Event> {
 
     private final FixtureService fixtureService;
 
@@ -24,7 +24,7 @@ public class EventDTOToEventConverter implements Converter<EventRapidDTO, Event>
 
     @Nullable
     @Override
-    public Event convert(@Nullable EventRapidDTO source) {
+    public Event convert(@Nullable EventDTO source) {
         if (source == null) {
             return null;
         }

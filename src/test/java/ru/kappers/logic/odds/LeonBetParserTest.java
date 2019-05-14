@@ -40,7 +40,7 @@ public class LeonBetParserTest {
 //        assertThat(oddsDTO.getLastUpdated(), is(1557833759654L));
         assertThat(leagueDTO, is(notNullValue()));
         assertThat(oddsDTO.isOpen(), is(true));
-        assertThat(oddsDTO.getMarketsCount(), is(50));
+        assertThat(oddsDTO.getMarketsCount(), is(52));
         assertThat(oddsDTO.getUrl(), is("/events/Soccer/281474976710675-Europe-UEFA-Champions-League/281474982732163-Tottenham-Hotspur-Liverpool"));
         assertThat(oddsDTO.getMarkets().size(), is(oddsDTO.getMarketsCount()));
         // check List<CompetitorDTO>
@@ -83,7 +83,7 @@ public class LeonBetParserTest {
         final OddsLeonDTO oddsDTO = parser.loadEventOdds("/events/Soccer/281474976710675-Europe-UEFA-Champions-League/281474982732162-Ajax-Tottenham-Hotspur");
 
         assertThat(oddsDTO, is(notNullValue()));
-        assertThat(oddsDTO.getId(), is(1143492108116379L));
+        assertThat(oddsDTO.getId(), is(1143492111092075L));
         assertThat(oddsDTO.getName(), is("ФК Арарат Ереван - FC Lori"));
         assertThat(oddsDTO.getCompetitors(), is(notNullValue()));
         assertThat(oddsDTO.getKickoff(), is(1557835200000L));

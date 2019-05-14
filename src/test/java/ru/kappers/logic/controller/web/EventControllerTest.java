@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.User;
-import ru.kappers.model.dto.rapidapi.EventRapidDTO;
+import ru.kappers.model.dto.EventDTO;
 import ru.kappers.model.utilmodel.Odds;
 import ru.kappers.model.utilmodel.Outcomes;
 import ru.kappers.repository.FixtureRepository;
@@ -116,14 +116,14 @@ public class EventControllerTest extends AbstractTransactionalJUnit4SpringContex
 
         final Fixture dbFixture = findFixture();
         assertThat(dbFixture, is(notNullValue()));
-        final EventRapidDTO eventRapidDTO = EventRapidDTO.builder()
+        final EventDTO eventDTO = EventDTO.builder()
                 .outcome(Outcomes.HOMETEAMWIN)
                 .coefficient(new BigDecimal("1.35"))
                 .tokens(50)
                 .price(new BigDecimal("500"))
                 .f_id(dbFixture.getId())
                 .build();
-        final String data = GSON.toJson(eventRapidDTO);
+        final String data = GSON.toJson(eventDTO);
 //        final Authentication authentication = mock(Authentication.class);
 //        when(eventController.getCurrentAuthentication()).thenReturn(authentication);
 //        when(eventService.createEventByUser())
@@ -135,23 +135,23 @@ public class EventControllerTest extends AbstractTransactionalJUnit4SpringContex
 ////                        .header("username", "kapper") //todo добавить авторизацию, пока временно отключил проверку
 //                        .content(data)
 //                ).andExpect(status().isOk())
-//                .andExpect(jsonPath("$.outcome", is(eventRapidDTO.getOutcome())))
-//                .andExpect(jsonPath("$.coefficient", is(eventRapidDTO.getCoefficient())))
-//                .andExpect(jsonPath("$.tokens", is(eventRapidDTO.getTokens())))
-//                .andExpect(jsonPath("$.price", is(eventRapidDTO.getPrice())))
-//                .andExpect(jsonPath("$.fixture.id", is(eventRapidDTO.getF_id())));
+//                .andExpect(jsonPath("$.outcome", is(eventDTO.getOutcome())))
+//                .andExpect(jsonPath("$.coefficient", is(eventDTO.getCoefficient())))
+//                .andExpect(jsonPath("$.tokens", is(eventDTO.getTokens())))
+//                .andExpect(jsonPath("$.price", is(eventDTO.getPrice())))
+//                .andExpect(jsonPath("$.fixture.id", is(eventDTO.getF_id())));
         final ResponseEntity<Event> response = testRestTemplate
                 .withBasicAuth(KAPPER_USERNAME, KAPPER_PASSWORD)
                 .postForEntity("/rest/events/create", data, Event.class);
 
         //todo разобраться почему внутри теста инициируется KapperInfo, а при вызове контроллера не находит KapperInfo
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody().getOutcome(), is(eventRapidDTO.getOutcome()));
-        assertThat(response.getBody().getCoefficient(), is(eventRapidDTO.getCoefficient()));
-        assertThat(response.getBody().getTokens(), is(eventRapidDTO.getTokens()));
-        assertThat(response.getBody().getPrice(), is(eventRapidDTO.getPrice()));
+        assertThat(response.getBody().getOutcome(), is(eventDTO.getOutcome()));
+        assertThat(response.getBody().getCoefficient(), is(eventDTO.getCoefficient()));
+        assertThat(response.getBody().getTokens(), is(eventDTO.getTokens()));
+        assertThat(response.getBody().getPrice(), is(eventDTO.getPrice()));
         assertThat(response.getBody().getFixture(), is(notNullValue()));
-        assertThat(response.getBody().getFixture().getId(), is(eventRapidDTO.getF_id()));
+        assertThat(response.getBody().getFixture().getId(), is(eventDTO.getF_id()));
     }
 
     @TestConfiguration

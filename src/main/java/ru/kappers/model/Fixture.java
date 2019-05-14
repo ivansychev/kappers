@@ -25,12 +25,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Table(name = "fixtures")
 public class Fixture implements Serializable, Comparable {
-
-//    @Id
-////    @GeneratedValue(strategy = GenerationType.AUTO)
-////    @Column(name = "id", nullable = false, insertable = false, updatable = false)
-////    @EqualsAndHashCode.Exclude
-////    private int Id;
     @Id
     @Column(name = "fixture_id",nullable = false, insertable = false, updatable = false)
     private Integer id;

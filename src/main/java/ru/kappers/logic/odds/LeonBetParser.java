@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class LeonBetParser implements BetParser<OddsLeonDTO> {
         StringBuilder sb = new StringBuilder();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                address.openConnection().getInputStream()))) {
+                address.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             String s;
             while ((s = br.readLine()) != null) {
                 sb.append(s);
