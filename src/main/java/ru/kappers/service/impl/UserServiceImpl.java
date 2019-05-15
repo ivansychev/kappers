@@ -9,16 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.exceptions.MoneyTransferException;
 import ru.kappers.model.*;
 import ru.kappers.repository.UsersRepository;
-import ru.kappers.service.CurrRateService;
-import ru.kappers.service.KapperInfoService;
-import ru.kappers.service.RolesService;
-import ru.kappers.service.UserService;
-import ru.kappers.util.CurrencyUtil;
+import ru.kappers.service.*;
 import ru.kappers.util.DateTimeUtil;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -31,15 +25,16 @@ public class UserServiceImpl implements UserService {
 
     private final UsersRepository repository;
     private final RolesService rolesService;
-    private final CurrRateService currService;
     private final KapperInfoService kapperInfoService;
+    private final CurrencyService currencyService;
 
     @Autowired
-    public UserServiceImpl(UsersRepository repository, RolesService rolesService, CurrRateService currService, KapperInfoService kapperInfoService) {
+    public UserServiceImpl(UsersRepository repository, RolesService rolesService, KapperInfoService kapperInfoService,
+                           CurrencyService currencyService) {
         this.repository = repository;
         this.rolesService = rolesService;
-        this.currService = currService;
         this.kapperInfoService = kapperInfoService;
+        this.currencyService = currencyService;
     }
 
     @Override
@@ -220,8 +215,7 @@ public class UserServiceImpl implements UserService {
                 log.debug("Kapper {} got {} {}", kapper.getUserName(), amount, kapper.getCurrency());
 
             } else {
-                CurrencyUtil currUtil = new CurrencyUtil(currService);
-                BigDecimal resultAmount = currUtil.exchange(user.getCurrency(), kapper.getCurrency(), amount);
+                BigDecimal resultAmount = currencyService.exchange(user.getCurrency(), kapper.getCurrency(), amount);
                 kapper.setBalance(kapper.getBalance().add(resultAmount));
                 log.debug("Kapper {} got {} {}", kapper.getUserName(), resultAmount, kapper.getCurrency());
             }
