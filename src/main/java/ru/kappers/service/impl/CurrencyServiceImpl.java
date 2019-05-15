@@ -3,7 +3,6 @@ package ru.kappers.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.exceptions.CurrRateGettingException;
 import ru.kappers.model.CurrencyRate;
@@ -39,7 +38,9 @@ public class CurrencyServiceImpl implements CurrencyService {
         log.debug("refreshCurrencyRatesForToday()...");
         try {
             final List<CurrencyRate> currencyRates = currencyRatesParser.parseFromCBRF();
-            currencyRates.forEach(currencyRate -> currRateService.save(currencyRate));
+            currencyRates.stream()
+                    .filter(currencyRate -> !currRateService.isExist(currencyRate.getDate(), currencyRate.getCharCode()))
+                    .forEach(currRateService::save);
             return true;
         } catch (Exception ex) {
             throw new CurrRateGettingException("Couldn't get currency rates", ex);
