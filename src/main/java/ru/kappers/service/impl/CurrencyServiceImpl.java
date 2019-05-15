@@ -70,7 +70,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     //TODO завести тесты на этот класс
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount){
         log.debug("exchange(fromCurr: {}, toCurr: {}, amount: {})...", fromCurr, toCurr, amount);
         if (fromCurr.equals(toCurr)) {
