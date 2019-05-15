@@ -12,11 +12,11 @@ import ru.kappers.service.CurrencyService;
  */
 @Slf4j
 @Service
-public class StartApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
+public class ApplicationStartListener implements ApplicationListener<ContextRefreshedEvent> {
     private final CurrencyService currencyService;
 
     @Autowired
-    public StartApplicationListener(CurrencyService currencyService) {
+    public ApplicationStartListener(CurrencyService currencyService) {
         this.currencyService = currencyService;
     }
 
