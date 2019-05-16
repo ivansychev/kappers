@@ -3,6 +3,7 @@ package ru.kappers.service.parser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.Map;
 @Service
 public class CBRFDailyCurrencyRatesParser {
     private final JsonParser jsonParser = new JsonParser();
+    @Getter
     private final URL cbrfUrl;
 
     /** Ссылка на JSON курсов валют ЦБ РФ по умолчанию */
@@ -38,6 +40,7 @@ public class CBRFDailyCurrencyRatesParser {
     }
 
     public CBRFDailyCurrencyRatesParser(URL cbrfUrl) {
+        log.debug("CBRFDailyCurrencyRatesParser(cbrfUrl: {})...", cbrfUrl);
         this.cbrfUrl = cbrfUrl;
     }
 
@@ -47,6 +50,7 @@ public class CBRFDailyCurrencyRatesParser {
      * @throws RuntimeException если во время парсинга произошла ошибка
      */
     public List<CurrencyRate> parseFromCBRF() {
+        log.debug("parseFromCBRF()...");
         return parseFromURL(cbrfUrl);
     }
 
@@ -57,6 +61,13 @@ public class CBRFDailyCurrencyRatesParser {
      * @throws RuntimeException если во время парсинга произошла ошибка
      */
     public List<CurrencyRate> parseFromURL(URL url) {
+        log.debug("parseFromURL(url: {})...", url);
+        final String json = getJSONStringFromURL(url);
+        return parseFromJSON(json);
+    }
+
+    protected String getJSONStringFromURL(URL url) {
+        log.debug("getJSONStringFromURL(url: {})...", url);
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
             String s;
@@ -68,7 +79,7 @@ public class CBRFDailyCurrencyRatesParser {
             log.error(msg, e);
             throw new RuntimeException(msg, e);
         }
-        return parseFromJSON(sb.toString());
+        return sb.toString();
     }
 
     /**
@@ -77,6 +88,7 @@ public class CBRFDailyCurrencyRatesParser {
      * @return список курсов валют
      */
     public List<CurrencyRate> parseFromJSON(String json) {
+        log.debug("parseFromJSON(json: {})...", json);
         JsonObject object = (JsonObject) jsonParser.parse(json);
         Date date = DateTimeUtil.parseSqlDateFromZonedDateTime(object.get("Date").getAsString());
         JsonObject valutes = object.get("Valute").getAsJsonObject();
