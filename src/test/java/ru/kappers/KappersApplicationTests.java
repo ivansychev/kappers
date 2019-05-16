@@ -11,6 +11,7 @@ import ru.kappers.logic.controller.CurrencyControllerTest;
 import ru.kappers.logic.controller.web.EventControllerTest;
 import ru.kappers.service.*;
 import ru.kappers.service.impl.ApplicationStartListenerTest;
+import ru.kappers.service.parser.CBRFDailyCurrencyRatesParserTest;
 import ru.kappers.util.DateTimeUtilTest;
 
 @RunWith(Suite.class)
@@ -27,7 +28,8 @@ import ru.kappers.util.DateTimeUtilTest;
         CurrRateServiceImplTest.class,
 		EventControllerTest.class,
 		CurrencyControllerTest.class,
-		ApplicationStartListenerTest.class
+		ApplicationStartListenerTest.class,
+		CBRFDailyCurrencyRatesParserTest.class
 })
 public class KappersApplicationTests {
 

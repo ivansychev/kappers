@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +70,7 @@ public class CBRFDailyCurrencyRatesParser {
     protected String getJSONStringFromURL(URL url) {
         log.debug("getJSONStringFromURL(url: {})...", url);
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
             String s;
             while ((s = reader.readLine()) != null) {
                 sb.append(s);

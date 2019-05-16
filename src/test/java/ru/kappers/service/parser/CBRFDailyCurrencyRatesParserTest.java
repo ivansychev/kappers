@@ -1,5 +1,6 @@
 package ru.kappers.service.parser;
 
+import org.apache.tomcat.util.digester.DocumentProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +33,7 @@ public class CBRFDailyCurrencyRatesParserTest {
 
     public CBRFDailyCurrencyRatesParserTest() throws IOException {
         File file = ResourceUtils.getFile("classpath:data/cbr_daily_json.js");
-        testJSON = new String(Files.readAllBytes(file.toPath()));
+        testJSON = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
     }
 
     @Test
