@@ -26,7 +26,6 @@ import java.util.Map;
 //todo Что то мне подсказывает что название класса не соответствует его содержимому. Можно было бы все эти методы просто перенести в FixtureService и его реализацию
 public class JsonUtil {
 
-    //todo Наличие утилитных классов и статических методов снижает эффект от наличия Spring Framework. Надо бы уменьшить количество статических реализаций и внедрять Spring бины, и лучше внедрять уже ConversionService из Spring Core
     private static final Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter = new FixtureDTOToFixtureConverter();
 
     public static JSONObject loadFixturesByLeague(int leagueId) throws UnirestException {
