@@ -7,7 +7,10 @@ import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
+import ru.kappers.logic.controller.CurrencyControllerTest;
+import ru.kappers.logic.controller.web.EventControllerTest;
 import ru.kappers.service.*;
+import ru.kappers.service.impl.ApplicationStartListenerTest;
 import ru.kappers.util.DateTimeUtilTest;
 
 @RunWith(Suite.class)
@@ -21,7 +24,10 @@ import ru.kappers.util.DateTimeUtilTest;
 		KapperInfoServiceImplTest.class,
 		HistoryServiceImplTest.class,
 		FixtureServiceImplTest.class,
-        CurrRateServiceImplTest.class
+        CurrRateServiceImplTest.class,
+		EventControllerTest.class,
+		CurrencyControllerTest.class,
+		ApplicationStartListenerTest.class
 })
 public class KappersApplicationTests {
 

@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import ru.kappers.config.AppConfig;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 @Log4j
 @SpringBootApplication
 @Import({AppConfig.class})

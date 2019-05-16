@@ -1,0 +1,27 @@
+package ru.kappers.convert;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Service;
+import ru.kappers.model.catalog.League;
+import ru.kappers.model.dto.rapidapi.LeagueRapidDTO;
+import ru.kappers.util.DateTimeUtil;
+
+@Service
+public class LeagueRapidDTOLeagueConverter implements Converter<LeagueRapidDTO, League> {
+    @Override
+    public League convert(LeagueRapidDTO source) {
+        if (source == null) {
+            return null;
+        }
+
+        return League.builder()
+                .id(source.getLeague_id())
+                .country(source.getCountry())
+                .name(source.getName())
+                .logoUrl(source.getLogo())
+                .season(source.getSeason())
+                .seasonStart(DateTimeUtil.parseTimestampFromDate(source.getSeason_start()+"+03:00"))
+                .seasonEnd(DateTimeUtil.parseTimestampFromDate(source.getSeason_end()+"+03:00"))
+                .build();
+    }
+}
