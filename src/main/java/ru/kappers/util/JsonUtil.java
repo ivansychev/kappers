@@ -16,17 +16,19 @@ import ru.kappers.model.Fixture;
 import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //todo Что то мне подсказывает что название класса не соответствует его содержимому. Можно было бы все эти методы просто перенести в FixtureService и его реализацию
 public class JsonUtil {
 
     private static final Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter = new FixtureDTOToFixtureConverter();
+
+    public static final Gson GSON = new Gson();
+    public static final JsonParser JSON_PARSER = new JsonParser();
 
     public static JSONObject loadFixturesByLeague(int leagueId) throws UnirestException {
         return getObjectsFromRapidAPI("https://api-football-v1.p.mashape.com/fixtures/league/" + leagueId);
@@ -58,41 +60,29 @@ public class JsonUtil {
                 .header("X-RapidAPI-Host", "api-football-v1.p.rapidapi.com")
                 .header("X-RapidAPI-Key", "4UUu9YH9M1mshzEpnUwMzCwZ7Kr9p1zShpXjsndn50fifuusMu")
                 .asJson();
-        JsonNode body = response.getBody();
-        return body.getObject();
+        return response.getBody().getObject();
     }
 
     public static Map<Integer, Fixture> getFixturesFromJson(String object) {
-        Gson gson = new Gson();
-        Type itemsMapType = new TypeToken<Map<Integer, FixtureRapidDTO>>() {
-        }.getType();
-        JsonElement element = new JsonParser().parse(object);
-        if (((JsonObject) element).get("body") != null) {
-            element = ((JsonObject) element).get("body").getAsJsonObject();
+        JsonObject jsonObject = (JsonObject) JSON_PARSER.parse(object);
+        if (jsonObject.get("body") != null) {
+            jsonObject = jsonObject.get("body").getAsJsonObject();
         }
-        JsonObject allResults = ((JsonObject) element).get("api").getAsJsonObject();
+        JsonObject allResults = jsonObject.get("api").getAsJsonObject();
         JsonObject fixtures = (JsonObject) allResults.get("fixtures");
-        Map<Integer, FixtureRapidDTO> elements;
         String replaceEmpties = fixtures.toString().replace("\"\"", "null");
-        //   fixtures = gson.fromJson(replaceEmpties,JsonObject.class);
-        elements = gson.fromJson(replaceEmpties, itemsMapType);
-        Map<Integer, Fixture> result = new HashMap<>();
-        for (Map.Entry<Integer, FixtureRapidDTO> record : elements.entrySet()) {
-            result.put(record.getKey(), fixtureDTOToFixtureConverter.convert(record.getValue()));
-        }
-        return result;
+        Map<Integer, FixtureRapidDTO> elements = GSON.fromJson(replaceEmpties, new TypeToken<Map<Integer, FixtureRapidDTO>>() {}.getType());
+        return elements.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey(), e -> fixtureDTOToFixtureConverter.convert(e.getValue())));
     }
 
     public static Map<Integer, Fixture> getFixturesFromFile(String filePath) {
         File file = new File(filePath);
-        JsonElement element;
-        try (InputStream is = new FileInputStream(file)) {
-            Reader r = new InputStreamReader(is, StandardCharsets.UTF_8);
-            element = new JsonParser().parse(r);
+        try (Reader r = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            return getFixturesFromJson(JSON_PARSER.parse(r).toString());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return getFixturesFromJson(element.toString());
     }
 
 
