@@ -2,6 +2,7 @@ package ru.kappers.util;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
 
-@Log4j
+@Slf4j
 @ActiveProfiles("test")
 @ContextConfiguration
 @RunWith(SpringRunner.class)

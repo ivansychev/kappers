@@ -3,12 +3,14 @@ package ru.kappers.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j
+@Slf4j
 @Data
 @Builder
 @AllArgsConstructor

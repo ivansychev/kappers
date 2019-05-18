@@ -1,6 +1,7 @@
 package ru.kappers.logic.controller;
 
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,7 +10,7 @@ import ru.kappers.model.User;
 import ru.kappers.service.RolesService;
 import ru.kappers.service.UserService;
 
-@Log4j
+@Slf4j
 @RestController
 @RequestMapping(value = "/rest/profile")
 public class ProfileController {

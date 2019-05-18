@@ -1,13 +1,9 @@
 package ru.kappers.logic.contract;
 
-import lombok.extern.log4j.Log4j;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ru.kappers.model.KapperInfo;
 import ru.kappers.model.User;
-import ru.kappers.repository.KapperInfoRepository;
-import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.KapperInfoService;
 import ru.kappers.service.UserService;
 
@@ -17,7 +13,7 @@ import java.util.Map;
  * Created by Shoma on 29.09.2018.
  */
 
-@Log4j
+@Slf4j
 public class Contract implements IContract {
 
     private UserService userService;

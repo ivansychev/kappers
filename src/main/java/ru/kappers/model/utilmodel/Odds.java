@@ -2,13 +2,14 @@ package ru.kappers.model.utilmodel;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import ru.kappers.model.Fixture;
 
 import java.util.EnumMap;
 import java.util.Map;
 //Пока что генерируем случайные коэифценты. В будущем будем парсить с сайта букмекера
 @Data
-@Log4j
+@Slf4j
 public class Odds {
     private Fixture fixture;
     private Map<Outcomes, Double> odds;

@@ -1,7 +1,7 @@
 package ru.kappers.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.NaturalId;
 import lombok.*;
 
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j
+@Slf4j
 @Data
 @Builder
 @AllArgsConstructor

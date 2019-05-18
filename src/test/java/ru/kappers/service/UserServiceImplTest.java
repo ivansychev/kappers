@@ -2,7 +2,7 @@ package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-@Log4j
+@Slf4j
 @ActiveProfiles("test")
 @ContextConfiguration
 @RunWith(SpringRunner.class)
@@ -102,7 +102,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void getByUserName() {
         User user1 = userService.getByUserName("kapper");
-        log.info(user1.getDateOfRegistration());
+        log.info(user1.toString());
         assertNotNull(user1);
         assertEquals(user1.getUserName(), kapper.getUserName());
         assertNotEquals(user1, user);

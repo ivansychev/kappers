@@ -1,6 +1,7 @@
 package ru.kappers.logic.controller;
 
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Base64;
-@Log4j
+@Slf4j
 @RestController
 public class UserController {
 

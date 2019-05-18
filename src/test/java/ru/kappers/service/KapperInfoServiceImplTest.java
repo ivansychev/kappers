@@ -2,7 +2,7 @@ package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import ru.kappers.util.DateTimeUtil;
 
 import static org.junit.Assert.*;
 
-@Log4j
+@Slf4j
 @ActiveProfiles("test")
 @ContextConfiguration
 @RunWith(SpringRunner.class)

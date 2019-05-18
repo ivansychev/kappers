@@ -1,7 +1,7 @@
 package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@Log4j
+@Slf4j
 @ActiveProfiles("test")
 @ContextConfiguration
 @RunWith(SpringRunner.class)

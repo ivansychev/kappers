@@ -1,6 +1,7 @@
 package ru.kappers.service.impl;
 
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.PersonalInfo;
@@ -8,7 +9,7 @@ import ru.kappers.model.User;
 import ru.kappers.repository.PersonalInfoRepository;
 import ru.kappers.service.PersonalInfoService;
 
-@Log4j
+@Slf4j
 @Service
 public class PersonalInfoServiceImpl implements PersonalInfoService {
 

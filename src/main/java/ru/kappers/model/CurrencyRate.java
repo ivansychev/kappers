@@ -1,13 +1,13 @@
 package ru.kappers.model;
 
 import lombok.*;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-@Log4j
+@Slf4j
 @Data
 @Builder
 @Entity
