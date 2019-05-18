@@ -14,6 +14,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Парсер сайта ООО "Леон"
@@ -56,29 +58,20 @@ public class LeonBetParser implements BetParser<OddsLeonDTO> {
     @Override
     public List<OddsLeonDTO> getEventsWithOdds(List<String> urls) {
         log.debug("getEventsWithOdds(urls: {})...", urls);
-        List<OddsLeonDTO> results = new ArrayList<>();
-        for (String url : urls) {
-            OddsLeonDTO oddsLeonDTO = loadEventOdds(url);
-            if (oddsLeonDTO != null) {
-                results.add(oddsLeonDTO);
-                //TODO сохранение в БД
-            }
-        }
+        final List<OddsLeonDTO> results = urls.stream()
+                .map(url -> loadEventOdds(url))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        //TODO сохранение в БД (не здесь, а во внешнем коде чтобы соблюдать принципы SOLID)
         return results;
     }
 
-    /**
-     * Метод возвращает {@link OddsLeonDTO} сущность, полученную из веб страницы конкретного евента
-     *
-     * @param url - линк веб страницы евента, который нужно распарсить
-     */
     @Override
     public OddsLeonDTO loadEventOdds(String url) {
-        log.info("loadEventOdds {}", url);
+        log.debug("loadEventOdds(url: {})...", url);
         JsonArray arr = getArrayOfEventsByURL(url);
         JsonObject object = arr.get(0).getAsJsonObject();
-        Gson gson = new Gson();
-        return gson.fromJson(object, OddsLeonDTO.class);
+        return GSON.fromJson(object, OddsLeonDTO.class);
     }
 
 

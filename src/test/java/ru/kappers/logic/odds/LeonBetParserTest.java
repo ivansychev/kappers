@@ -1,6 +1,8 @@
 package ru.kappers.logic.odds;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.util.ResourceUtils;
 import ru.kappers.model.dto.leon.CompetitorLeonDTO;
 import ru.kappers.model.dto.leon.LeagueLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
@@ -8,24 +10,29 @@ import ru.kappers.model.dto.leon.SportLeonDTO;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public class LeonBetParserTest {
 
-    private BetParser<OddsLeonDTO> parser = new LeonBetParser();
+    private BetParser<OddsLeonDTO> parser;
+
+    @Before
+    public void setUp() throws Exception {
+        parser = new LeonBetParser(ResourceUtils.getFile("classpath:data")
+                .toURI().toURL().toString());
+    }
 
     @Test
     public void loadEventUrlsOfTournament() {
-        List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710675-Europe-UEFA-Champions-League");
+        List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710675-Europe-UEFA-Champions-League.htm");
         assertThat(list.size(), is(1));
         assertThat(list.get(0), is("/events/Soccer/281474976710675-Europe-UEFA-Champions-League/281474982732163-Tottenham-Hotspur-Liverpool"));
     }
 
     @Test
     public void getEventsWithOdds() {
-        List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710675-Europe-UEFA-Champions-League");
+        List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710675-Europe-UEFA-Champions-League.htm");
         List<OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
 
         assertThat(eventsWithOdds.isEmpty(), is(false));
@@ -37,10 +44,10 @@ public class LeonBetParserTest {
         assertThat(oddsDTO.getName(), is("Тоттенхэм Хотспур - Ливерпуль"));
         assertThat(competitors, is(notNullValue()));
         assertThat(oddsDTO.getKickoff(), is(1559415600000L));
-//        assertThat(oddsDTO.getLastUpdated(), is(1557833759654L));
+        assertThat(oddsDTO.getLastUpdated(), is(1558185003370L));
         assertThat(leagueDTO, is(notNullValue()));
         assertThat(oddsDTO.isOpen(), is(true));
-        assertThat(oddsDTO.getMarketsCount(), is(52));
+        assertThat(oddsDTO.getMarketsCount(), is(46));
         assertThat(oddsDTO.getUrl(), is("/events/Soccer/281474976710675-Europe-UEFA-Champions-League/281474982732163-Tottenham-Hotspur-Liverpool"));
         assertThat(oddsDTO.getMarkets().size(), is(oddsDTO.getMarketsCount()));
         // check List<CompetitorDTO>
@@ -83,14 +90,14 @@ public class LeonBetParserTest {
         final OddsLeonDTO oddsDTO = parser.loadEventOdds("/events/Soccer/281474976710675-Europe-UEFA-Champions-League/281474982732162-Ajax-Tottenham-Hotspur");
 
         assertThat(oddsDTO, is(notNullValue()));
-        assertThat(oddsDTO.getId(), is(1143492111092075L));
-        assertThat(oddsDTO.getName(), is("ФК Арарат Ереван - FC Lori"));
+        assertThat(oddsDTO.getId(), is(1143492107996767L));
+        assertThat(oddsDTO.getName(), is("Реал Вальядолид - Валенсия"));
         assertThat(oddsDTO.getCompetitors(), is(notNullValue()));
-        assertThat(oddsDTO.getKickoff(), is(1557835200000L));
+        assertThat(oddsDTO.getKickoff(), is(1558188900000L));
         assertThat(oddsDTO.getLeague(), is(notNullValue()));
-        assertThat(oddsDTO.isOpen(), is(true));
-//        assertThat(oddsDTO.getMarketsCount(), is(61));
-        assertThat(oddsDTO.getUrl(), is("/events/Soccer/1143492095850626-Armenia-Premier-League/1143492108116379-Ararat-Yerevan-FC-FC-Lori"));
-        assertThat(oddsDTO.getMarkets(), is(notNullValue()));
+        assertThat(oddsDTO.isOpen(), is(false));
+        assertThat(oddsDTO.getMarketsCount(), is(0));
+        assertThat(oddsDTO.getUrl(), is("/events/Soccer/1143492092890276-Spain-LaLiga/1143492107996767-Real-Valladolid-Valencia-CF"));
+        assertThat(oddsDTO.getMarkets(), is(nullValue()));
     }
 }
