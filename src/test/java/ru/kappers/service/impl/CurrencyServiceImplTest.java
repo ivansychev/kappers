@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import ru.kappers.config.KappersProperties;
 import ru.kappers.exceptions.CurrRateGettingException;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.service.CurrRateService;
@@ -15,7 +16,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,6 +26,8 @@ public class CurrencyServiceImplTest {
     private CurrRateService currRateService;
     @Mock
     private CBRFDailyCurrencyRatesParser currencyRatesParser;
+    @Mock
+    private KappersProperties kappersProperties;
 
     @Test
     public void refreshCurrencyRatesForTodayMustSaveRateIfTableHasNotRate() {
@@ -70,5 +72,29 @@ public class CurrencyServiceImplTest {
         when(currencyRatesParser.parseFromCBRF()).thenThrow(RuntimeException.class);
 
         currencyService.refreshCurrencyRatesForToday();
+    }
+
+    @Test
+    public void refreshCurrencyRatesForTodayBySchedulerIfRefreshEnabled() {
+        KappersProperties.CurrencyRates currencyRatesProp = mock(KappersProperties.CurrencyRates.class);
+        when(kappersProperties.getCurrencyRates()).thenReturn(currencyRatesProp);
+        when(currencyRatesProp.isRefreshCronEnabled()).thenReturn(true);
+        currencyService = spy(currencyService);
+
+        currencyService.refreshCurrencyRatesForTodayByScheduler();
+
+        verify(currencyService).refreshCurrencyRatesForToday();
+    }
+
+    @Test
+    public void refreshCurrencyRatesForTodayBySchedulerIfRefreshDisabled() {
+        KappersProperties.CurrencyRates currencyRatesProp = mock(KappersProperties.CurrencyRates.class);
+        when(kappersProperties.getCurrencyRates()).thenReturn(currencyRatesProp);
+        when(currencyRatesProp.isRefreshCronEnabled()).thenReturn(false);
+        currencyService = spy(currencyService);
+
+        currencyService.refreshCurrencyRatesForTodayByScheduler();
+
+        verify(currencyService, never()).refreshCurrencyRatesForToday();
     }
 }

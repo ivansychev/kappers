@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.event.ContextRefreshedEvent;
+import ru.kappers.config.KappersProperties;
 import ru.kappers.service.CurrencyService;
 
 import static org.mockito.Mockito.mock;
@@ -17,6 +18,8 @@ public class ApplicationStartListenerTest {
     private ApplicationStartListener applicationStartListener;
     @Mock
     private CurrencyService currencyService;
+    @Mock
+    private KappersProperties kappersProperties;
 
     @Test
     public void onApplicationEvent() {

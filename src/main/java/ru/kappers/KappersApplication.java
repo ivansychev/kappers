@@ -4,14 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
-import ru.kappers.config.AppConfig;
-
-import javax.annotation.PostConstruct;
-import java.util.TimeZone;
+import ru.kappers.config.KappersConfig;
 
 @Slf4j
 @SpringBootApplication
-@Import({AppConfig.class})
+@Import({KappersConfig.class})
 public class KappersApplication {
 
 	public static void main(String[] args) {
