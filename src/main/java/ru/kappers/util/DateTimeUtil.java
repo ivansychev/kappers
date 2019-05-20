@@ -15,8 +15,10 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public final class DateTimeUtil {
 
+	/** миллисекунд в часе */
+	public static final int MILLISECONDS_IN_HOUR = 3600 * 1000;
 	/** миллисекунд в сутках */
-	public static final int MILLISECONDS_IN_DAY = 24 * 3600 * 1000;
+	public static final int MILLISECONDS_IN_DAY = 24 * MILLISECONDS_IN_HOUR;
 	/** миллисекунд в неделе */
 	public static final int MILLISECONDS_IN_WEEK = MILLISECONDS_IN_DAY * 7;
 
