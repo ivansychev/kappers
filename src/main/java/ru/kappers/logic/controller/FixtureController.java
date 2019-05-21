@@ -24,18 +24,19 @@ public class FixtureController {
         this.service = service;
     }
 
-/*
     @RequestMapping(value = "/nextweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getNextWeek() {
         return service.getFixturesNextWeek(Status.NOT_STARTED);
     }
-*/
 
+    //todo чтобы перейти к полноценному отображению данных с паджинацией надо будет web UI обучить не только отображать список содержимого, но и информацию по страницам и переходам по ним
 // пример тестового URL: http://localhost:8080/rest/fixture/nextweek?page=1&size=30&sort=eventDate
+/*
     @RequestMapping(value = "/nextweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Fixture> getNextWeek(Pageable pageable) {
         return service.getFixturesNextWeek(Status.NOT_STARTED, pageable);
     }
+*/
 
     @RequestMapping(value = "/lastweek", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getLastWeek() {

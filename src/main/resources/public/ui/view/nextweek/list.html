@@ -59,7 +59,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="fixture in fixtures.content | filter:search">
+<!--        if has pagenation -->
+<!--        <tr ng-repeat="fixture in fixtures.content | filter:search">-->
+        <tr ng-repeat="fixture in fixtures | filter:search">
             <!--<th scope="row">
                 <input for="{{employee.id}}" type="checkbox" ng-model="selection.ids[employee.id]" name="group" id="check_{{employee.id}}" />
             </th>-->
