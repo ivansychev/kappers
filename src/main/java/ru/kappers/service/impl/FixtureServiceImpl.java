@@ -2,6 +2,8 @@ package ru.kappers.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.Fixture;
@@ -63,9 +65,23 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<Fixture> getAll(Pageable pageable) {
+        log.debug("getAll(pageable: {})...", pageable);
+        return repository.findAll(pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to) {
         log.debug("getFixturesByPeriod(from: {}, to: {})...", from, to);
         return repository.getFixturesByPeriod(from, to);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to, Pageable pageable) {
+        log.debug("getFixturesByPeriod(from: {}, to: {}, pageable: {})...", from, to, pageable);
+        return repository.getFixturesByPeriod(from, to, pageable);
     }
 
     @Override
@@ -77,17 +93,31 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Pageable pageable) {
+        log.debug("getFixturesByPeriod(from: {}, to: {}, pageable: {})...", from, to, pageable);
+        return getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter) {
         log.debug("getFixturesByPeriod(from: {}, to: {}, filter: {})...", from, to, filter);
         return repository.getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), filter);
     }
 
-    protected LocalDateTime getFromNow(LocalDate now) {
-        return LocalDateTime.of(now, LocalTime.MIN);
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter, Pageable pageable) {
+        log.debug("getFixturesByPeriod(from: {}, to: {}, filter: {}, pageable: {})...", from, to, filter, pageable);
+        return repository.getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), filter, pageable);
     }
 
-    protected LocalDateTime getToNow(LocalDate now) {
-        return LocalDateTime.of(now, LocalTime.MAX);
+    protected LocalDateTime getDayBegin(LocalDate date) {
+        return LocalDateTime.of(date, LocalTime.MIN);
+    }
+
+    protected LocalDateTime getDayEnd(LocalDate date) {
+        return LocalDateTime.of(date, LocalTime.MAX);
     }
 
     @Override
@@ -95,7 +125,15 @@ public class FixtureServiceImpl implements FixtureService {
     public List<Fixture> getFixturesToday() {
         log.debug("getFixturesToday()...");
         final LocalDate now = LocalDate.now();
-        return getFixturesByPeriod(getFromNow(now), getToNow(now));
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesToday(Pageable pageable) {
+        log.debug("getFixturesToday(pageable)...");
+        final LocalDate now = LocalDate.now();
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now), pageable);
     }
 
     @Override
@@ -103,7 +141,15 @@ public class FixtureServiceImpl implements FixtureService {
     public List<Fixture> getFixturesToday(Status filter) {
         log.debug("getFixturesToday(filter: {})...", filter);
         final LocalDate now = LocalDate.now();
-        return getFixturesByPeriod(getFromNow(now), getToNow(now), filter);
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now), filter);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesToday(Status filter, Pageable pageable) {
+        log.debug("getFixturesToday(filter: {}, pageable: {})...", filter, pageable);
+        final LocalDate now = LocalDate.now();
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now), filter, pageable);
     }
 
     @Override
@@ -111,7 +157,15 @@ public class FixtureServiceImpl implements FixtureService {
     public List<Fixture> getFixturesLastWeek() {
         log.debug("getFixturesLastWeek()...");
         final LocalDate now = LocalDate.now();
-        return getFixturesByPeriod(getFromNow(now).minusDays(7), getToNow(now));
+        return getFixturesByPeriod(getDayBegin(now).minusDays(7), getDayEnd(now));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesLastWeek(Pageable pageable) {
+        log.debug("getFixturesLastWeek(pageable: {})...", pageable);
+        final LocalDate now = LocalDate.now();
+        return getFixturesByPeriod(getDayBegin(now).minusDays(7), getDayEnd(now), pageable);
     }
 
     @Override
@@ -119,7 +173,15 @@ public class FixtureServiceImpl implements FixtureService {
     public List<Fixture> getFixturesLastWeek(Status filter) {
         log.debug("getFixturesLastWeek(filter: {})...", filter);
         final LocalDate now = LocalDate.now();
-        return getFixturesByPeriod(getFromNow(now).minusDays(7), getToNow(now), filter);
+        return getFixturesByPeriod(getDayBegin(now).minusDays(7), getDayEnd(now), filter);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesLastWeek(Status filter, Pageable pageable) {
+        log.debug("getFixturesLastWeek(filter: {}, pageable: {})...", filter, pageable);
+        final LocalDate now = LocalDate.now();
+        return getFixturesByPeriod(getDayBegin(now).minusDays(7), getDayEnd(now), filter, pageable);
     }
 
     @Override
@@ -127,7 +189,15 @@ public class FixtureServiceImpl implements FixtureService {
     public List<Fixture> getFixturesNextWeek() {
         log.debug("getFixturesNextWeek()...");
         final LocalDate now = LocalDate.now();
-        return getFixturesByPeriod(getFromNow(now), getToNow(now).plusDays(7));
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now).plusDays(7));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesNextWeek(Pageable pageable) {
+        log.debug("getFixturesNextWeek(pageable: {})...", pageable);
+        final LocalDate now = LocalDate.now();
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now).plusDays(7), pageable);
     }
 
     @Override
@@ -135,7 +205,15 @@ public class FixtureServiceImpl implements FixtureService {
     public List<Fixture> getFixturesNextWeek(Status filter) {
         log.debug("getFixturesNextWeek(filter: {})...", filter);
         final LocalDate now = LocalDate.now();
-        return getFixturesByPeriod(getFromNow(now), getToNow(now).plusDays(7), filter);
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now).plusDays(7), filter);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Fixture> getFixturesNextWeek(Status filter, Pageable pageable) {
+        log.debug("getFixturesNextWeek(filter: {}, pageable: {})...", filter, pageable);
+        final LocalDate now = LocalDate.now();
+        return getFixturesByPeriod(getDayBegin(now), getDayEnd(now).plusDays(7), filter, pageable);
     }
 
     @Override
