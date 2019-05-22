@@ -9,8 +9,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import ru.kappers.logic.controller.CurrencyControllerTest;
 import ru.kappers.logic.controller.web.EventControllerTest;
+import ru.kappers.logic.odds.LeonBetParserTest;
 import ru.kappers.service.*;
 import ru.kappers.service.impl.ApplicationStartListenerTest;
+import ru.kappers.service.impl.CurrencyServiceImplTest;
 import ru.kappers.service.parser.CBRFDailyCurrencyRatesParserTest;
 import ru.kappers.util.DateTimeUtilTest;
 
@@ -29,7 +31,9 @@ import ru.kappers.util.DateTimeUtilTest;
 		EventControllerTest.class,
 		CurrencyControllerTest.class,
 		ApplicationStartListenerTest.class,
-		CBRFDailyCurrencyRatesParserTest.class
+		CBRFDailyCurrencyRatesParserTest.class,
+		CurrencyServiceImplTest.class,
+		LeonBetParserTest.class
 })
 public class KappersApplicationTests {
 

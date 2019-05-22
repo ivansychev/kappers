@@ -1,7 +1,6 @@
 package ru.kappers.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -11,7 +10,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 import org.springframework.core.convert.converter.Converter;
-import ru.kappers.convert.FixtureDTOToFixtureConverter;
+import ru.kappers.convert.FixtureRapidDTOToFixtureConverter;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 //todo Что то мне подсказывает что название класса не соответствует его содержимому. Можно было бы все эти методы просто перенести в FixtureService и его реализацию
 public class JsonUtil {
 
-    private static final Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter = new FixtureDTOToFixtureConverter();
+    private static final Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter = new FixtureRapidDTOToFixtureConverter();
 
     public static final Gson GSON = new Gson();
     public static final JsonParser JSON_PARSER = new JsonParser();
