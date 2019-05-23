@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kappers.model.Fixture;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.service.UserService;
 
@@ -24,7 +25,7 @@ public class RaitingCotroller {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<User> getLastWeek() {
-        Set<User> kappers = new TreeSet<>(service.getAllByRole("ROLE_KAPPER"));
+        Set<User> kappers = new TreeSet<>(service.getAllByRole(Role.Names.KAPPER));
         return kappers;
     }
 }

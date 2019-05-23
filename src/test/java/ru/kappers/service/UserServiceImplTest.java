@@ -148,7 +148,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void getAllByRole() {
-        List<User> admins = userService.getAllByRole("ROLE_ADMIN");
+        List<User> admins = userService.getAllByRole(Role.Names.ADMIN);
         assertNotNull(admins);
         assertNotEquals(0, admins.size());
         assertTrue(admins.stream()
@@ -161,13 +161,13 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
     public void hasRole() {
         User userU = userService.getByUserName(user.getUserName());
         User userK = userService.getByUserName(kapper.getUserName());
-        assertTrue(userService.hasRole(userK, "ROLE_KAPPER"));
-        assertFalse(userService.hasRole(userU, "ROLE_KAPPER"));
-        assertFalse(userService.hasRole(userK, "ROLE_ADMIN"));
-        assertTrue(userService.hasRole(userU, rolesService.getRoleIdByName("ROLE_USER")));
-        assertTrue(userService.hasRole(userU, rolesService.getByName("ROLE_USER")));
+        assertTrue(userService.hasRole(userK, Role.Names.KAPPER));
+        assertFalse(userService.hasRole(userU, Role.Names.KAPPER));
+        assertFalse(userService.hasRole(userK, Role.Names.ADMIN));
+        assertTrue(userService.hasRole(userU, rolesService.getRoleIdByName(Role.Names.USER)));
+        assertTrue(userService.hasRole(userU, rolesService.getByName(Role.Names.USER)));
         assertTrue(userService.hasRole(userU, rolesService.getById(2)));
-        assertEquals(userK.getRole(), rolesService.getByName("ROLE_KAPPER"));
+        assertEquals(userK.getRole(), rolesService.getByName(Role.Names.KAPPER));
     }
 
     @Test
@@ -176,7 +176,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
         assertNotNull(userK);
         Role role = userService.getRole(userK);
         assertNotNull(role);
-        assertEquals(role.getName(), "ROLE_KAPPER");
+        assertEquals(role.getName(), Role.Names.KAPPER);
     }
 
     @Test

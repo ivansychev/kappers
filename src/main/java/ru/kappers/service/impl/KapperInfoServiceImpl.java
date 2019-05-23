@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.exceptions.UserNotHaveKapperRoleException;
 import ru.kappers.model.KapperInfo;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.repository.KapperInfoRepository;
 import ru.kappers.repository.UsersRepository;
@@ -28,7 +29,7 @@ public class KapperInfoServiceImpl implements KapperInfoService {
     public KapperInfo initKapper(User user) {
         log.debug("initKapper(user: {})...", user);
         KapperInfo kapper = null;
-        if (user.hasRole("ROLE_KAPPER")) {
+        if (user.hasRole(Role.Names.KAPPER)) {
             kapper = getByUser(user);
             if (kapper == null) {
                 kapper = KapperInfo.builder().user(user).build();
