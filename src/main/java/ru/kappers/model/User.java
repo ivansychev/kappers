@@ -2,12 +2,14 @@ package ru.kappers.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.NaturalId;
 import lombok.*;
+import org.hibernate.annotations.Type;
+import org.joda.money.Money;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +73,10 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
-    /** Валюта */
-    @Column(name = "currency")
-    private String currency;
-
-    /** Баланс, по умолчанию 0.0 */
-    @Column(name = "balance")
-    private BigDecimal balance = BigDecimal.ZERO;
+    /** Баланс с валютой */
+    @Columns(columns = { @Column(name = "currency"), @Column(name = "balance") })
+    @Type(type = "org.jadira.usertype.moneyandcurrency.joda.PersistentMoneyAmountAndCurrency")
+    private Money balance;
 
     //
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

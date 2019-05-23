@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import ru.kappers.model.Role;
 
 import javax.sql.DataSource;
 
@@ -54,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/sign-in/get-authority",
                         "/rest/dict/**"
                 ).permitAll()
-                .antMatchers("/rest/api/fixtures/twoweeks").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/rest/api/fixtures/twoweeks").hasAnyAuthority(Role.Names.ADMIN)
                 .anyRequest().authenticated()
 //                .and()
 //                .sessionManagement().maximumSessions(10)

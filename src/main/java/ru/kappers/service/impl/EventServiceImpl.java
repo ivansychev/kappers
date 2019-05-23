@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.exceptions.UserNotHaveKapperRoleException;
 import ru.kappers.model.Event;
 import ru.kappers.model.KapperInfo;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.repository.EventRepository;
 import ru.kappers.service.EventService;
@@ -40,7 +41,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event createEventByUser(Event event, User user) {
         log.debug("createEventByUser(event: {}, user: {})...", event, user);
-        if (!user.hasRole("ROLE_KAPPER")) {
+        if (!user.hasRole(Role.Names.KAPPER)) {
             throw new UserNotHaveKapperRoleException("The user " + user.getUserName() + " is not kapper");
         }
         KapperInfo kapper = kapperService.getByUser(user);

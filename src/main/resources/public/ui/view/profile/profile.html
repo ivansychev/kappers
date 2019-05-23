@@ -79,7 +79,14 @@
                 <label for="currency" class="col-2 col-form-label">Currency</label>
                 <div class="col-10">
                     <input class="form-control" type="text" id="currency"
-                           ng-model="user.currency" ng-disabled="true">
+                           ng-model="user.balance.currencyUnit.code" ng-disabled="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="balance" class="col-2 col-form-label">Balance</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="balance"
+                           ng-model="user.balance.amount" ng-disabled="true">
                 </div>
             </div>
             <div class="form-group row">

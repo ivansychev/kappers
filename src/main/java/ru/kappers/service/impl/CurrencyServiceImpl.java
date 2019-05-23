@@ -1,6 +1,7 @@
 package ru.kappers.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -92,9 +93,14 @@ public class CurrencyServiceImpl implements CurrencyService {
         return date;
     }
 
+    @Override
+    public BigDecimal exchange(CurrencyUnit fromCurr, CurrencyUnit toCurr, BigDecimal amount) {
+        return exchange(fromCurr.getCode(), toCurr.getCode(), amount);
+    }
+
     //TODO завести тесты на этот класс
     @Override
-    public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount){
+    public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount) {
         log.debug("exchange(fromCurr: {}, toCurr: {}, amount: {})...", fromCurr, toCurr, amount);
         if (fromCurr.equals(toCurr)) {
             return amount;
