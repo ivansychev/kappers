@@ -206,22 +206,22 @@ public class UserServiceImpl implements UserService {
         log.debug("transfer(user: {}, kapper: {}, amount: {})...", user, kapper, amount);
         Preconditions.checkArgument(user.hasRole("ROLE_USER"), "User %s has no permission to transfer money", user.getUserName());
         Preconditions.checkArgument(kapper.hasRole("ROLE_KAPPER"), "The operation is forbidden. Money can be transfered only from user to kapper");
-        Preconditions.checkArgument(user.getBalance().compareTo(amount) >= 0, "The user %s doesnt have enough money. On balance %s %s",
-                user.getUserName(), user.getBalance(), user.getCurrency());
+        Preconditions.checkArgument(user.getBalance().getAmount().compareTo(amount) >= 0, "The user %s doesnt have enough money. On balance %s",
+                user.getUserName(), user.getBalance());
         try {
-            user.setBalance(user.getBalance().subtract(amount));
-            if (user.getCurrency().equals(kapper.getCurrency())) {
-                kapper.setBalance(kapper.getBalance().add(amount));
-                log.debug("Kapper {} got {} {}", kapper.getUserName(), amount, kapper.getCurrency());
+            user.setBalance(user.getBalance().minus(amount));
+            if (user.getBalance().getCurrencyUnit().equals(kapper.getBalance().getCurrencyUnit())) {
+                kapper.setBalance(kapper.getBalance().plus(amount));
+                log.debug("Kapper {} got {} {}", kapper.getUserName(), amount, kapper.getBalance().getCurrencyUnit());
 
             } else {
-                BigDecimal resultAmount = currencyService.exchange(user.getCurrency(), kapper.getCurrency(), amount);
-                kapper.setBalance(kapper.getBalance().add(resultAmount));
-                log.debug("Kapper {} got {} {}", kapper.getUserName(), resultAmount, kapper.getCurrency());
+                BigDecimal resultAmount = currencyService.exchange(user.getBalance().getCurrencyUnit(), kapper.getBalance().getCurrencyUnit(), amount);
+                kapper.setBalance(kapper.getBalance().plus(resultAmount));
+                log.debug("Kapper {} got {} {}", kapper.getUserName(), resultAmount, kapper.getBalance().getCurrencyUnit());
             }
             editUser(user);
             editUser(kapper);
-            log.info("User {} transfered {} {} to kapper {}", user.getUserName(), amount, user.getCurrency(), kapper.getUserName());
+            log.info("User {} transfered {} {} to kapper {}", user.getUserName(), amount, user.getBalance().getCurrencyUnit(), kapper.getUserName());
         } catch (Exception e) {
             log.error("Couldn't transfer money from {} to {}", user.getUserName(), kapper.getUserName());
             throw new MoneyTransferException(e);
