@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -26,7 +23,7 @@ import javax.validation.constraints.Size;
 
 public class CompetitorLeon  {
     @Id
-    @Column(name = "id",nullable = false, insertable = false, updatable = false)
+    @Column(name = "competitor_id",nullable = false, insertable = true, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
@@ -41,4 +38,7 @@ public class CompetitorLeon  {
     @Column(name = "logo")
     @Size(max = 512)
     private String logo;
+    @ManyToOne
+    @JoinColumn(name = "odd_id", nullable = false)
+    private OddsLeon odd;
 }

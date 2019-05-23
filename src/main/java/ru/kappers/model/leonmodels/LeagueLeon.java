@@ -19,16 +19,19 @@ import javax.validation.constraints.Size;
 @Table(name = "league_leon")
 public class LeagueLeon {
     @Id
-    @Column(name = "id",nullable = false, insertable = false, updatable = false)
+    @Column(name = "league_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
     @NotBlank
     private String name;
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "sport_id", nullable = false)
     private SportLeon sport;
     @Column(name = "url")
     @Size(max = 512)
     private String url;
+    @JoinColumn(name = "odd_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    private OddsLeon odd;
 }

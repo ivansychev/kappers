@@ -20,7 +20,7 @@ import java.util.List;
 @Table(name = "market_leon")
 public class MarketLeon {
     @Id
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "market_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
@@ -33,4 +33,7 @@ public class MarketLeon {
     @Column(name = "family")
     @Size(max = 255)
     private String family;
+    @ManyToOne
+    @JoinColumn(name = "odd_id", nullable = false)
+    private  OddsLeon odd;
 }

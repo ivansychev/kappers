@@ -11,6 +11,8 @@ import ru.kappers.model.leonmodels.CompetitorLeon;
 import ru.kappers.model.leonmodels.LeagueLeon;
 import ru.kappers.model.leonmodels.MarketLeon;
 import ru.kappers.model.leonmodels.OddsLeon;
+
+import java.sql.Timestamp;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +32,10 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
        return OddsLeon.builder()
                 .id(source.getId())
                 .name(source.getName())
-                .kickoff(source.getKickoff())
+                .kickoff(new Timestamp(source.getKickoff()))
                 .open(source.isOpen())
                 .url(source.getUrl())
-                .lastUpdated(source.getLastUpdated())
+                .lastUpdated(new Timestamp(source.getLastUpdated()))
                 .league(conversionService.convert(source.getLeague(), LeagueLeon.class))
                 .competitors(source.getCompetitors().stream().map(s-> conversionService.convert(s, CompetitorLeon.class)).collect(Collectors.toList()))
                 .markets(source.getCompetitors().stream().map(s-> conversionService.convert(s, MarketLeon.class)).collect(Collectors.toList()))

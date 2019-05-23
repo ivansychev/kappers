@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Slf4j
 @Data
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @Table(name = "sport_leon")
 public class SportLeon {
     @Id
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "sport_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
@@ -30,8 +31,5 @@ public class SportLeon {
     @Size(max = 255)
     private String betlineCombination;
     @OneToMany(mappedBy = "sport")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private LeagueLeon leagues;
+    private List<LeagueLeon> leagues;
 }

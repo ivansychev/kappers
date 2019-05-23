@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "runner_leon")
 public class RunnerLeon {
     @Id
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "runner_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
@@ -32,8 +32,6 @@ public class RunnerLeon {
     @Column(name = "price")
     private double price;
     @ManyToOne
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
+    @JoinColumn(name = "market_id", nullable = false)
     private MarketLeon market;
 }
