@@ -2,7 +2,10 @@ package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +23,7 @@ import ru.kappers.model.User;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.util.DateTimeUtil;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,6 +51,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .password("asasdgfas")
             .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
+            .balance(Money.of(CurrencyUnit.EUR, new BigDecimal("10.00")))
             .build();
     private User user = User.builder()
             .userName("user")
@@ -54,6 +59,7 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .password("assaasas")
             .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
+            .balance(Money.of(CurrencyUnit.USD, new BigDecimal("10.00")))
             .build();
     private User kapper = User.builder()
             .userName("kapper")
@@ -61,22 +67,20 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .password("assaasas")
             .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
+            .balance(Money.of(CurrencyUnit.of("RUB"), new BigDecimal("100.00")))
             .build();
 
-    private final Map<User, Integer> userRoleIdMap = new HashMap<>();
-    {
-        userRoleIdMap.put(admin, 1);
-        userRoleIdMap.put(user, 2);
-        userRoleIdMap.put(kapper, 3);
-    }
+    private final Map<User, String> userRoleNameMap = ImmutableMap.<User, String>builder()
+            .put(admin, Role.Names.ADMIN)
+            .put(user, Role.Names.USER)
+            .put(kapper, Role.Names.KAPPER)
+            .build();
 
     @Before
     public void setUp() {
-        for (User u : userRoleIdMap.keySet()) {
-            if (u.getRole() == null) {
-                u.setRole(rolesService.getById(userRoleIdMap.get(u)));
-            }
-        }
+        userRoleNameMap.entrySet().stream()
+                .filter(it -> it.getKey().getRole() == null)
+                .forEach(it -> it.getKey().setRole(rolesService.getByName(it.getValue())));
     }
 
 
