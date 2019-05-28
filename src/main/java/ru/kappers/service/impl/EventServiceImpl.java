@@ -12,6 +12,7 @@ import ru.kappers.model.User;
 import ru.kappers.repository.EventRepository;
 import ru.kappers.service.EventService;
 import ru.kappers.service.KapperInfoService;
+import ru.kappers.service.MessageTranslator;
 
 import java.util.List;
 
@@ -25,11 +26,13 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository repository;
     private final KapperInfoService kapperService;
+    private final MessageTranslator translator;
 
     @Autowired
-    public EventServiceImpl(EventRepository repository, KapperInfoService kapperService) {
+    public EventServiceImpl(EventRepository repository, KapperInfoService kapperService, MessageTranslator translator) {
         this.repository = repository;
         this.kapperService = kapperService;
+        this.translator = translator;
     }
 
     @Override
@@ -42,15 +45,15 @@ public class EventServiceImpl implements EventService {
     public Event createEventByUser(Event event, User user) {
         log.debug("createEventByUser(event: {}, user: {})...", event, user);
         if (!user.hasRole(Role.Names.KAPPER)) {
-            throw new UserNotHaveKapperRoleException("The user " + user.getUserName() + " is not kapper");
+            throw new UserNotHaveKapperRoleException(translator.byCode("user.isNotKapper", user.getUserName()));
         }
         KapperInfo kapper = kapperService.getByUser(user);
         if (kapper == null) {
-            throw new RuntimeException("KapperInfo was not found for user with username: " + user.getUserName());
+            throw new RuntimeException(translator.byCode("kapperInfo.notFoundForUser", user.getUserName()));
         }
         Integer price = event.getTokens();
         if (kapper.getTokens() - kapper.getBlockedTokens() < price) {
-            throw new RuntimeException("Недостаточно токенов для создания события");
+            throw new RuntimeException(translator.byCode("user.noTokensForEventCreation"));
         }
         event.setKapper(user);
         kapper.setBlockedTokens(kapper.getBlockedTokens() + price);
