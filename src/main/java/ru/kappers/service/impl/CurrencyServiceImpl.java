@@ -11,6 +11,7 @@ import ru.kappers.exceptions.CurrRateGettingException;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.service.CurrRateService;
 import ru.kappers.service.CurrencyService;
+import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.parser.CBRFDailyCurrencyRatesParser;
 
 import java.math.BigDecimal;
@@ -29,28 +30,32 @@ public class CurrencyServiceImpl implements CurrencyService {
     private final CurrRateService currRateService;
     private final CBRFDailyCurrencyRatesParser currencyRatesParser;
     private final KappersProperties kappersProperties;
+    private final MessageTranslator translator;
 
     @Autowired
-    public CurrencyServiceImpl(CurrRateService currRateService, CBRFDailyCurrencyRatesParser currencyRatesParser, KappersProperties kappersProperties) {
+    public CurrencyServiceImpl(CurrRateService currRateService, CBRFDailyCurrencyRatesParser currencyRatesParser, KappersProperties kappersProperties, MessageTranslator translator) {
         this.currRateService = currRateService;
         this.currencyRatesParser = currencyRatesParser;
         this.kappersProperties = kappersProperties;
+        this.translator = translator;
     }
 
-    //TODO кстати, данный метод собирались в будущем вызывать по расписанию, это возможно будет настроено как раз в самом методе сервиса или отдельной конфигурации Spring контекста
     @Override
     public boolean refreshCurrencyRatesForToday() {
         log.debug("refreshCurrencyRatesForToday()...");
         try {
+            log.info(translator.byCode("currencyRates.refreshBegin"));
             final List<CurrencyRate> currencyRates = currencyRatesParser.parseFromCBRF();
             currencyRates.stream()
                     .filter(currencyRate -> !currRateService.isExist(currencyRate.getDate(), currencyRate.getCharCode()))
                     .forEach(currRateService::save);
+            log.info(translator.byCode("currencyRates.refreshEnd"));
             return true;
         } catch (Exception ex) {
-            throw new CurrRateGettingException("Couldn't get currency rates", ex);
+            final String msg = translator.byCode("currencyRates.refreshFailed", ex.getMessage());
+            log.error(msg, ex);
+            throw new CurrRateGettingException(msg, ex);
         }
-
     }
 
     /**
