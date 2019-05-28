@@ -9,6 +9,7 @@ import ru.kappers.config.KappersProperties;
 import ru.kappers.exceptions.CurrRateGettingException;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.service.CurrRateService;
+import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.parser.CBRFDailyCurrencyRatesParser;
 
 import java.sql.Date;
@@ -28,6 +29,8 @@ public class CurrencyServiceImplTest {
     private CBRFDailyCurrencyRatesParser currencyRatesParser;
     @Mock
     private KappersProperties kappersProperties;
+    @Mock
+    private MessageTranslator translator;
 
     @Test
     public void refreshCurrencyRatesForTodayMustSaveRateIfTableHasNotRate() {

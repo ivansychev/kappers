@@ -1,10 +1,8 @@
 package ru.kappers.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.LocaleResolver;
@@ -22,17 +20,15 @@ import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 import ru.kappers.model.dto.rapidapi.LeagueRapidDTO;
 import ru.kappers.model.dto.rapidapi.TeamRapidDTO;
 
-import java.util.Locale;
-
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
-
-    public static final Locale RUSSIAN_LOCALE = new Locale("ru", "RU");
 
     private Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter;
     private Converter<EventDTO, Event> eventDTOEventConverter;
     private Converter<LeagueRapidDTO, League> leagueDTOLeagueConverter;
     private Converter<TeamRapidDTO, Team> teamRapidDTOTeamConverter;
+
+    private KappersProperties kappersProperties;
 
     @Autowired
     public void setFixtureDTOToFixtureConverter(Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter) {
@@ -51,6 +47,11 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Autowired
     public void setTeamRapidDTOTeamConverter(Converter<TeamRapidDTO, Team> teamRapidDTOTeamConverter) {
         this.teamRapidDTOTeamConverter = teamRapidDTOTeamConverter;
+    }
+
+    @Autowired
+    public void setKappersProperties(KappersProperties kappersProperties) {
+        this.kappersProperties = kappersProperties;
     }
 
     @Override
@@ -75,22 +76,14 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang");
+        lci.setParamName(kappersProperties.getRequestLocaleParameterName());
         return lci;
     }
 
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(RUSSIAN_LOCALE);
+        slr.setDefaultLocale(kappersProperties.getDefaultLocale());
         return slr;
-    }
-
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
     }
 }

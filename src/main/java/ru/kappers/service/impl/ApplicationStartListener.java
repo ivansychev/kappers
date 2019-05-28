@@ -7,6 +7,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 import ru.kappers.config.KappersProperties;
 import ru.kappers.service.CurrencyService;
+import ru.kappers.service.MessageTranslator;
 
 /**
  * Слушатель старта приложения (срабатывает после завершения подъема Spring контекста)
@@ -16,20 +17,20 @@ import ru.kappers.service.CurrencyService;
 public class ApplicationStartListener implements ApplicationListener<ContextRefreshedEvent> {
     private final CurrencyService currencyService;
     private final KappersProperties kappersProperties;
+    private final MessageTranslator translator;
 
     @Autowired
-    public ApplicationStartListener(CurrencyService currencyService, KappersProperties kappersProperties) {
+    public ApplicationStartListener(CurrencyService currencyService, KappersProperties kappersProperties, MessageTranslator translator) {
         this.currencyService = currencyService;
         this.kappersProperties = kappersProperties;
+        this.translator = translator;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.debug("onApplicationEvent(event: {})...", event);
-        log.info("Spring контекст обновился. Завершен подъём приложения");
-        log.info("Свойства приложения KappersProperties: {}", kappersProperties);
-        log.info("Обновление курсов валют...");
+        log.info(translator.byCode("kappersMessage.springContextRefreshed"));
+        log.info(translator.byCode("kappersMessage.KappersPropertiesForLog"), kappersProperties);
         currencyService.refreshCurrencyRatesForToday();
-        log.info("Обновление курсов валют завершено");
     }
 }
