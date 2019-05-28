@@ -1,11 +1,18 @@
 package ru.kappers.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.catalog.League;
@@ -15,8 +22,12 @@ import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 import ru.kappers.model.dto.rapidapi.LeagueRapidDTO;
 import ru.kappers.model.dto.rapidapi.TeamRapidDTO;
 
+import java.util.Locale;
+
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
+
+    public static final Locale RUSSIAN_LOCALE = new Locale("ru", "RU");
 
     private Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter;
     private Converter<EventDTO, Event> eventDTOEventConverter;
@@ -54,5 +65,32 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/ui/view/index.html");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
+        return lci;
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(RUSSIAN_LOCALE);
+        return slr;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:i18n/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }
