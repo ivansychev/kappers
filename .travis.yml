@@ -31,4 +31,6 @@ script:
 
 after_success:
   - ls -la
+  - cd ./target/reports/jacoco
+  - ls -la
   - bash <(curl -s https://codecov.io/bash)
