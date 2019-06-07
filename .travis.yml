@@ -4,6 +4,8 @@ dist: xenial
 language: java
 jdk:
   - openjdk10
+before_install:
+  - chmod +x mvnw
 
 addons:
   postgresql: "10"
