@@ -2,8 +2,8 @@ os: linux
 dist: xenial
 
 language: java
-#jdk:
-#  - openjdk8
+jdk:
+  - openjdk8
 install: true
 before_install:
   - chmod +x mvnw
