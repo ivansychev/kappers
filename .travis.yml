@@ -32,4 +32,5 @@ script:
 after_success:
   - $PWD
   - ls -la
-  - bash <(curl -s https://codecov.io/bash) -s /home/travis/target/reports/jacoco
+  - export JACOCO_REPORT_DIR="$proj_root/target/reports/jacoco"
+  - bash <(curl -s https://codecov.io/bash) -s $JACOCO_REPORT_DIR
