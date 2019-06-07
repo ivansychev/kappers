@@ -21,7 +21,7 @@ before_script:
   - psql -c 'create database testdb;' -U postgres
 
 script:
-  - ./mvnw clean install -q -DargLine="-Dspring.datasource.password= -Dlogging.level.org.flywaydb=warn -Dlogging.level.org.org.springframework=warn -Dlogging.level.org.springframework.test.context.cache=warn -Dlogging.level.com.github.springtestdbunit=warn -Dlogging.level.org.dbunit.operation=warn -Dlogging.level.org.hibernate.sql=warn -Dlogging.level.org.hibernate.type.descriptor.sql.BasicBinder=warn -Dlogging.level.org.hibernate.type.EnumType=warn"
+  - ./mvnw clean install -q -DargLine="-Dspring.datasource.password= -Dspring.jpa.show-sql=false -Dlogging.level.org.flywaydb=warn -Dlogging.level.org.springframework=warn -Dlogging.level.org.springframework.test.context.cache=warn -Dlogging.level.com.github.springtestdbunit=warn -Dlogging.level.org.dbunit.operation=warn -Dlogging.level.org.hibernate.sql=error -Dlogging.level.org.hibernate.type.descriptor.sql.BasicBinder=error -Dlogging.level.org.hibernate.type.EnumType=error"
   - ./mvnw cobertura:cobertura -q
 
 after_success:
