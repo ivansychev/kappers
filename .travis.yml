@@ -30,4 +30,5 @@ script:
   - ./mvnw clean install -q -DargLine="-Dspring.datasource.password= -Dspring.jpa.show-sql=false -Dlogging.level.org.flywaydb=warn -Dlogging.level.org.springframework=warn -Dlogging.level.org.springframework.test.context.cache=warn -Dlogging.level.com.github.springtestdbunit=warn -Dlogging.level.org.dbunit.operation=warn -Dlogging.level.org.hibernate.sql=error -Dlogging.level.org.hibernate.type.descriptor.sql.BasicBinder=error -Dlogging.level.org.hibernate.type.EnumType=error"
 
 after_success:
+  - bash <(ls -la)
   - bash <(curl -s https://codecov.io/bash)
