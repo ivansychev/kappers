@@ -32,7 +32,7 @@ script:
 after_success:
   - $PWD; ls -la
   - echo "TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR"
-  - export JACOCO_REPORT_DIR="$proj_root/target/reports/jacoco"
+  - export JACOCO_REPORT_DIR="$TRAVIS_BUILD_DIR/target/reports/jacoco"
   - echo "JACOCO_REPORT_DIR=$JACOCO_REPORT_DIR"
   - cd $JACOCO_REPORT_DIR; ls -la
   - bash <(curl -s https://codecov.io/bash) -s $JACOCO_REPORT_DIR
