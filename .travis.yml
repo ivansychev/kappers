@@ -21,8 +21,8 @@ before_script:
   - psql -c 'create database testdb;' -U postgres
 
 script:
-  - ./mvnw clean install -DargLine="spring.datasource.password="
-  - ./mvnw cobertura:cobertura
+  - ./mvnw clean install -q -DargLine="-Dspring.datasource.password="
+  - ./mvnw cobertura:cobertura -q
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
