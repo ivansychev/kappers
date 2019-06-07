@@ -3,7 +3,7 @@ dist: xenial
 
 language: java
 jdk:
-  - oraclejdk9
+  - openjdk10
 
 addons:
   postgresql: "10"
