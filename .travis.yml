@@ -3,7 +3,7 @@ dist: xenial
 
 language: java
 jdk:
-  - openjdk10
+  - openjdk8
 before_install:
   - chmod +x mvnw
 
