@@ -6,7 +6,8 @@ jdk:
   - openjdk8
 before_install:
   - chmod +x mvnw
-  - export MAVEN_OPTS="--no-transfer-progress"
+  - ./mvnw --version
+#  - export MAVEN_OPTS="--no-transfer-progress"
 
 addons:
   postgresql: "10"
