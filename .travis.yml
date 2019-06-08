@@ -4,10 +4,14 @@ dist: xenial
 language: java
 jdk:
   - openjdk8
+install: true
 before_install:
   - chmod +x mvnw
-  - ./mvnw --version
-#  - export MAVEN_OPTS="--no-transfer-progress"
+
+# Improve Build Speed https://dzone.com/articles/travis-ci-tutorial-java-projects
+cache:
+  directories:
+    - $HOME/.m2
 
 addons:
   postgresql: "10"
@@ -24,7 +28,12 @@ before_script:
 
 script:
   - ./mvnw clean install -q -DargLine="-Dspring.datasource.password= -Dspring.jpa.show-sql=false -Dlogging.level.org.flywaydb=warn -Dlogging.level.org.springframework=warn -Dlogging.level.org.springframework.test.context.cache=warn -Dlogging.level.com.github.springtestdbunit=warn -Dlogging.level.org.dbunit.operation=warn -Dlogging.level.org.hibernate.sql=error -Dlogging.level.org.hibernate.type.descriptor.sql.BasicBinder=error -Dlogging.level.org.hibernate.type.EnumType=error"
-  - ./mvnw cobertura:cobertura -q -DskipTests=true
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - export KAPPER_TARGET_DIR="$TRAVIS_BUILD_DIR/target"
+  - echo "KAPPER_TARGET_DIR=$KAPPER_TARGET_DIR"
+  - cd $KAPPER_TARGET_DIR; ls -la
+  - export JACOCO_REPORT_DIR="$TRAVIS_BUILD_DIR/target/site/jacoco"
+  - echo "JACOCO_REPORT_DIR=$JACOCO_REPORT_DIR"
+  - cd $JACOCO_REPORT_DIR; ls -la
+  - bash <(curl -s https://codecov.io/bash) -s $JACOCO_REPORT_DIR

@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <argLine></argLine>
     </properties>
 
 <!-- Для централизованного управления зависимостями их версии указываем по возможности только здесь, как и исключения в них -->
@@ -250,16 +251,47 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                    <check />
+                    <forkMode>once</forkMode>
+                    <forkCount>1</forkCount>
+                    <argLine>${argLine} ${jaCoCoArgLine}</argLine>
+                    <reuseForks>false</reuseForks>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.3</version>
+                <configuration>
+                    <!-- outputDirectory сформировал на основе destFile из https://github.com/codecov/example-gradle -->
+<!--                    <outputDirectory>${project.build.directory}/reports/jacoco</outputDirectory>-->
+                    <excludes>
+                        <exclude>**/KappersApplication.*</exclude>
+                        <exclude>**/ServletInitializer.*</exclude>
+                        <exclude>ru/kappers/config/**/*</exclude>
+                        <exclude>org/jadira/**/*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+<!--                        http://janejieblog.blogspot.com/2017/12/problem-jacoco-skipping-jacoco.html -->
+                        <configuration>
+                            <propertyName>jaCoCoArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
