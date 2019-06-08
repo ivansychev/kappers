@@ -35,7 +35,7 @@ after_success:
   - export KAPPER_TARGET_DIR="$TRAVIS_BUILD_DIR/target"
   - echo "KAPPER_TARGET_DIR=$KAPPER_TARGET_DIR"
   - cd $KAPPER_TARGET_DIR; ls -la
-  - export JACOCO_REPORT_DIR="$TRAVIS_BUILD_DIR/target/reports/jacoco"
+  - export JACOCO_REPORT_DIR="$TRAVIS_BUILD_DIR/target/site/jacoco"
   - echo "JACOCO_REPORT_DIR=$JACOCO_REPORT_DIR"
   - cd $JACOCO_REPORT_DIR; ls -la
   - bash <(curl -s https://codecov.io/bash) -s $JACOCO_REPORT_DIR
