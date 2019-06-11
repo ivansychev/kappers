@@ -46,8 +46,10 @@ public class Role implements Serializable {
         public static final String USER = "ROLE_USER";
         /** Kapper (спортивный аналитик) */
         public static final String KAPPER = "ROLE_KAPPER";
+        /** Анонимный */
+        public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
         /** Список всех имен ролей */
-        public static final List<String> LIST = ImmutableList.of(ADMIN, USER, KAPPER);
+        public static final List<String> LIST = ImmutableList.of(ADMIN, USER, KAPPER, ANONYMOUS);
     }
 }
