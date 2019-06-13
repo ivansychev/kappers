@@ -5,6 +5,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.dto.leon.LeagueLeonDTO;
+import ru.kappers.model.dto.leon.SportLeonDTO;
 import ru.kappers.model.leonmodels.LeagueLeon;
 import ru.kappers.model.leonmodels.SportLeon;
 
@@ -12,12 +13,8 @@ import javax.annotation.Nullable;
 
 @Service
 public class LeagueLeonDTOToLeagueLeonConverter implements Converter<LeagueLeonDTO, LeagueLeon> {
-    private ConversionService conversionService;
+    private Converter<SportLeonDTO, SportLeon> converter = new SportLeonDTOToSportLeonConverter();
 
-    @Autowired
-    public void setConversionService(ConversionService conversionService) {
-        this.conversionService = conversionService;
-    }
     @Nullable
     @Override
     public LeagueLeon convert(@Nullable LeagueLeonDTO source) {
@@ -28,7 +25,7 @@ public class LeagueLeonDTOToLeagueLeonConverter implements Converter<LeagueLeonD
                     .id(source.getId())
                     .name(source.getName())
                     .url(source.getUrl())
-                    .sport(conversionService.convert(source.getSport(), SportLeon.class))
+                    .sport(converter.convert(source.getSport()))
                     .build();
         }
     }

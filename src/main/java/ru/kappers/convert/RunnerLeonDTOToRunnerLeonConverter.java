@@ -19,8 +19,10 @@ public class RunnerLeonDTOToRunnerLeonConverter implements Converter<RunnerLeonD
                     .name(source.getName())
                     .open(source.isOpen())
                     .price(source.getPrice())
-                    .tags(source.getTags())
+                    .tags(source.getTags().toString())
                     .build();
+
+            //TODO теги сделать через отдельный метод
         }
     }
 }

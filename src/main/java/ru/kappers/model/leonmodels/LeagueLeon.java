@@ -25,7 +25,7 @@ public class LeagueLeon {
     @Size(max = 255)
     @NotBlank
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sport_id", nullable = false)
     private SportLeon sport;
     @Column(name = "url")

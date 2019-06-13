@@ -26,9 +26,8 @@ public class RunnerLeon {
     private String name;
     @Column(name = "open")
     private boolean open;
-    @ElementCollection
     @Column(name = "tags")
-    private List<String> tags;
+    private String tags;
     @Column(name = "price")
     private double price;
     @ManyToOne

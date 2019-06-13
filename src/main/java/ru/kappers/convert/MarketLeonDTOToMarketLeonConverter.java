@@ -5,6 +5,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.dto.leon.MarketLeonDTO;
+import ru.kappers.model.dto.leon.RunnerLeonDTO;
 import ru.kappers.model.leonmodels.MarketLeon;
 import ru.kappers.model.leonmodels.RunnerLeon;
 
@@ -13,12 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MarketLeonDTOToMarketLeonConverter implements Converter<MarketLeonDTO, MarketLeon> {
-    private ConversionService conversionService;
-
-    @Autowired
-    public void setConversionService(ConversionService conversionService) {
-        this.conversionService = conversionService;
-    }
+private Converter <RunnerLeonDTO, RunnerLeon> converter = new RunnerLeonDTOToRunnerLeonConverter();
 
     @Nullable
     @Override
@@ -31,7 +27,7 @@ public class MarketLeonDTOToMarketLeonConverter implements Converter<MarketLeonD
                     .name(source.getName())
                     .family(source.getFamily())
                     .open(source.isOpen())
-                    .runners(source.getRunners().stream().map(s -> conversionService.convert(s, RunnerLeon.class)).collect(Collectors.toList()))
+                    .runners(source.getRunners().stream().map(s -> converter.convert(s)).collect(Collectors.toList()))
                     .build();
         }
 

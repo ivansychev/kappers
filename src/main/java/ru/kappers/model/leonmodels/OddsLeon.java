@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "odds_leon")
 public class OddsLeon  {
     @Id
@@ -31,7 +32,7 @@ public class OddsLeon  {
     private Timestamp kickoff;
     @Column(name = "last_updated")
     private Timestamp lastUpdated;
-    @OneToOne(mappedBy = "odd")
+    @OneToOne(mappedBy = "odd", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private LeagueLeon league;
     @Column(name = "open")
     private boolean open;
