@@ -1,6 +1,5 @@
 package ru.kappers.service.impl;
 
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public History addHistoryRecord(History record) {
-        repository.save(record);
-        return record;
+        return repository.save(record);
     }
 
     @Override
@@ -50,9 +48,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public History editHistory(History record) {
-        return null;
-        //repository.update(record);
-        //TODO
+        return repository.save(record);
     }
 
     @Override
