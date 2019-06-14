@@ -16,10 +16,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FixtureDTOToFixtureConverterTest {
+public class FixtureRapidDTOToFixtureConverterTest {
 
     @InjectMocks
-    private FixtureDTOToFixtureConverter converter;
+    private FixtureRapidDTOToFixtureConverter converter;
 
     @Test
     public void convertMustReturnNullIfParameterIsNull() {
