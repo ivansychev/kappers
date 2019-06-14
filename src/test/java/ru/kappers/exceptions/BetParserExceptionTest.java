@@ -3,6 +3,7 @@ package ru.kappers.exceptions;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 public class BetParserExceptionTest {
@@ -14,6 +15,7 @@ public class BetParserExceptionTest {
         BetParserException exception = new BetParserException(testMessage);
 
         assertThat(exception.getMessage(), is(testMessage));
+        assertThat(exception.getCause(), is(nullValue()));
     }
 
     @Test
