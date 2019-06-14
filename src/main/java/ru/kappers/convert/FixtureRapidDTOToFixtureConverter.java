@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
  * Конвертер из {@link FixtureRapidDTO} в {@link Fixture}
  */
 @Service
-public class FixtureDTOToFixtureConverter implements Converter<FixtureRapidDTO, Fixture> {
+public class FixtureRapidDTOToFixtureConverter implements Converter<FixtureRapidDTO, Fixture> {
 
     @Nullable
     @Override

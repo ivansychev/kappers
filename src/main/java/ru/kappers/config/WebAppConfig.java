@@ -23,7 +23,7 @@ import ru.kappers.model.dto.rapidapi.TeamRapidDTO;
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
 
-    private Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter;
+    private Converter<FixtureRapidDTO, Fixture> fixtureRapidDTOFixtureConverter;
     private Converter<EventDTO, Event> eventDTOEventConverter;
     private Converter<LeagueRapidDTO, League> leagueDTOLeagueConverter;
     private Converter<TeamRapidDTO, Team> teamRapidDTOTeamConverter;
@@ -31,8 +31,8 @@ public class WebAppConfig implements WebMvcConfigurer {
     private KappersProperties kappersProperties;
 
     @Autowired
-    public void setFixtureDTOToFixtureConverter(Converter<FixtureRapidDTO, Fixture> fixtureDTOToFixtureConverter) {
-        this.fixtureDTOToFixtureConverter = fixtureDTOToFixtureConverter;
+    public void setFixtureRapidDTOFixtureConverter(Converter<FixtureRapidDTO, Fixture> fixtureRapidDTOFixtureConverter) {
+        this.fixtureRapidDTOFixtureConverter = fixtureRapidDTOFixtureConverter;
     }
 
     @Autowired
@@ -56,8 +56,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        // регистрируем FixtureDTOToFixtureConverter в системе конвертаций Spring
-        registry.addConverter(fixtureDTOToFixtureConverter);
+        // регистрируем FixtureRapidDTOToFixtureConverter в системе конвертаций Spring
+        registry.addConverter(fixtureRapidDTOFixtureConverter);
         registry.addConverter(eventDTOEventConverter);
         registry.addConverter(leagueDTOLeagueConverter);
         registry.addConverter(teamRapidDTOTeamConverter);
