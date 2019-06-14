@@ -19,7 +19,7 @@ import ru.kappers.KappersApplication;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {KappersApplication.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
-public class JsonUtilTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class JsonServiceImplTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void mockTest() {

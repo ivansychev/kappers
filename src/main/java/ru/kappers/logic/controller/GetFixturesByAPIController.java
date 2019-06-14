@@ -11,14 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
-import ru.kappers.service.EventService;
-import ru.kappers.service.FixtureService;
-import ru.kappers.service.KapperInfoService;
-import ru.kappers.service.UserService;
-import ru.kappers.util.JsonUtil;
+import ru.kappers.service.*;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 @Slf4j
@@ -26,18 +21,23 @@ import java.util.Map;
 @RequestMapping(value = "/rest/api/fixtures")
 public class GetFixturesByAPIController {
     //Этот контроллер доступен для вызова только пользователям с ролью ROLE_ADMIN
-    @Autowired
-    private FixtureService service;
+    private final FixtureService service;
+    private final EventService eventService;
+    private final UserService userService;
+    private final KapperInfoService kapperService;
+    private final JsonService jsonService;
 
     @Autowired
-    private EventService eventService;
+    public GetFixturesByAPIController(FixtureService service, EventService eventService, UserService userService,
+                                      KapperInfoService kapperService, JsonService jsonService) {
+        this.service = service;
+        this.eventService = eventService;
+        this.userService = userService;
+        this.kapperService = kapperService;
+        this.jsonService = jsonService;
+    }
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private KapperInfoService kapperService;
-/**
+    /**
  * Метод предназначен для обновления списка спортивных событий
  * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
  * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
@@ -48,8 +48,8 @@ public class GetFixturesByAPIController {
        log.debug("getFixturesLastWeek()");
         for (long i = -5; i < 5; i++) {
             try {
-                JSONObject jsonObject = JsonUtil.loadFixturesByDate(LocalDate.now().plusDays(i));
-                Map<Integer, Fixture> fixturesFromJson = JsonUtil.getFixturesFromJson(jsonObject.toString());
+                JSONObject jsonObject = jsonService.loadFixturesByDate(LocalDate.now().plusDays(i));
+                Map<Integer, Fixture> fixturesFromJson = jsonService.getFixturesFromJson(jsonObject.toString());
                 for (Map.Entry<Integer, Fixture> entry : fixturesFromJson.entrySet()) {
                     Fixture value = entry.getValue();
                     value.setId(entry.getKey());

@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.kappers.exceptions.UnirestAPIException;
 import ru.kappers.model.catalog.League;
 import ru.kappers.model.catalog.Team;
+import ru.kappers.service.JsonService;
 import ru.kappers.service.LeagueService;
+import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.TeamService;
 import ru.kappers.service.parser.RapidAPIParser;
-import ru.kappers.util.JsonUtil;
 
 import java.util.List;
 import java.util.function.Function;
@@ -25,14 +26,18 @@ public class LeguesAndTeamsController {
     private final TeamService teamService;
     private final RapidAPIParser<League> leagueRapidAPIParser;
     private final RapidAPIParser<Team> teamRapidAPIParser;
+    private final JsonService jsonService;
+    private final MessageTranslator messageTranslator;
 
     @Autowired
     public LeguesAndTeamsController(LeagueService leagueService, TeamService teamService, RapidAPIParser<League> leagueRapidAPIParser,
-                                    RapidAPIParser<Team> teamRapidAPIParser) {
+                                    RapidAPIParser<Team> teamRapidAPIParser, JsonService jsonService, MessageTranslator messageTranslator) {
         this.leagueService = leagueService;
         this.teamService = teamService;
         this.leagueRapidAPIParser = leagueRapidAPIParser;
         this.teamRapidAPIParser = teamRapidAPIParser;
+        this.jsonService = jsonService;
+        this.messageTranslator = messageTranslator;
     }
 
     @ResponseBody
@@ -40,10 +45,10 @@ public class LeguesAndTeamsController {
     public List<League> getLeaguesList() {
         log.debug("getLeaguesList()...");
         try {
-            final List<League> leagues = leagueRapidAPIParser.parseListFromJSON(JsonUtil.loadLeagues().toString());
+            final List<League> leagues = leagueRapidAPIParser.parseListFromJSON(jsonService.loadLeagues().toString());
             return saveEntities(leagues, leagueService::save);
         } catch (UnirestException e) {
-            throw new UnirestAPIException("Ошибка получения списка лиг по Rapid API", e);
+            throw new UnirestAPIException(messageTranslator.byCode("rapidAPI.leagueListLoadingError"), e);
         }
     }
 
@@ -52,10 +57,10 @@ public class LeguesAndTeamsController {
     public List<League> getLeaguesListBySeason(@PathVariable String season) {
         log.debug("getLeaguesListBySeason(season: {})...", season);
         try {
-            final List<League> leagues = leagueRapidAPIParser.parseListFromJSON(JsonUtil.loadLeaguesOfSeason(season).toString());
+            final List<League> leagues = leagueRapidAPIParser.parseListFromJSON(jsonService.loadLeaguesOfSeason(season).toString());
             return saveEntities(leagues, leagueService::save);
         } catch (UnirestException e) {
-            throw new UnirestAPIException("Ошибка получения списка лиг по Rapid API за "+season+" сезон", e);
+            throw new UnirestAPIException(messageTranslator.byCode("rapidAPI.leagueListLoadingErrorForSeason", season), e);
         }
         //TODO в выдавемом JSON часовой пояс на UTC, а надо на UTC+3
     }
@@ -65,10 +70,10 @@ public class LeguesAndTeamsController {
     public List<Team> getTeamsOfLeague(@PathVariable Integer leagueId) {
         log.debug("getTeamsOfLeague(leagueId: {})...", leagueId);
         try {
-            final List<Team> list = teamRapidAPIParser.parseListFromJSON(JsonUtil.loadTeamsByLeague(leagueId).toString());
+            final List<Team> list = teamRapidAPIParser.parseListFromJSON(jsonService.loadTeamsByLeague(leagueId).toString());
             return saveEntities(list, teamService::save);
         } catch (UnirestException e) {
-            throw new UnirestAPIException("Ошибка получения списка команд лиги "+leagueId, e);
+            throw new UnirestAPIException(messageTranslator.byCode("rapidAPI.teamListLoadingErrorForLeagueWithId", leagueId), e);
         }
     }
 
