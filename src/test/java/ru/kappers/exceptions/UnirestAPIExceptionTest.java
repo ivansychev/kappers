@@ -3,6 +3,7 @@ package ru.kappers.exceptions;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 public class UnirestAPIExceptionTest {
@@ -14,6 +15,7 @@ public class UnirestAPIExceptionTest {
         UnirestAPIException exception = new UnirestAPIException(testMessage);
 
         assertThat(exception.getMessage(), is(testMessage));
+        assertThat(exception.getCause(), is(nullValue()));
     }
 
     @Test
