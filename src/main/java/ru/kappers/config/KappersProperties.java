@@ -3,6 +3,7 @@ package ru.kappers.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.math.RoundingMode;
 import java.util.Locale;
 
 @Data
@@ -26,6 +27,12 @@ public class KappersProperties {
 
     /** Имя параметра для Locale в запросе */
     private String requestLocaleParameterName = REQUEST_LOCALE_PARAMETER_NAME_DEFAULT;
+
+    /** Режим округления для {@link java.math.BigDecimal} */
+    private RoundingMode bigDecimalRoundingMode = RoundingMode.HALF_UP;
+
+    /** Код валюты рубля (вообще то их 2: RUB и RUR, RUB появился в 1998 году) */
+    private String rubCurrencyCode = "RUB";
 
     @Data
     public static class CurrencyRates {
