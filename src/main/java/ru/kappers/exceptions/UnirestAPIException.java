@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UnirestAPIException extends RuntimeException {
-    private static final String ERROR_TEXT = "Ошибка получения данных по Rapid API";
+    protected static final String ERROR_TEXT = "Ошибка получения данных по Rapid API";
     public UnirestAPIException(String message, Exception e){
         super(message, e);
         log.error(message + " "+e.getMessage());
