@@ -103,7 +103,6 @@ public class CurrencyServiceImpl implements CurrencyService {
         return exchange(fromCurr.getCode(), toCurr.getCode(), amount);
     }
 
-    //TODO завести тесты на этот класс
     @Override
     public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount) {
         log.debug("exchange(fromCurr: {}, toCurr: {}, amount: {})...", fromCurr, toCurr, amount);
