@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kappers.config.KappersProperties;
 import ru.kappers.model.CurrencyRate;
 import ru.kappers.repository.CurrRateRepository;
 import ru.kappers.service.CurrRateService;
@@ -21,10 +22,12 @@ import java.util.List;
 public class CurrRateServiceImpl implements CurrRateService {
 
     private final CurrRateRepository repository;
+    private final KappersProperties kappersProperties;
 
     @Autowired
-    public CurrRateServiceImpl(CurrRateRepository repository) {
+    public CurrRateServiceImpl(CurrRateRepository repository, KappersProperties kappersProperties) {
         this.repository = repository;
+        this.kappersProperties = kappersProperties;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class CurrRateServiceImpl implements CurrRateService {
     @Transactional(readOnly = true)
     public boolean isExist(Date date, String currLiteral) {
         log.debug("isExist(date: {}, currLiteral: {})...", date, currLiteral);
-        if (currLiteral.equals("RUB")) return true;
+        if (currLiteral.equals(kappersProperties.getRubCurrencyCode())) return true;
         return getCurrByDate(date, currLiteral) != null;
     }
 

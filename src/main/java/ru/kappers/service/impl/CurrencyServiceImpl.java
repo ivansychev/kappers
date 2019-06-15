@@ -15,6 +15,7 @@ import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.parser.CBRFDailyCurrencyRatesParser;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -90,8 +91,7 @@ public class CurrencyServiceImpl implements CurrencyService {
             if (todaysCurrRatesGot) {
                 if (!currRateService.isExist(date, fromCurr) || !currRateService.isExist(date, toCurr)) {
                     LocalDate localDate = date.toLocalDate().minusDays(1);
-                    date = Date.valueOf(localDate);
-                    getActualCurrencyRateDate(date, toCurr, fromCurr, todaysCurrRatesGot);
+                    date = getActualCurrencyRateDate(Date.valueOf(localDate), fromCurr, toCurr, todaysCurrRatesGot);
                 }
             }
         }
@@ -103,24 +103,20 @@ public class CurrencyServiceImpl implements CurrencyService {
         return exchange(fromCurr.getCode(), toCurr.getCode(), amount);
     }
 
-    //TODO завести тесты на этот класс
     @Override
     public BigDecimal exchange(String fromCurr, String toCurr, BigDecimal amount) {
         log.debug("exchange(fromCurr: {}, toCurr: {}, amount: {})...", fromCurr, toCurr, amount);
         if (fromCurr.equals(toCurr)) {
             return amount;
         }
-        Date date = Date.valueOf(LocalDate.now());
-        if (!currRateService.isExist(date, fromCurr) || !currRateService.isExist(date, toCurr)) {
-            refreshCurrencyRatesForToday();
-            date = getActualCurrencyRateDate(date, fromCurr, toCurr, false);
-
-        }
-        if (fromCurr.equals("RUB")) {
+        Date date = getActualCurrencyRateDate(Date.valueOf(LocalDate.now()), fromCurr, toCurr, false);
+        final RoundingMode roundingMode = kappersProperties.getBigDecimalRoundingMode();
+        final String rubCurrencyCode = kappersProperties.getRubCurrencyCode();
+        if (fromCurr.equals(rubCurrencyCode)) {
             CurrencyRate rate = currRateService.getCurrByDate(date, toCurr);
-            return amount.divide(rate.getValue())
+            return amount.divide(rate.getValue(), roundingMode)
                     .multiply(BigDecimal.valueOf(rate.getNominal()));
-        } else if (toCurr.equals("RUB")) {
+        } else if (toCurr.equals(rubCurrencyCode)) {
             CurrencyRate rate = currRateService.getCurrByDate(date, fromCurr);
             return amount.multiply(rate.getValue())
                     .multiply(BigDecimal.valueOf(rate.getNominal()));
@@ -129,7 +125,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         CurrencyRate to = currRateService.getCurrByDate(date, toCurr);
         BigDecimal amountInRub = amount.multiply(from.getValue())
                 .multiply(BigDecimal.valueOf(from.getNominal()));
-        return amountInRub.divide(to.getValue())
+        return amountInRub.divide(to.getValue(), roundingMode)
                 .multiply(BigDecimal.valueOf(to.getNominal()));
     }
 
