@@ -3,17 +3,36 @@ package ru.kappers.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.math.RoundingMode;
+import java.util.Locale;
+
 @Data
 @ConfigurationProperties(prefix = "kappers")
 public class KappersProperties {
-    /** cron-выражение - каждый день в 00:00 */
+    /** Cron-выражение - каждый день в 00:00 */
     public static final String CRON_EVERY_DAY_AT_00_00 = "0 0 0 * * ?";
+    /** Locale для русского языка в Российской Федерации */
+    public static final Locale RUSSIAN_LOCALE = new Locale("ru", "RU");
+    /** Имя параметра для Locale в запросе по умолчанию */
+    public static final String REQUEST_LOCALE_PARAMETER_NAME_DEFAULT = "lang";
 
-    /** курсы валют */
+    /** Курсы валют */
     private CurrencyRates currencyRates = new CurrencyRates();
 
-    /** размер пула планировщика заданий */
+    /** Размер пула планировщика заданий */
     private int taskSchedulerPoolSize = 10;
+
+    /** Locale по умолчанию */
+    private Locale defaultLocale = RUSSIAN_LOCALE;
+
+    /** Имя параметра для Locale в запросе */
+    private String requestLocaleParameterName = REQUEST_LOCALE_PARAMETER_NAME_DEFAULT;
+
+    /** Режим округления для {@link java.math.BigDecimal} */
+    private RoundingMode bigDecimalRoundingMode = RoundingMode.HALF_UP;
+
+    /** Код валюты рубля (вообще то их 2: RUB и RUR, RUB появился в 1998 году) */
+    private String rubCurrencyCode = "RUB";
 
     @Data
     public static class CurrencyRates {

@@ -1,8 +1,10 @@
 package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.kappers.KappersApplication;
 import ru.kappers.exceptions.UserNotHaveKapperRoleException;
 import ru.kappers.model.KapperInfo;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.util.DateTimeUtil;
+
+import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
@@ -34,6 +39,7 @@ public class KapperInfoServiceImplTest extends AbstractTransactionalJUnit4Spring
             .password("assaasas")
             .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
+            .balance(Money.of(CurrencyUnit.EUR, new BigDecimal("10.00")))
             .build();
     private User kapper = User.builder()
             .userName("kapper1")
@@ -41,14 +47,22 @@ public class KapperInfoServiceImplTest extends AbstractTransactionalJUnit4Spring
             .password("assaasas")
             .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
             .lang("RUSSIAN")
+            .balance(Money.of(CurrencyUnit.USD, new BigDecimal("100.00")))
             .build();
 
 
     @Autowired
     private KapperInfoService kapperInfoService;
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private RolesService rolesService;
+
+    @Before
+    public void setUp() throws Exception {
+        deleteFromTables("users");
+        kapper.setRole(rolesService.getByName(Role.Names.KAPPER));
+    }
 
     @Test
     public void initKapper() {
@@ -91,6 +105,7 @@ public class KapperInfoServiceImplTest extends AbstractTransactionalJUnit4Spring
         kapper = userService.addUser(kapper);
         user = userService.addUser(user);
 
+        assertNotNull(userService.getByUserName(kapper.getUserName()));
         assertNotNull(kapperInfoService.getByUser(kapper));
         assertNull(kapperInfoService.getByUser(user));
     }

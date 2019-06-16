@@ -8,6 +8,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.event.ContextRefreshedEvent;
 import ru.kappers.config.KappersProperties;
 import ru.kappers.service.CurrencyService;
+import ru.kappers.service.MessageTranslator;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -20,6 +21,8 @@ public class ApplicationStartListenerTest {
     private CurrencyService currencyService;
     @Mock
     private KappersProperties kappersProperties;
+    @Mock
+    private MessageTranslator translator;
 
     @Test
     public void onApplicationEvent() {

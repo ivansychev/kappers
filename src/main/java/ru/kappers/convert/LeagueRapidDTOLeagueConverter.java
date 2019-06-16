@@ -6,10 +6,13 @@ import ru.kappers.model.catalog.League;
 import ru.kappers.model.dto.rapidapi.LeagueRapidDTO;
 import ru.kappers.util.DateTimeUtil;
 
+import javax.annotation.Nullable;
+
 @Service
 public class LeagueRapidDTOLeagueConverter implements Converter<LeagueRapidDTO, League> {
+    @Nullable
     @Override
-    public League convert(LeagueRapidDTO source) {
+    public League convert(@Nullable LeagueRapidDTO source) {
         if (source == null) {
             return null;
         }

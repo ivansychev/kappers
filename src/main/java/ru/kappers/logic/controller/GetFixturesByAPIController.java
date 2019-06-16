@@ -13,10 +13,12 @@ import ru.kappers.logic.odds.BetParser;
 import ru.kappers.logic.odds.LeonBetParser;
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
+import ru.kappers.service.*;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.service.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -24,23 +26,25 @@ import java.util.List;
 @RequestMapping(value = "/rest/api/fixtures")
 public class GetFixturesByAPIController {
     //Этот контроллер доступен для вызова только пользователям с ролью ROLE_ADMIN
-    @Autowired
-    private FixtureService service;
+    private final FixtureService service;
+    private final EventService eventService;
+    private final UserService userService;
+    private final KapperInfoService kapperService;
+    private final JsonService jsonService;
 
     @Autowired
-    private EventService eventService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private KapperInfoService kapperService;
-
-    @Autowired
-    private OddsLeonService oddsService;
+    public GetFixturesByAPIController(FixtureService service, EventService eventService, UserService userService,
+                                      KapperInfoService kapperService, JsonService jsonService) {
+        this.service = service;
+        this.eventService = eventService;
+        this.userService = userService;
+        this.kapperService = kapperService;
+        this.jsonService = jsonService;
+    }
 
 
 /**
+    /**
  * Метод предназначен для обновления списка спортивных событий
  * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
  * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
@@ -62,6 +66,23 @@ public class GetFixturesByAPIController {
         }
 
        log.debug("getFixturesLastWeek()");
+        for (long i = -5; i < 5; i++) {
+            try {
+                JSONObject jsonObject = jsonService.loadFixturesByDate(LocalDate.now().plusDays(i));
+                Map<Integer, Fixture> fixturesFromJson = jsonService.getFixturesFromJson(jsonObject.toString());
+                for (Map.Entry<Integer, Fixture> entry : fixturesFromJson.entrySet()) {
+                    Fixture value = entry.getValue();
+                    value.setId(entry.getKey());
+                    Event event = eventService.getById(entry.getKey());
+                    service.addRecord(value);
+                    if (event!=null){
+                        completeEventData(event, value);
+                    }
+                }
+            } catch (UnirestException e) {
+                throw new RuntimeException(e);
+            }
+        }
        //Этот фарагмент раскоментировать, когда закончится тестирование сохранения сущностей leon
 //        for (long i = -5; i < 5; i++) {
 //            try {

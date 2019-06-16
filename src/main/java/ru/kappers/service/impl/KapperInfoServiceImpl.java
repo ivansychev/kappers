@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.exceptions.UserNotHaveKapperRoleException;
 import ru.kappers.model.KapperInfo;
+import ru.kappers.model.Role;
 import ru.kappers.model.User;
 import ru.kappers.repository.KapperInfoRepository;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.KapperInfoService;
+import ru.kappers.service.MessageTranslator;
 
 @Slf4j
 @Service
@@ -17,18 +19,20 @@ import ru.kappers.service.KapperInfoService;
 public class KapperInfoServiceImpl implements KapperInfoService {
     private final KapperInfoRepository kapperRepository;
     private final UsersRepository usersRepository;
+    private final MessageTranslator translator;
 
     @Autowired
-    public KapperInfoServiceImpl(KapperInfoRepository kapperRepository, UsersRepository usersRepository) {
+    public KapperInfoServiceImpl(KapperInfoRepository kapperRepository, UsersRepository usersRepository, MessageTranslator translator) {
         this.kapperRepository = kapperRepository;
         this.usersRepository = usersRepository;
+        this.translator = translator;
     }
 
     @Override
     public KapperInfo initKapper(User user) {
         log.debug("initKapper(user: {})...", user);
         KapperInfo kapper = null;
-        if (user.hasRole("ROLE_KAPPER")) {
+        if (user.hasRole(Role.Names.KAPPER)) {
             kapper = getByUser(user);
             if (kapper == null) {
                 kapper = KapperInfo.builder().user(user).build();
@@ -39,12 +43,12 @@ public class KapperInfoServiceImpl implements KapperInfoService {
                 editKapper(kapper);
                 return kapper;
             } else {
-                String message = "The user " + user.getUserName() + " has already been initialized as Kapper.";
+                String message = translator.byCode("user.alreadyIsKapper", user.getUserName());
                 log.error(message);
                 return kapper;
             }
         } else {
-            String message = "The user " + user.getUserName() + " doesn't have KAPPER role, but it is being tried to initialize as KAPPER.";
+            String message = translator.byCode("user.isNotKapperButTriedInitialize", user.getUserName());
             log.error(message);
             throw new UserNotHaveKapperRoleException(message);
         }
