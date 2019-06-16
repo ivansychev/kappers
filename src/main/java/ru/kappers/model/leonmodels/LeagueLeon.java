@@ -1,9 +1,6 @@
 package ru.kappers.model.leonmodels;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -33,5 +30,7 @@ public class LeagueLeon {
     @Size(max = 512)
     private String url;
     @OneToMany(mappedBy = "league", fetch=FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Collection<OddsLeon> odd;
 }

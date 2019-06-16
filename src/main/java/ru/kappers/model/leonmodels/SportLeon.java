@@ -1,6 +1,5 @@
 package ru.kappers.model.leonmodels;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,5 +30,7 @@ public class SportLeon {
     @Size(max = 255)
     private String betlineCombination;
     @OneToMany(mappedBy = "sport")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<LeagueLeon> leagues;
 }

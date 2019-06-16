@@ -1,6 +1,8 @@
 package ru.kappers.logic.controller;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import ru.kappers.service.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -31,15 +34,17 @@ public class GetFixturesByAPIController {
     private final UserService userService;
     private final KapperInfoService kapperService;
     private final JsonService jsonService;
+    private final OddsLeonService oddsLeonService;
 
     @Autowired
     public GetFixturesByAPIController(FixtureService service, EventService eventService, UserService userService,
-                                      KapperInfoService kapperService, JsonService jsonService) {
+                                      KapperInfoService kapperService, JsonService jsonService, OddsLeonService oddsLeonService) {
         this.service = service;
         this.eventService = eventService;
         this.userService = userService;
         this.kapperService = kapperService;
         this.jsonService = jsonService;
+        this.oddsLeonService = oddsLeonService;
     }
 
 
@@ -62,32 +67,14 @@ public class GetFixturesByAPIController {
 
         for (OddsLeonDTO dto: eventsWithOdds) {
             OddsLeon odd = converter.convert(dto);
-            oddsService.save(odd);
+            oddsLeonService.save(odd);
         }
 
        log.debug("getFixturesLastWeek()");
-        for (long i = -5; i < 5; i++) {
-            try {
-                JSONObject jsonObject = jsonService.loadFixturesByDate(LocalDate.now().plusDays(i));
-                Map<Integer, Fixture> fixturesFromJson = jsonService.getFixturesFromJson(jsonObject.toString());
-                for (Map.Entry<Integer, Fixture> entry : fixturesFromJson.entrySet()) {
-                    Fixture value = entry.getValue();
-                    value.setId(entry.getKey());
-                    Event event = eventService.getById(entry.getKey());
-                    service.addRecord(value);
-                    if (event!=null){
-                        completeEventData(event, value);
-                    }
-                }
-            } catch (UnirestException e) {
-                throw new RuntimeException(e);
-            }
-        }
-       //Этот фарагмент раскоментировать, когда закончится тестирование сохранения сущностей leon
 //        for (long i = -5; i < 5; i++) {
 //            try {
-//                JSONObject jsonObject = JsonUtil.loadFixturesByDate(LocalDate.now().plusDays(i));
-//                Map<Integer, Fixture> fixturesFromJson = JsonUtil.getFixturesFromJson(jsonObject.toString());
+//                JSONObject jsonObject = jsonService.loadFixturesByDate(LocalDate.now().plusDays(i));
+//                Map<Integer, Fixture> fixturesFromJson = jsonService.getFixturesFromJson(jsonObject.toString());
 //                for (Map.Entry<Integer, Fixture> entry : fixturesFromJson.entrySet()) {
 //                    Fixture value = entry.getValue();
 //                    value.setId(entry.getKey());
@@ -101,6 +88,8 @@ public class GetFixturesByAPIController {
 //                throw new RuntimeException(e);
 //            }
 //        }
+       //Этот фарагмент раскоментировать, когда закончится тестирование сохранения сущностей leon
+
         return null;
     }
 

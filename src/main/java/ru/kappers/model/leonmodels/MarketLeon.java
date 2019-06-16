@@ -1,9 +1,6 @@
 package ru.kappers.model.leonmodels;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -27,6 +24,8 @@ public class MarketLeon {
     @NotBlank
     private String name;
     @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<RunnerLeon> runners;
     @Column(name = "open")
     private boolean open;
