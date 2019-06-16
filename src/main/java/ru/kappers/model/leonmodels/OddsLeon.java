@@ -1,9 +1,6 @@
 package ru.kappers.model.leonmodels;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -26,7 +23,9 @@ public class OddsLeon  {
     @Size(max = 255)
     @NotBlank
     private String name;
-    @OneToMany(mappedBy = "odd", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "odd")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<CompetitorLeon> competitors;
     @Column(name = "kickoff")
     private Timestamp kickoff;
@@ -41,5 +40,7 @@ public class OddsLeon  {
     @Size(max = 512)
     private String url;
     @OneToMany(mappedBy = "odd", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<MarketLeon> markets;
 }
