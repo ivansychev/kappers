@@ -1,8 +1,6 @@
 package ru.kappers.logic.controller;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.MediaType;
@@ -18,12 +16,9 @@ import ru.kappers.model.Fixture;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.service.*;
-import ru.kappers.util.JsonUtil;
 
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/rest/api/fixtures")
@@ -56,15 +51,15 @@ public class GetFixturesByAPIController {
 /*
 * Закомментированный код нужен для проверки сохранения сущностей. Для запуска можно просто нажать на кнопку в админке
 * */
-//        BetParser<OddsLeonDTO> parser = new LeonBetParser();
-//        List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710876-African-Cup-of-Nations");
-//        List<OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
-//        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter();
-//
-//        for (OddsLeonDTO dto: eventsWithOdds) {
-//            OddsLeon odd = converter.convert(dto);
-//            oddsService.add(odd);
-//        }
+        BetParser<OddsLeonDTO> parser = new LeonBetParser();
+        List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710876-African-Cup-of-Nations");
+        List<OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
+        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter();
+
+        for (OddsLeonDTO dto: eventsWithOdds) {
+            OddsLeon odd = converter.convert(dto);
+            oddsService.save(odd);
+        }
 
        log.debug("getFixturesLastWeek()");
        //Этот фарагмент раскоментировать, когда закончится тестирование сохранения сущностей leon

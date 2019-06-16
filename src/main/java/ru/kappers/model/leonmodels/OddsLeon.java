@@ -26,13 +26,14 @@ public class OddsLeon  {
     @Size(max = 255)
     @NotBlank
     private String name;
-    @OneToMany(mappedBy = "odd", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "odd", fetch=FetchType.LAZY)
     private List<CompetitorLeon> competitors;
     @Column(name = "kickoff")
     private Timestamp kickoff;
     @Column(name = "last_updated")
     private Timestamp lastUpdated;
-    @OneToOne(mappedBy = "odd", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name="league_id")
     private LeagueLeon league;
     @Column(name = "open")
     private boolean open;

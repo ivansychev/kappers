@@ -25,7 +25,6 @@ create table league_leon
 			primary key,
 	name varchar(255) not null,
 	url varchar(512),
-	odd_id bigint,
 	sport_id bigint
 )
 ;
@@ -100,6 +99,7 @@ create table odds_leon
 		constraint odds_leon_pkey
 			primary key,
 	name varchar(255) not null,
+	league_id bigint not null,
 	kickoff timestamp,
 	last_updated timestamp,
 	open boolean,
@@ -113,4 +113,5 @@ alter table odds_leon owner to postgres
 create unique index odds_leon_odds_id_uindex
 	on odds_leon (odd_id)
 ;
+
 

@@ -130,7 +130,7 @@ public class LeonBetParserTest extends AbstractTransactionalJUnit4SpringContextT
 
 //        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter();
 //        OddsLeon entity = converter.convert(oddsDTO);
-//        oddsLeonService.add(entity);
+//        oddsLeonService.save(entity);
 //        System.out.println();
     }
 

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 
 @Slf4j
 @Data
@@ -31,7 +32,6 @@ public class LeagueLeon {
     @Column(name = "url")
     @Size(max = 512)
     private String url;
-    @JoinColumn(name = "odd_id")
-    @OneToOne(cascade = CascadeType.ALL)
-    private OddsLeon odd;
+    @OneToMany(mappedBy = "league", fetch=FetchType.EAGER)
+    private Collection<OddsLeon> odd;
 }

@@ -38,7 +38,7 @@ public class CompetitorLeon  {
     @Column(name = "logo")
     @Size(max = 512)
     private String logo;
-    @ManyToOne
-    @JoinColumn(name = "odd_id", nullable = false)
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn(name = "odd_id", nullable = true)
     private OddsLeon odd;
 }
