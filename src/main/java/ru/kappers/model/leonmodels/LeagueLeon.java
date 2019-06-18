@@ -23,14 +23,11 @@ public class LeagueLeon {
     @Size(max = 255)
     @NotBlank
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sport_id", nullable = false)
-    private SportLeon sport;
+    @Column(name = "sport")
+    @Size(max = 128)
+    private String sport;
     @Column(name = "url")
     @Size(max = 512)
     private String url;
-    @OneToMany(mappedBy = "league", fetch=FetchType.EAGER)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Collection<OddsLeon> odd;
+
 }

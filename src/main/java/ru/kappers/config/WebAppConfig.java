@@ -34,7 +34,6 @@ public class WebAppConfig implements WebMvcConfigurer {
     private Converter<MarketLeonDTO, MarketLeon> marketLeonDTOMarketLeonConverter;
     private Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter;
     private Converter<RunnerLeonDTO, RunnerLeon> runnerLeonDTORunnerLeonConverter;
-    private Converter<SportLeonDTO, SportLeon> sportLeonDTOSportLeonConverter;
 
     private KappersProperties kappersProperties;
 
@@ -88,11 +87,6 @@ public class WebAppConfig implements WebMvcConfigurer {
         this.runnerLeonDTORunnerLeonConverter = runnerLeonDTORunnerLeonConverter;
     }
 
-    @Autowired
-    public void setSportLeonDTOSportLeonConverter(Converter<SportLeonDTO, SportLeon> sportLeonDTOSportLeonConverter) {
-        this.sportLeonDTOSportLeonConverter = sportLeonDTOSportLeonConverter;
-    }
-
     @Override
     public void addFormatters(FormatterRegistry registry) {
         // регистрируем FixtureRapidDTOToFixtureConverter в системе конвертаций Spring
@@ -105,7 +99,6 @@ public class WebAppConfig implements WebMvcConfigurer {
         registry.addConverter(marketLeonDTOMarketLeonConverter);
         registry.addConverter(oddsLeonDTOOddsLeonConverter);
         registry.addConverter(runnerLeonDTORunnerLeonConverter);
-        registry.addConverter(sportLeonDTOSportLeonConverter);
     }
 
     @Override

@@ -35,42 +35,48 @@ public class GetFixturesByAPIController {
     private final KapperInfoService kapperService;
     private final JsonService jsonService;
     private final OddsLeonService oddsLeonService;
+    private final CompetitorLeonService competitorService;
+    private final LeagueLeonService leagueService;
 
     @Autowired
     public GetFixturesByAPIController(FixtureService service, EventService eventService, UserService userService,
-                                      KapperInfoService kapperService, JsonService jsonService, OddsLeonService oddsLeonService) {
+                                      KapperInfoService kapperService, JsonService jsonService,
+                                      OddsLeonService oddsLeonService, CompetitorLeonService competitorService,
+                                      LeagueLeonService leagueService
+    ) {
         this.service = service;
         this.eventService = eventService;
         this.userService = userService;
         this.kapperService = kapperService;
         this.jsonService = jsonService;
         this.oddsLeonService = oddsLeonService;
+        this.competitorService = competitorService;
+        this.leagueService = leagueService;
     }
 
 
-/**
     /**
- * Метод предназначен для обновления списка спортивных событий
- * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
- * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
- * */
+     * Метод предназначен для обновления списка спортивных событий
+     * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
+     * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
+     */
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
-/*
-* Закомментированный код нужен для проверки сохранения сущностей. Для запуска можно просто нажать на кнопку в админке
-* */
+        /*
+         * Закомментированный код нужен для проверки сохранения сущностей. Для запуска можно просто нажать на кнопку в админке
+         * */
         BetParser<OddsLeonDTO> parser = new LeonBetParser();
         List<String> list = parser.loadEventUrlsOfTournament("/events/Soccer/281474976710876-African-Cup-of-Nations");
         List<OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
-        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter();
+        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter(competitorService, leagueService);
 
-        for (OddsLeonDTO dto: eventsWithOdds) {
+        for (OddsLeonDTO dto : eventsWithOdds) {
             OddsLeon odd = converter.convert(dto);
             oddsLeonService.save(odd);
         }
 
-       log.debug("getFixturesLastWeek()");
+        log.debug("getFixturesLastWeek()");
 //        for (long i = -5; i < 5; i++) {
 //            try {
 //                JSONObject jsonObject = jsonService.loadFixturesByDate(LocalDate.now().plusDays(i));
@@ -88,27 +94,25 @@ public class GetFixturesByAPIController {
 //                throw new RuntimeException(e);
 //            }
 //        }
-       //Этот фарагмент раскоментировать, когда закончится тестирование сохранения сущностей leon
+        //Этот фарагмент раскоментировать, когда закончится тестирование сохранения сущностей leon
 
         return null;
     }
 
     private void completeEventData(Event event, Fixture value) {
-       //TODO сравнить результат, закрыть евент
+        //TODO сравнить результат, закрыть евент
 
     }
 
     /**
      * Выгрузка всех событий без каких либо фильтров из БД
-     * */
+     */
 
     @ResponseBody
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
-    public List<Fixture> getAllFixtures()
-    {
+    public List<Fixture> getAllFixtures() {
         return service.getAll();
     }
-
 
 
 }

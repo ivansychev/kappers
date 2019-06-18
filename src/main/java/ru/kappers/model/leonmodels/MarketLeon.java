@@ -29,10 +29,5 @@ public class MarketLeon {
     private List<RunnerLeon> runners;
     @Column(name = "open")
     private boolean open;
-    @Column(name = "family")
-    @Size(max = 255)
-    private String family;
-    @ManyToOne
-    @JoinColumn(name = "odd_id", nullable = false)
-    private  OddsLeon odd;
+
 }

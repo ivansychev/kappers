@@ -5,7 +5,7 @@ create table league_leon
 			primary key,
 	name varchar(255) not null,
 	url varchar(512),
-	sport_id bigint
+	sport varchar(128)
 )
 ;
 

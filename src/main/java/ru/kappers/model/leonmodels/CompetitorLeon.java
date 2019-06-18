@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Сущность парсинга Competitor из Leon
@@ -20,22 +21,19 @@ import javax.validation.constraints.Size;
 
 public class CompetitorLeon  {
     @Id
-    @Column(name = "competitor_id",nullable = false, updatable = false)
+    @Column(name = "competitor_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
     @NotBlank
     private String name;
-    @Size(max = 8)
-    @Column(name = "home_away")
-    private String homeAway;
-    @Column(name = "type")
-    @Size(max = 32)
-    private String type;
     @Column(name = "logo")
     @Size(max = 512)
     private String logo;
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
-    @JoinColumn(name = "odd_id")
-    private OddsLeon odd;
+
+    @OneToMany (mappedBy = "home")
+    private List<OddsLeon> home_odds;
+
+    @OneToMany (mappedBy = "away")
+    private List<OddsLeon> away_odds;
 }

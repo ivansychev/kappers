@@ -25,7 +25,6 @@ private Converter <RunnerLeonDTO, RunnerLeon> converter = new RunnerLeonDTOToRun
             return MarketLeon.builder()
                     .id(source.getId())
                     .name(source.getName())
-                    .family(source.getFamily())
                     .open(source.isOpen())
                     .runners(source.getRunners().stream().map(s -> converter.convert(s)).collect(Collectors.toList()))
                     .build();

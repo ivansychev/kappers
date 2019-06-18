@@ -17,10 +17,8 @@ public class CompetitorLeonDTOToCompetitorLeonConverter implements Converter<Com
         else{
            return CompetitorLeon.builder()
                    .id(source.getId())
-                   .homeAway(source.getHomeAway())
                    .logo(source.getLogo())
                    .name(source.getName())
-                   .type(source.getType())
                    .build();
         }
     }

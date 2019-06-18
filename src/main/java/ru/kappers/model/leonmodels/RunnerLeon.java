@@ -31,4 +31,7 @@ public class RunnerLeon {
     @ManyToOne
     @JoinColumn(name = "market_id", nullable = false)
     private MarketLeon market;
+    @ManyToOne
+    @JoinColumn(name = "odd_id", nullable = false)
+    private OddsLeon odd;
 }

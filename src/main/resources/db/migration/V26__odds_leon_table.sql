@@ -5,6 +5,8 @@ create table odds_leon
 			primary key,
 	name varchar(255) not null,
 	league_id bigint not null,
+	home_id bigint not null,
+	away_id bigint not null,
 	kickoff timestamp,
 	last_updated timestamp,
 	open boolean,

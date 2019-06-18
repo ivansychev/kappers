@@ -1,4 +1,4 @@
-package ru.kappers.util;
+package ru.kappers.service.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

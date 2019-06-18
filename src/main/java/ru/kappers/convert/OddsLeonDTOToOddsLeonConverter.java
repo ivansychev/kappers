@@ -6,23 +6,29 @@ import org.springframework.core.convert.converter.Converter;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import ru.kappers.model.dto.leon.CompetitorLeonDTO;
-import ru.kappers.model.dto.leon.LeagueLeonDTO;
-import ru.kappers.model.dto.leon.MarketLeonDTO;
-import ru.kappers.model.dto.leon.OddsLeonDTO;
-import ru.kappers.model.leonmodels.CompetitorLeon;
-import ru.kappers.model.leonmodels.LeagueLeon;
-import ru.kappers.model.leonmodels.MarketLeon;
-import ru.kappers.model.leonmodels.OddsLeon;
+import ru.kappers.model.dto.leon.*;
+import ru.kappers.model.leonmodels.*;
+import ru.kappers.service.CompetitorLeonService;
+import ru.kappers.service.LeagueLeonService;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, OddsLeon> {
     private Converter<LeagueLeonDTO, LeagueLeon> leagueConverter = new LeagueLeonDTOToLeagueLeonConverter();
     private Converter<CompetitorLeonDTO, CompetitorLeon> competitorConverter = new CompetitorLeonDTOToCompetitorLeonConverter();
-    private Converter<MarketLeonDTO, MarketLeon> marketConverter = new MarketLeonDTOToMarketLeonConverter();
+    private Converter<RunnerLeonDTO, RunnerLeon> runnerConverter = new RunnerLeonDTOToRunnerLeonConverter();
+
+    private final CompetitorLeonService competitorService;
+    private final LeagueLeonService leagueService;
+
+    public OddsLeonDTOToOddsLeonConverter(CompetitorLeonService competitorService, LeagueLeonService leagueService) {
+        this.competitorService = competitorService;
+        this.leagueService = leagueService;
+    }
 
     @Nullable
     @Override
@@ -30,6 +36,27 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
         if (source == null) {
             return null;
         }
+        List<CompetitorLeonDTO> compDtos = source.getCompetitors();
+        CompetitorLeon home = null;
+        CompetitorLeon away = null;
+        for (CompetitorLeonDTO dto:compDtos) {
+            CompetitorLeon comp = competitorService.getByName(dto.getName());
+            if (comp==null){
+                comp = competitorConverter.convert(dto);
+                competitorService.save(comp);
+            }
+            if (dto.getHomeAway().equals("HOME")){
+                home = comp;
+            } else{
+                away = comp;
+            }
+        }
+        LeagueLeon league = leagueService.getByName(source.getLeague().getName());
+        if (league==null){
+            league = leagueConverter.convert(source.getLeague());
+            leagueService.save(league);
+        }
+
         return OddsLeon.builder()
                 .id(source.getId())
                 .name(source.getName())
@@ -37,9 +64,9 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
                 .open(source.isOpen())
                 .url(source.getUrl())
                 .lastUpdated(new Timestamp(source.getLastUpdated()))
-                .league(leagueConverter.convert(source.getLeague()))
-                .competitors(source.getCompetitors().stream().map(s -> competitorConverter.convert(s)).collect(Collectors.toList()))
-                .markets(source.getMarkets() != null ? source.getMarkets().stream().map(m -> marketConverter.convert(m)).collect(Collectors.toList()) : null)
+                .league(league)
+                .home(home)
+                .away(away)
                 .build();
 
     }

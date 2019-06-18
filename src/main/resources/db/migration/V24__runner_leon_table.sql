@@ -7,7 +7,8 @@ create table runner_leon
 	open boolean,
 	tags varchar,
 	price double precision,
-	market_id bigint
+	market_id bigint,
+	odd_id bigint
 )
 ;
 

@@ -4,10 +4,7 @@ create table competitor_leon
 		constraint competitor_leon_pkey
 			primary key,
 	name varchar(255) not null,
-	home_away varchar(8),
-	type varchar(32),
-	logo varchar(512),
-	odd_id bigint
+	logo varchar(512)
 )
 ;
 
