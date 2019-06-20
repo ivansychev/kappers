@@ -63,7 +63,7 @@ public interface UserService {
     boolean hasRole(User user, int roleId);
     boolean hasRole(User user, Role role);
     Role getRole(User user);
-    History getHistory(User user);
+    List<History> getHistory(User user);
     Stat getStat(User user);
     KapperInfo getKapperInfo(User user);
     PersonalInfo getInfo(User user);

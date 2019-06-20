@@ -27,14 +27,18 @@ public class UserServiceImpl implements UserService {
     private final RolesService rolesService;
     private final KapperInfoService kapperInfoService;
     private final CurrencyService currencyService;
+    private final MessageTranslator messageTranslator;
+    private final HistoryService historyService;
 
     @Autowired
     public UserServiceImpl(UsersRepository repository, RolesService rolesService, KapperInfoService kapperInfoService,
-                           CurrencyService currencyService) {
+                           CurrencyService currencyService, MessageTranslator messageTranslator, HistoryService historyService) {
         this.repository = repository;
         this.rolesService = rolesService;
         this.kapperInfoService = kapperInfoService;
         this.currencyService = currencyService;
+        this.messageTranslator = messageTranslator;
+        this.historyService = historyService;
     }
 
     @Override
@@ -167,10 +171,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public History getHistory(User user) {
+    public List<History> getHistory(User user) {
         log.debug("getHistory(user: {})...", user);
-        //TODO
-        return null;
+        return historyService.getUsersHistory(user);
     }
 
     @Override
@@ -199,21 +202,20 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    //TODO написать unit-тесты для transfer и exchange
+    // Нельзя метод transfer делать синхронизированным! Он находится в синглтоне и, если его синхронизировать, то это будет бутылочным горлышком.
+    // Вместо синхронизации нужно реализовать сервис таким образом, чтобы он не хранил состояние и метод выполнялся под транзакцией.
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public synchronized void transfer(User user, User kapper, BigDecimal amount){
+    public void transfer(User user, User kapper, BigDecimal amount){
         log.debug("transfer(user: {}, kapper: {}, amount: {})...", user, kapper, amount);
-        Preconditions.checkArgument(user.hasRole(Role.Names.USER), "User %s has no permission to transfer money", user.getUserName());
-        Preconditions.checkArgument(kapper.hasRole(Role.Names.KAPPER), "The operation is forbidden. Money can be transfered only from user to kapper");
-        Preconditions.checkArgument(user.getBalance().getAmount().compareTo(amount) >= 0, "The user %s doesnt have enough money. On balance %s",
+        Preconditions.checkArgument(user.hasRole(Role.Names.USER), messageTranslator.byCode("user.hasNoPermissionToTransferMoney"), user.getUserName());
+        Preconditions.checkArgument(kapper.hasRole(Role.Names.KAPPER), messageTranslator.byCode("user.canTransferOnlyToKapper"));
+        Preconditions.checkArgument(user.getBalance().getAmount().compareTo(amount) >= 0, messageTranslator.byCode("user.doesNotNaveEnoughMoney"),
                 user.getUserName(), user.getBalance());
         try {
             user.setBalance(user.getBalance().minus(amount));
             if (user.getBalance().getCurrencyUnit().equals(kapper.getBalance().getCurrencyUnit())) {
                 kapper.setBalance(kapper.getBalance().plus(amount));
                 log.debug("Kapper {} got {} {}", kapper.getUserName(), amount, kapper.getBalance().getCurrencyUnit());
-
             } else {
                 BigDecimal resultAmount = currencyService.exchange(user.getBalance().getCurrencyUnit(), kapper.getBalance().getCurrencyUnit(), amount);
                 kapper.setBalance(kapper.getBalance().plus(resultAmount));
