@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 @Transactional
 public class OddsLeonServiceImpl implements OddsLeonService {
-    private OddsLeonRepository repository;
+    private final OddsLeonRepository repository;
 
     @Autowired
-    public void setRepository(OddsLeonRepository repository) {
+    public OddsLeonServiceImpl(OddsLeonRepository repository) {
         this.repository = repository;
     }
 
@@ -37,11 +37,13 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OddsLeon getById(long oddId) {
         return repository.getOne(oddId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OddsLeon> getAll() {
         return repository.findAll();
     }

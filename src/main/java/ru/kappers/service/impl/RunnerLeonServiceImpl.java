@@ -3,6 +3,7 @@ package ru.kappers.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.leonmodels.RunnerLeon;
 import ru.kappers.repository.RunnerLeonRepository;
 import ru.kappers.service.MarketLeonService;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@Transactional
 public class RunnerLeonServiceImpl implements RunnerLeonService {
     private final RunnerLeonRepository repository;
     private final MarketLeonService marketService;
@@ -27,16 +29,19 @@ public class RunnerLeonServiceImpl implements RunnerLeonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RunnerLeon> getByMarketAndOdd(long marketId, long oddId) {
         return repository.getByMarketAndOdd(marketService.getById(marketId), oddService.getById(oddId));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RunnerLeon> getByOdd(long oddId) {
         return repository.getByOdd(oddService.getById(oddId));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RunnerLeon> getAll() {
         return repository.findAll();
     }
@@ -52,6 +57,7 @@ public class RunnerLeonServiceImpl implements RunnerLeonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RunnerLeon getById(long id) {
         return repository.getOne(id);
     }
