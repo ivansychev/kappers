@@ -12,9 +12,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class CompetitorLeonServiceImpl implements CompetitorLeonService {
+    private final CompetitorRepository repository;
 
     @Autowired
-    CompetitorRepository repository;
+    public CompetitorLeonServiceImpl(CompetitorRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public CompetitorLeon save(CompetitorLeon comp) {
