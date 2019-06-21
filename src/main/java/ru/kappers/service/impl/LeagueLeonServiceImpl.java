@@ -10,8 +10,13 @@ import ru.kappers.service.LeagueLeonService;
 @Service
 @Slf4j
 public class LeagueLeonServiceImpl implements LeagueLeonService {
+    private final LeagueLeonRepository repository;
+
     @Autowired
-    LeagueLeonRepository repository;
+    public LeagueLeonServiceImpl(LeagueLeonRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public LeagueLeon getByName(String name) {
         return repository.getByName(name);
