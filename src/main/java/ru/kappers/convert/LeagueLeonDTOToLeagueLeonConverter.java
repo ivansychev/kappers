@@ -14,15 +14,14 @@ public class LeagueLeonDTOToLeagueLeonConverter implements Converter<LeagueLeonD
     @Nullable
     @Override
     public LeagueLeon convert(@Nullable LeagueLeonDTO source) {
-        if (source == null)
+        if (source == null) {
             return null;
-        else {
-            return LeagueLeon.builder()
-                    .id(source.getId())
-                    .name(source.getName())
-                    .url(source.getUrl())
-                    .sport(source.getSport().getName())
-                    .build();
         }
+        return LeagueLeon.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .url(source.getUrl())
+                .sport(source.getSport().getName())
+                .build();
     }
 }
