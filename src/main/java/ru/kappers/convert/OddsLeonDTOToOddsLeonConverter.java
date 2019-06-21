@@ -2,6 +2,7 @@ package ru.kappers.convert;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 
@@ -15,20 +16,20 @@ import ru.kappers.service.LeagueLeonService;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, OddsLeon> {
-    private Converter<LeagueLeonDTO, LeagueLeon> leagueConverter = new LeagueLeonDTOToLeagueLeonConverter();
-    private Converter<CompetitorLeonDTO, CompetitorLeon> competitorConverter = new CompetitorLeonDTOToCompetitorLeonConverter();
-
     private final CompetitorLeonService competitorService;
     private final LeagueLeonService leagueService;
+    private final ConversionService conversionService;
 
-    public OddsLeonDTOToOddsLeonConverter(CompetitorLeonService competitorService, LeagueLeonService leagueService) {
+    @Autowired
+    public OddsLeonDTOToOddsLeonConverter(CompetitorLeonService competitorService, LeagueLeonService leagueService,
+                                          @Lazy ConversionService conversionService) {
         this.competitorService = competitorService;
         this.leagueService = leagueService;
+        this.conversionService = conversionService;
     }
 
     @Nullable
@@ -37,16 +38,16 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
         if (source == null) {
             return null;
         }
-        List<CompetitorLeonDTO> compDtos = source.getCompetitors();
+        final List<CompetitorLeonDTO> compDtos = source.getCompetitors();
         CompetitorLeon home = null;
         CompetitorLeon away = null;
         for (CompetitorLeonDTO dto : compDtos) {
             CompetitorLeon comp = competitorService.getByName(dto.getName());
             if (comp == null) {
-                comp = competitorConverter.convert(dto);
-                competitorService.save(comp);
+                comp = competitorService.save(
+                        conversionService.convert(dto, CompetitorLeon.class));
             }
-            if (dto.getHomeAway().equals("HOME")) {
+            if ("HOME".equalsIgnoreCase(dto.getHomeAway())) {
                 home = comp;
             } else {
                 away = comp;
@@ -54,10 +55,9 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
         }
         LeagueLeon league = leagueService.getByName(source.getLeague().getName());
         if (league == null) {
-            league = leagueConverter.convert(source.getLeague());
-            leagueService.save(league);
+            league = leagueService.save(
+                    conversionService.convert(source.getLeague(), LeagueLeon.class));
         }
-
 
         return OddsLeon.builder()
                 .id(source.getId())
@@ -69,9 +69,7 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
                 .league(league)
                 .home(home)
                 .away(away)
-                .runners(null)
+                .runners(new ArrayList<>()) // не стоит коллекции делать null, во избежание лишних NPE
                 .build();
-
     }
 }
-

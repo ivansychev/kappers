@@ -5,12 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kappers.convert.OddsLeonDTOToOddsLeonConverter;
 import ru.kappers.model.dto.leon.MarketLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.dto.leon.RunnerLeonDTO;
@@ -32,13 +31,15 @@ public class LeonParsingController {
     private final LeagueLeonService leagueService;
     private final OddsLeonService oddsLeonService;
     private final MarketLeonService marketService;
+    private final ConversionService conversionService;
 
     @Autowired
-    public LeonParsingController(CompetitorLeonService competitorService, LeagueLeonService leagueService, OddsLeonService oddsLeonService, MarketLeonService marketService) {
+    public LeonParsingController(CompetitorLeonService competitorService, LeagueLeonService leagueService, OddsLeonService oddsLeonService, MarketLeonService marketService, ConversionService conversionService) {
         this.competitorService = competitorService;
         this.leagueService = leagueService;
         this.oddsLeonService = oddsLeonService;
         this.marketService = marketService;
+        this.conversionService = conversionService;
     }
 
     /**
@@ -56,9 +57,8 @@ public class LeonParsingController {
         BetParser<OddsLeonDTO> parser = new LeonBetParser();
         List<String> list = parser.loadEventUrlsOfTournament(url);
         List<OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
-        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter(competitorService, leagueService);
         for (OddsLeonDTO dto : eventsWithOdds) {
-            OddsLeon odd = converter.convert(dto);
+            OddsLeon odd = conversionService.convert(dto, OddsLeon.class);
             List<RunnerLeon> runners = runnerLeonConverter(dto.getMarkets());
             if (odd != null) {
                 runners.forEach(s -> s.setOdd(odd));
