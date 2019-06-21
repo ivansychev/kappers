@@ -10,8 +10,8 @@ import ru.kappers.service.MarketLeonService;
 import ru.kappers.service.OddsLeonService;
 import ru.kappers.service.RunnerLeonService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -69,10 +69,8 @@ public class RunnerLeonServiceImpl implements RunnerLeonService {
 
     @Override
     public List<RunnerLeon> saveAll(List<RunnerLeon> runners) {
-        List<RunnerLeon> savedOnes = new ArrayList<>();
-        for (RunnerLeon r:runners) {
-            savedOnes.add(repository.save(r));
-        }
-       return savedOnes;
+       return runners.stream()
+               .map(repository::save)
+               .collect(Collectors.toList());
     }
 }
