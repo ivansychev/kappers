@@ -1,5 +1,6 @@
 package ru.kappers.convert;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
@@ -17,10 +18,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, OddsLeon> {
     private Converter<LeagueLeonDTO, LeagueLeon> leagueConverter = new LeagueLeonDTOToLeagueLeonConverter();
     private Converter<CompetitorLeonDTO, CompetitorLeon> competitorConverter = new CompetitorLeonDTOToCompetitorLeonConverter();
-    private Converter<RunnerLeonDTO, RunnerLeon> runnerConverter = new RunnerLeonDTOToRunnerLeonConverter();
 
     private final CompetitorLeonService competitorService;
     private final LeagueLeonService leagueService;
@@ -39,23 +40,24 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
         List<CompetitorLeonDTO> compDtos = source.getCompetitors();
         CompetitorLeon home = null;
         CompetitorLeon away = null;
-        for (CompetitorLeonDTO dto:compDtos) {
+        for (CompetitorLeonDTO dto : compDtos) {
             CompetitorLeon comp = competitorService.getByName(dto.getName());
-            if (comp==null){
+            if (comp == null) {
                 comp = competitorConverter.convert(dto);
                 competitorService.save(comp);
             }
-            if (dto.getHomeAway().equals("HOME")){
+            if (dto.getHomeAway().equals("HOME")) {
                 home = comp;
-            } else{
+            } else {
                 away = comp;
             }
         }
         LeagueLeon league = leagueService.getByName(source.getLeague().getName());
-        if (league==null){
+        if (league == null) {
             league = leagueConverter.convert(source.getLeague());
             leagueService.save(league);
         }
+
 
         return OddsLeon.builder()
                 .id(source.getId())
@@ -67,6 +69,7 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
                 .league(league)
                 .home(home)
                 .away(away)
+                .runners(null)
                 .build();
 
     }

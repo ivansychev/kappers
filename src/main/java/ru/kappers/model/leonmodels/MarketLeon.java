@@ -23,10 +23,6 @@ public class MarketLeon {
     @Size(max = 255)
     @NotBlank
     private String name;
-    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<RunnerLeon> runners;
     @Column(name = "open")
     private boolean open;
 

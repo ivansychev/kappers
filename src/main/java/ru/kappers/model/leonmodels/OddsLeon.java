@@ -42,7 +42,7 @@ public class OddsLeon {
     @Column(name = "url")
     @Size(max = 512)
     private String url;
-    @OneToMany(mappedBy = "odd")
+    @OneToMany(mappedBy = "odd", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<RunnerLeon> runners;

@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -16,15 +14,12 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ResourceUtils;
 import ru.kappers.KappersApplication;
-import ru.kappers.convert.FixtureRapidDTOToFixtureConverter;
-import ru.kappers.convert.OddsLeonDTOToOddsLeonConverter;
-import ru.kappers.model.Fixture;
+
 import ru.kappers.model.dto.leon.CompetitorLeonDTO;
 import ru.kappers.model.dto.leon.LeagueLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.dto.leon.SportLeonDTO;
-import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
-import ru.kappers.model.leonmodels.OddsLeon;
+
 import ru.kappers.service.OddsLeonService;
 
 import java.util.List;
@@ -125,13 +120,6 @@ public class LeonBetParserTest extends AbstractTransactionalJUnit4SpringContextT
         assertThat(oddsDTO.getMarketsCount(), is(0));
         assertThat(oddsDTO.getUrl(), is("/events/Soccer/1143492092890276-Spain-LaLiga/1143492107996767-Real-Valladolid-Valencia-CF"));
         assertThat(oddsDTO.getMarkets(), is(nullValue()));
-
-        //Для тестирования сохранения
-
-//        Converter<OddsLeonDTO, OddsLeon> converter = new OddsLeonDTOToOddsLeonConverter();
-//        OddsLeon entity = converter.convert(oddsDTO);
-//        oddsLeonService.save(entity);
-//        System.out.println();
     }
 
 

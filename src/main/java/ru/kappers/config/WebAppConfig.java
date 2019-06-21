@@ -31,9 +31,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     private Converter<TeamRapidDTO, Team> teamRapidDTOTeamConverter;
     private Converter<CompetitorLeonDTO, CompetitorLeon> competitorLeonDTOCompetitorLeonConverter;
     private Converter<LeagueLeonDTO, LeagueLeon> leagueLeonDTOLeagueLeonConverter;
-    private Converter<MarketLeonDTO, MarketLeon> marketLeonDTOMarketLeonConverter;
     private Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter;
-    private Converter<RunnerLeonDTO, RunnerLeon> runnerLeonDTORunnerLeonConverter;
 
     private KappersProperties kappersProperties;
 
@@ -72,33 +70,21 @@ public class WebAppConfig implements WebMvcConfigurer {
         this.leagueLeonDTOLeagueLeonConverter = leagueLeonDTOLeagueLeonConverter;
     }
 
-    @Autowired
-    public void setMarketLeonDTOMarketLeonConverter(Converter<MarketLeonDTO, MarketLeon> marketLeonDTOMarketLeonConverter) {
-        this.marketLeonDTOMarketLeonConverter = marketLeonDTOMarketLeonConverter;
-    }
 
     @Autowired
     public void setOddsLeonDTOOddsLeonConverter(Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter) {
         this.oddsLeonDTOOddsLeonConverter = oddsLeonDTOOddsLeonConverter;
     }
 
-    @Autowired
-    public void setRunnerLeonDTORunnerLeonConverter(Converter<RunnerLeonDTO, RunnerLeon> runnerLeonDTORunnerLeonConverter) {
-        this.runnerLeonDTORunnerLeonConverter = runnerLeonDTORunnerLeonConverter;
-    }
-
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        // регистрируем FixtureRapidDTOToFixtureConverter в системе конвертаций Spring
         registry.addConverter(fixtureRapidDTOFixtureConverter);
         registry.addConverter(eventDTOEventConverter);
         registry.addConverter(leagueDTOLeagueConverter);
         registry.addConverter(teamRapidDTOTeamConverter);
         registry.addConverter(competitorLeonDTOCompetitorLeonConverter);
         registry.addConverter(leagueLeonDTOLeagueLeonConverter);
-        registry.addConverter(marketLeonDTOMarketLeonConverter);
         registry.addConverter(oddsLeonDTOOddsLeonConverter);
-        registry.addConverter(runnerLeonDTORunnerLeonConverter);
     }
 
     @Override

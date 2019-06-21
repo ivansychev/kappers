@@ -4,9 +4,7 @@ create table market_leon
 		constraint market_leon_pkey
 			primary key,
 	name varchar(255) not null,
-	open boolean,
-	family varchar(255),
-	odd_id bigint
+	open boolean
 )
 ;
 
