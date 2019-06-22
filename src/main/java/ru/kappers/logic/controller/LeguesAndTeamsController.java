@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/rest/api/v1")
+@RequestMapping(value = "/rest/api/rapid")
 public class LeguesAndTeamsController {
     private final LeagueService leagueService;
     private final TeamService teamService;

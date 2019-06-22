@@ -16,9 +16,13 @@ import ru.kappers.model.Fixture;
 import ru.kappers.model.catalog.League;
 import ru.kappers.model.catalog.Team;
 import ru.kappers.model.dto.EventDTO;
+import ru.kappers.model.dto.leon.*;
 import ru.kappers.model.dto.rapidapi.FixtureRapidDTO;
 import ru.kappers.model.dto.rapidapi.LeagueRapidDTO;
 import ru.kappers.model.dto.rapidapi.TeamRapidDTO;
+import ru.kappers.model.leonmodels.*;
+
+import java.util.List;
 
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
@@ -27,6 +31,11 @@ public class WebAppConfig implements WebMvcConfigurer {
     private Converter<EventDTO, Event> eventDTOEventConverter;
     private Converter<LeagueRapidDTO, League> leagueDTOLeagueConverter;
     private Converter<TeamRapidDTO, Team> teamRapidDTOTeamConverter;
+    private Converter<CompetitorLeonDTO, CompetitorLeon> competitorLeonDTOCompetitorLeonConverter;
+    private Converter<LeagueLeonDTO, LeagueLeon> leagueLeonDTOLeagueLeonConverter;
+    private Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter;
+    private Converter<MarketLeonDTO, MarketLeon> marketLeonDTOToMarketLeonConverter;
+    private Converter<MarketLeonDTO, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter;
 
     private KappersProperties kappersProperties;
 
@@ -44,6 +53,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     public void setLeagueDTOLeagueConverter(Converter<LeagueRapidDTO, League> leagueDTOLeagueConverter) {
         this.leagueDTOLeagueConverter = leagueDTOLeagueConverter;
     }
+
     @Autowired
     public void setTeamRapidDTOTeamConverter(Converter<TeamRapidDTO, Team> teamRapidDTOTeamConverter) {
         this.teamRapidDTOTeamConverter = teamRapidDTOTeamConverter;
@@ -54,13 +64,43 @@ public class WebAppConfig implements WebMvcConfigurer {
         this.kappersProperties = kappersProperties;
     }
 
+    @Autowired
+    public void setCompetitorLeonDTOCompetitorLeonConverter(Converter<CompetitorLeonDTO, CompetitorLeon> competitorLeonDTOCompetitorLeonConverter) {
+        this.competitorLeonDTOCompetitorLeonConverter = competitorLeonDTOCompetitorLeonConverter;
+    }
+
+    @Autowired
+    public void setLeagueLeonDTOLeagueLeonConverter(Converter<LeagueLeonDTO, LeagueLeon> leagueLeonDTOLeagueLeonConverter) {
+        this.leagueLeonDTOLeagueLeonConverter = leagueLeonDTOLeagueLeonConverter;
+    }
+
+
+    @Autowired
+    public void setOddsLeonDTOOddsLeonConverter(Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter) {
+        this.oddsLeonDTOOddsLeonConverter = oddsLeonDTOOddsLeonConverter;
+    }
+
+    @Autowired
+    public void setMarketLeonDTOToMarketLeonConverter(Converter<MarketLeonDTO, MarketLeon> marketLeonDTOToMarketLeonConverter) {
+        this.marketLeonDTOToMarketLeonConverter = marketLeonDTOToMarketLeonConverter;
+    }
+
+    @Autowired
+    public void setMarketLeonDTOToRunnerLeonListConverter(Converter<MarketLeonDTO, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter) {
+        this.marketLeonDTOToRunnerLeonListConverter = marketLeonDTOToRunnerLeonListConverter;
+    }
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        // регистрируем FixtureRapidDTOToFixtureConverter в системе конвертаций Spring
         registry.addConverter(fixtureRapidDTOFixtureConverter);
         registry.addConverter(eventDTOEventConverter);
         registry.addConverter(leagueDTOLeagueConverter);
         registry.addConverter(teamRapidDTOTeamConverter);
+        registry.addConverter(competitorLeonDTOCompetitorLeonConverter);
+        registry.addConverter(leagueLeonDTOLeagueLeonConverter);
+        registry.addConverter(oddsLeonDTOOddsLeonConverter);
+        registry.addConverter(marketLeonDTOToMarketLeonConverter);
+        registry.addConverter(marketLeonDTOToRunnerLeonListConverter);
     }
 
     @Override
