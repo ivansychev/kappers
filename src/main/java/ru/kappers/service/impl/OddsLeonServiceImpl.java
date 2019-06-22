@@ -44,12 +44,12 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     @Override
     public OddsLeon update(OddsLeon odd) {
         try {
-            OddsLeon newOne = repository.getOne(odd.getId());
+            OddsLeon newOne = getByName(odd.getName());
             newOne.setRunners(odd.getRunners());
             newOne.setKickoff(odd.getKickoff());
             newOne.setOpen(odd.isOpen());
             newOne.setLastUpdated(odd.getLastUpdated());
-            return save(newOne);
+            return repository.save(newOne);
         } catch (Exception e) {
             throw new EntitySaveException("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
         }
@@ -59,7 +59,7 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     @Override
     @Transactional(readOnly = true)
     public OddsLeon getById(long oddId) {
-        return repository.getOne(oddId);
+        return repository.findById(oddId).orElse(null);
     }
 
     @Override
