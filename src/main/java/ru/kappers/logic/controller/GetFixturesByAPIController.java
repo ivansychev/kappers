@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import ru.kappers.model.Event;
 import ru.kappers.model.Fixture;
 import ru.kappers.service.*;
 
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/rest/api/fixtures")
@@ -23,29 +26,25 @@ public class GetFixturesByAPIController {
     //Этот контроллер доступен для вызова только пользователям с ролью ROLE_ADMIN
     private final FixtureService service;
     private final EventService eventService;
-    private final UserService userService;
-    private final KapperInfoService kapperService;
     private final JsonService jsonService;
 
     @Autowired
-    public GetFixturesByAPIController(FixtureService service, EventService eventService, UserService userService,
-                                      KapperInfoService kapperService, JsonService jsonService) {
+    public GetFixturesByAPIController(FixtureService service, EventService eventService, JsonService jsonService
+    ) {
         this.service = service;
         this.eventService = eventService;
-        this.userService = userService;
-        this.kapperService = kapperService;
         this.jsonService = jsonService;
     }
 
     /**
- * Метод предназначен для обновления списка спортивных событий
- * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
- * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
- * */
+     * Метод предназначен для обновления списка спортивных событий
+     * - две недели назад от сегодняшнего дня, и две недели вперед - предстоящие
+     * Внимание! На период разработки выставлено 5 дней до и 5 дней после. Можно менять в своих целях. Перед деплоем нужно выставить 7 в цикле
+     */
     @ResponseBody
     @RequestMapping(value = "/twoweeks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Fixture> getFixturesLastWeek() {
-       log.debug("getFixturesLastWeek()");
+        log.debug("getFixturesLastWeek()");
         for (long i = -5; i < 5; i++) {
             try {
                 JSONObject jsonObject = jsonService.loadFixturesByDate(LocalDate.now().plusDays(i));
@@ -63,25 +62,24 @@ public class GetFixturesByAPIController {
                 throw new RuntimeException(e);
             }
         }
+
         return null;
     }
 
     private void completeEventData(Event event, Fixture value) {
-       //TODO сравнить результат, закрыть евент
+        //TODO сравнить результат, закрыть евент
 
     }
 
     /**
      * Выгрузка всех событий без каких либо фильтров из БД
-     * */
+     */
 
     @ResponseBody
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
-    public List<Fixture> getAllFixtures()
-    {
+    public List<Fixture> getAllFixtures() {
         return service.getAll();
     }
-
 
 
 }

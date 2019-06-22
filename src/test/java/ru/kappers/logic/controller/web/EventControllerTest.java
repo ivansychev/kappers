@@ -43,10 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-//    @MockBean(FixtureService.class),
-//    @MockBean(EventService.class),
-//    @MockBean(UserService.class),
-//    @MockBean(ConversionService.class)
 @TestExecutionListeners({DbUnitTestExecutionListener.class})
 public class EventControllerTest extends AbstractTransactionalJUnit4SpringContextTests {
 

@@ -1,20 +1,41 @@
 package ru.kappers.logic.odds;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ResourceUtils;
+import ru.kappers.KappersApplication;
+
 import ru.kappers.model.dto.leon.CompetitorLeonDTO;
 import ru.kappers.model.dto.leon.LeagueLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.dto.leon.SportLeonDTO;
+
+import ru.kappers.service.OddsLeonService;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-public class LeonBetParserTest {
-
+@Slf4j
+@ActiveProfiles("test")
+@ContextConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {KappersApplication.class})
+@TestExecutionListeners({DbUnitTestExecutionListener.class})
+public class LeonBetParserTest extends AbstractTransactionalJUnit4SpringContextTests {
+    @Autowired
+    private OddsLeonService oddsLeonService;
     private BetParser<OddsLeonDTO> parser;
 
     @Before
@@ -100,4 +121,6 @@ public class LeonBetParserTest {
         assertThat(oddsDTO.getUrl(), is("/events/Soccer/1143492092890276-Spain-LaLiga/1143492107996767-Real-Valladolid-Valencia-CF"));
         assertThat(oddsDTO.getMarkets(), is(nullValue()));
     }
+
+
 }
