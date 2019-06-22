@@ -7,12 +7,16 @@ import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
+import ru.kappers.convert.*;
+import ru.kappers.exceptions.*;
+import ru.kappers.logic.contract.ContractTest;
 import ru.kappers.logic.controller.CurrencyControllerTest;
+import ru.kappers.logic.controller.LeguesAndTeamsControllerTest;
+import ru.kappers.logic.controller.UserControllerTest;
 import ru.kappers.logic.controller.web.EventControllerTest;
 import ru.kappers.logic.odds.LeonBetParserTest;
 import ru.kappers.service.*;
-import ru.kappers.service.impl.ApplicationStartListenerTest;
-import ru.kappers.service.impl.CurrencyServiceImplTest;
+import ru.kappers.service.impl.*;
 import ru.kappers.service.parser.CBRFDailyCurrencyRatesParserTest;
 import ru.kappers.util.DateTimeUtilTest;
 
@@ -33,7 +37,30 @@ import ru.kappers.util.DateTimeUtilTest;
 		ApplicationStartListenerTest.class,
 		CBRFDailyCurrencyRatesParserTest.class,
 		CurrencyServiceImplTest.class,
-		LeonBetParserTest.class
+		LeonBetParserTest.class,
+		CompetitorLeonServiceImplTest.class,
+		LeagueLeonServiceImplTest.class,
+		MarketLeonServiceImplTest.class,
+		OddsLeonServiceImplTest.class,
+		RunnerLeonServiceImplTest.class,
+		LeguesAndTeamsControllerTest.class,
+		UserControllerTest.class,
+		ContractTest.class,
+		BetParserExceptionTest.class,
+		CurrRateGettingExceptionTest.class,
+		MoneyTransferExceptionTest.class,
+		UnirestAPIExceptionTest.class,
+		UserNotHaveKapperRoleExceptionTest.class,
+		CompetitorLeonDTOToCompetitorLeonConverterTest.class,
+		EventDTOToEventConverterTest.class,
+		FixtureRapidDTOToFixtureConverterTest.class,
+		LeagueLeonDTOToLeagueLeonConverterTest.class,
+		LeagueRapidDTOLeagueConverterTest.class,
+		MarketLeonDTOToMarketLeonConverterTest.class,
+		MarketLeonDTOToRunnerLeonListConverterTest.class,
+		OddsLeonDTOToOddsLeonConverterTest.class,
+		TeamRapidDTOTeamConverterTest.class
+
 })
 public class KappersApplicationTests {
 
