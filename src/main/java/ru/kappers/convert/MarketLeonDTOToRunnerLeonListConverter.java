@@ -11,6 +11,7 @@ import ru.kappers.model.dto.leon.RunnerLeonDTO;
 import ru.kappers.model.leonmodels.MarketLeon;
 import ru.kappers.model.leonmodels.RunnerLeon;
 import ru.kappers.service.MarketLeonService;
+import ru.kappers.service.RunnerLeonService;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -20,11 +21,13 @@ import java.util.List;
 @Service
 public class MarketLeonDTOToRunnerLeonListConverter implements Converter<MarketLeonDTO, List<RunnerLeon>> {
     private final MarketLeonService marketService;
+    private final RunnerLeonService runnerService;
     private final ConversionService conversionService;
 
     @Autowired
-    public MarketLeonDTOToRunnerLeonListConverter(MarketLeonService marketService, @Lazy ConversionService conversionService) {
+    public MarketLeonDTOToRunnerLeonListConverter(MarketLeonService marketService, RunnerLeonService runnerService, @Lazy ConversionService conversionService) {
         this.marketService = marketService;
+        this.runnerService = runnerService;
         this.conversionService = conversionService;
     }
 
@@ -42,16 +45,27 @@ public class MarketLeonDTOToRunnerLeonListConverter implements Converter<MarketL
         }
 
         for (RunnerLeonDTO runnerDTO : marketDTO.getRunners()) {
-            runners.add(RunnerLeon.builder()
+            runners.add(getRunner(runnerDTO, market));
+        }
+        return runners;
+    }
+
+    private RunnerLeon getRunner(RunnerLeonDTO runnerDTO, MarketLeon market) {
+        RunnerLeon byId = runnerService.getById(runnerDTO.getId());
+        if (byId == null) {
+            return RunnerLeon.builder()
                     .id(runnerDTO.getId())
                     .name(runnerDTO.getName())
                     .price(runnerDTO.getPrice())
                     .open(runnerDTO.isOpen())
                     .market(market)
-                    .tags(runnerDTO.getTags().toString())
-                    .build()
-            );
+                    .tags(runnerDTO.getTags() != null ? runnerDTO.getTags().toString() : "")
+                    .build();
+        } else{
+            byId.setPrice(runnerDTO.getPrice());
+            byId.setOpen(runnerDTO.isOpen());
+            return byId;
         }
-        return runners;
+
     }
 }

@@ -17,7 +17,7 @@ import java.util.Collection;
 @Table(name = "league_leon")
 public class LeagueLeon {
     @Id
-    @Column(name = "league_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "league_id", nullable = false, insertable = true, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)

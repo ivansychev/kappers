@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.kappers.exceptions.EntitySaveException;
 import ru.kappers.model.dto.leon.MarketLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.leonmodels.OddsLeon;
@@ -25,19 +26,13 @@ import java.util.List;
 public class LeonParsingController {
     private static final Gson GSON = new Gson();
 
-    private final CompetitorLeonService competitorService;
-    private final LeagueLeonService leagueService;
     private final OddsLeonService oddsLeonService;
-    private final MarketLeonService marketService;
     private final ConversionService conversionService;
     private final BetParser<OddsLeonDTO> leonBetParser = new LeonBetParser();
 
     @Autowired
-    public LeonParsingController(CompetitorLeonService competitorService, LeagueLeonService leagueService, OddsLeonService oddsLeonService, MarketLeonService marketService, ConversionService conversionService) {
-        this.competitorService = competitorService;
-        this.leagueService = leagueService;
+    public LeonParsingController(OddsLeonService oddsLeonService, ConversionService conversionService) {
         this.oddsLeonService = oddsLeonService;
-        this.marketService = marketService;
         this.conversionService = conversionService;
     }
 
@@ -61,7 +56,12 @@ public class LeonParsingController {
             if (odd != null) {
                 runners.forEach(s -> s.setOdd(odd));
                 odd.setRunners(runners);
-                oddsLeonService.save(odd);
+                try {
+                    oddsLeonService.save(odd);
+                } catch (Exception e) {
+                    throw new EntitySaveException("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
+                }
+
             }
         }
         return new ResponseEntity<>(

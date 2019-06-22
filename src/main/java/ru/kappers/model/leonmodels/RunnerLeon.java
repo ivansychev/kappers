@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @Table(name = "runner_leon")
 public class RunnerLeon {
     @Id
-    @Column(name = "runner_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "runner_id", nullable = false, insertable = true, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
@@ -28,10 +28,14 @@ public class RunnerLeon {
     private String tags;
     @Column(name = "price")
     private double price;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "market_id", nullable = false)
     private MarketLeon market;
+    @ToString.Exclude
     @ManyToOne
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "odd_id", nullable = false)
     private OddsLeon odd;
 }

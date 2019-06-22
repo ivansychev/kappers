@@ -11,6 +11,7 @@ import ru.kappers.service.OddsLeonService;
 import ru.kappers.service.RunnerLeonService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,7 +60,7 @@ public class RunnerLeonServiceImpl implements RunnerLeonService {
     @Override
     @Transactional(readOnly = true)
     public RunnerLeon getById(long id) {
-        return repository.getOne(id);
+            return repository.findById(id).orElse(null);
     }
 
     @Override

@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kappers.exceptions.EntitySaveException;
 import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.repository.OddsLeonRepository;
 import ru.kappers.service.OddsLeonService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Slf4j
@@ -23,7 +25,15 @@ public class OddsLeonServiceImpl implements OddsLeonService {
 
     @Override
     public OddsLeon save(OddsLeon odd) {
-        return repository.save(odd);
+        OddsLeon newOne = null;
+        try {
+            newOne = getByName(odd.getName());
+            if (newOne == null) return repository.save(odd);
+            else return update(newOne);
+        } catch (Exception e) {
+            throw new EntitySaveException("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
+        }
+
     }
 
     @Override
@@ -33,7 +43,17 @@ public class OddsLeonServiceImpl implements OddsLeonService {
 
     @Override
     public OddsLeon update(OddsLeon odd) {
-        return save(odd);
+        try {
+            OddsLeon newOne = repository.getOne(odd.getId());
+            newOne.setRunners(odd.getRunners());
+            newOne.setKickoff(odd.getKickoff());
+            newOne.setOpen(odd.isOpen());
+            newOne.setLastUpdated(odd.getLastUpdated());
+            return save(newOne);
+        } catch (Exception e) {
+            throw new EntitySaveException("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
+        }
+
     }
 
     @Override
@@ -46,5 +66,10 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     @Transactional(readOnly = true)
     public List<OddsLeon> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public OddsLeon getByName(String name) {
+        return repository.getByName(name);
     }
 }

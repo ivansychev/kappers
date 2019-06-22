@@ -9,8 +9,10 @@ import ru.kappers.model.dto.leon.OddsLeonDTO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +83,11 @@ public class LeonBetParser implements BetParser<OddsLeonDTO> {
      * @param url - линк веб страницы, которую нужно распарсить
      */
     private JsonArray getArrayOfEventsByURL(String url) {
-
+        try {
+            url = URLEncoder.encode(url, StandardCharsets.UTF_8.toString()).replace("%2F", "/");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         URL address = null;
         try {
             address = new URL(leonAddress + url);
