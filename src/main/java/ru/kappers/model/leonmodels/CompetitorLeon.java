@@ -32,8 +32,12 @@ public class CompetitorLeon  {
     private String logo;
 
     @OneToMany (mappedBy = "home")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<OddsLeon> home_odds;
 
     @OneToMany (mappedBy = "away")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<OddsLeon> away_odds;
 }

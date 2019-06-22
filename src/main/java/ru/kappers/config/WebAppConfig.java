@@ -22,6 +22,8 @@ import ru.kappers.model.dto.rapidapi.LeagueRapidDTO;
 import ru.kappers.model.dto.rapidapi.TeamRapidDTO;
 import ru.kappers.model.leonmodels.*;
 
+import java.util.List;
+
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
 
@@ -32,6 +34,8 @@ public class WebAppConfig implements WebMvcConfigurer {
     private Converter<CompetitorLeonDTO, CompetitorLeon> competitorLeonDTOCompetitorLeonConverter;
     private Converter<LeagueLeonDTO, LeagueLeon> leagueLeonDTOLeagueLeonConverter;
     private Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter;
+    private Converter<MarketLeonDTO, MarketLeon> marketLeonDTOToMarketLeonConverter;
+    private Converter<MarketLeonDTO, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter;
 
     private KappersProperties kappersProperties;
 
@@ -76,6 +80,16 @@ public class WebAppConfig implements WebMvcConfigurer {
         this.oddsLeonDTOOddsLeonConverter = oddsLeonDTOOddsLeonConverter;
     }
 
+    @Autowired
+    public void setMarketLeonDTOToMarketLeonConverter(Converter<MarketLeonDTO, MarketLeon> marketLeonDTOToMarketLeonConverter) {
+        this.marketLeonDTOToMarketLeonConverter = marketLeonDTOToMarketLeonConverter;
+    }
+
+    @Autowired
+    public void setMarketLeonDTOToRunnerLeonListConverter(Converter<MarketLeonDTO, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter) {
+        this.marketLeonDTOToRunnerLeonListConverter = marketLeonDTOToRunnerLeonListConverter;
+    }
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(fixtureRapidDTOFixtureConverter);
@@ -85,6 +99,8 @@ public class WebAppConfig implements WebMvcConfigurer {
         registry.addConverter(competitorLeonDTOCompetitorLeonConverter);
         registry.addConverter(leagueLeonDTOLeagueLeonConverter);
         registry.addConverter(oddsLeonDTOOddsLeonConverter);
+        registry.addConverter(marketLeonDTOToMarketLeonConverter);
+        registry.addConverter(marketLeonDTOToRunnerLeonListConverter);
     }
 
     @Override

@@ -12,14 +12,13 @@ public class CompetitorLeonDTOToCompetitorLeonConverter implements Converter<Com
     @Nullable
     @Override
     public CompetitorLeon convert(@Nullable CompetitorLeonDTO source) {
-        if (source==null)
-        return null;
-        else{
-           return CompetitorLeon.builder()
-                   .id(source.getId())
-                   .logo(source.getLogo())
-                   .name(source.getName())
-                   .build();
+        if (source == null) {
+            return null;
         }
+        return CompetitorLeon.builder()
+                .id(source.getId())
+                .logo(source.getLogo())
+                .name(source.getName())
+                .build();
     }
 }
