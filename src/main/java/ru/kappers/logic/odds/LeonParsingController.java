@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kappers.model.dto.leon.MarketLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
-import ru.kappers.model.dto.leon.RunnerLeonDTO;
-import ru.kappers.model.leonmodels.MarketLeon;
 import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.model.leonmodels.RunnerLeon;
 import ru.kappers.service.*;
@@ -32,6 +30,7 @@ public class LeonParsingController {
     private final OddsLeonService oddsLeonService;
     private final MarketLeonService marketService;
     private final ConversionService conversionService;
+    private final BetParser<OddsLeonDTO> leonBetParser = new LeonBetParser();
 
     @Autowired
     public LeonParsingController(CompetitorLeonService competitorService, LeagueLeonService leagueService, OddsLeonService oddsLeonService, MarketLeonService marketService, ConversionService conversionService) {
@@ -54,9 +53,8 @@ public class LeonParsingController {
     public ResponseEntity<String> getOddLeons(@RequestBody String content) {
         JsonObject jObject = GSON.fromJson(content, JsonElement.class).getAsJsonObject();
         String url = jObject.get("url").getAsString();
-        BetParser<OddsLeonDTO> parser = new LeonBetParser();
-        List<String> list = parser.loadEventUrlsOfTournament(url);
-        List<OddsLeonDTO> eventsWithOdds = parser.getEventsWithOdds(list);
+        List<String> list = leonBetParser.loadEventUrlsOfTournament(url);
+        List<OddsLeonDTO> eventsWithOdds = leonBetParser.getEventsWithOdds(list);
         for (OddsLeonDTO dto : eventsWithOdds) {
             OddsLeon odd = conversionService.convert(dto, OddsLeon.class);
             List<RunnerLeon> runners = runnerLeonConverter(dto.getMarkets());
@@ -75,37 +73,9 @@ public class LeonParsingController {
      * Из MarketLeonDTO, который мы получили с сайта Леон, вытаскиваем всех раннеров. Сами маркеты сохраняем отдельной сущностью, они могут повторяться
      */
     private List<RunnerLeon> runnerLeonConverter(List<MarketLeonDTO> markets) {
-        List<RunnerLeon> runners = new ArrayList<>();
+        final List<RunnerLeon> runners = new ArrayList<>(markets.size());
         for (MarketLeonDTO market : markets) {
-            MarketLeon m = marketService.getByName(market.getName());
-            if (m == null) {
-                m = marketService.save(MarketLeon.builder()
-                        .id(market.getId())
-                        .name(market.getName())
-                        .open(market.isOpen())
-                        .build());
-            }
-            runners.addAll(getRunnersFromMarketDTO(market, m));
-        }
-        return runners;
-    }
-/**
- * Вытаскиваются из маркета все раннеры и конвертируются в нашу сущность RunnerLeon.
- * Внимание! В этом методе не происходит сохранение. Сохранение происходит вместе с сущзностью OddsLeon каскадом
- * */
-    private List<RunnerLeon> getRunnersFromMarketDTO(MarketLeonDTO market, MarketLeon m) {
-        List<RunnerLeon> runners = new ArrayList<>();
-        List<RunnerLeonDTO> dtos = market.getRunners();
-        for (RunnerLeonDTO dto : dtos) {
-            RunnerLeon runner = RunnerLeon.builder()
-                    .id(dto.getId())
-                    .name(dto.getName())
-                    .price(dto.getPrice())
-                    .open(dto.isOpen())
-                    .market(m)
-                    .tags(dto.getTags().toString())
-                    .build();
-            runners.add(runner);
+            runners.addAll(conversionService.convert(market, (Class<List<RunnerLeon>>) (Class<?>) List.class));
         }
         return runners;
     }
