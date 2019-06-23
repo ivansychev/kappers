@@ -74,4 +74,9 @@ public class RunnerLeonServiceImpl implements RunnerLeonService {
                .map(repository::save)
                .collect(Collectors.toList());
     }
+
+    @Override
+    public RunnerLeon getFirstByMarketAndOddAndName(long marketId, long oddId, String name) {
+        return repository.getFirstByMarketAndOddAndName(marketService.getById(marketId), oddService.getById(oddId), name);
+    }
 }

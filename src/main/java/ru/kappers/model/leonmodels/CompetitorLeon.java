@@ -21,7 +21,7 @@ import java.util.List;
 
 public class CompetitorLeon  {
     @Id
-    @Column(name = "competitor_id", nullable = false, insertable = true, updatable = false)
+    @Column(name = "competitor_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)

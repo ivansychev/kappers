@@ -24,12 +24,13 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     }
 
     @Override
+    @Transactional
     public OddsLeon save(OddsLeon odd) {
         OddsLeon newOne = null;
         try {
             newOne = getByName(odd.getName());
             if (newOne == null) return repository.save(odd);
-            else return update(newOne);
+            else return update(odd);
         } catch (Exception e) {
             throw new EntitySaveException("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
         }

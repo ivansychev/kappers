@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.util.Pair;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -35,7 +36,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     private Converter<LeagueLeonDTO, LeagueLeon> leagueLeonDTOLeagueLeonConverter;
     private Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter;
     private Converter<MarketLeonDTO, MarketLeon> marketLeonDTOToMarketLeonConverter;
-    private Converter<MarketLeonDTO, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter;
+    private Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter;
 
     private KappersProperties kappersProperties;
 
@@ -86,7 +87,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     }
 
     @Autowired
-    public void setMarketLeonDTOToRunnerLeonListConverter(Converter<MarketLeonDTO, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter) {
+    public void setMarketLeonDTOToRunnerLeonListConverter(Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter) {
         this.marketLeonDTOToRunnerLeonListConverter = marketLeonDTOToRunnerLeonListConverter;
     }
 

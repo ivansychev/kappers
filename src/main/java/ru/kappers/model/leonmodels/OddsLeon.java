@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "odds_leon")
 public class OddsLeon {
     @Id
-    @Column(name = "odd_id", nullable = false, insertable = true, updatable = false)
+    @Column(name = "odd_id", nullable = false, insertable = false, updatable = false)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
@@ -48,7 +48,7 @@ public class OddsLeon {
     @Column(name = "url")
     @Size(max = 512)
     private String url;
-    @OneToMany(mappedBy = "odd", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "odd", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<RunnerLeon> runners;
