@@ -1,7 +1,9 @@
 package ru.kappers.model.leonmodels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import ru.kappers.model.mapping.TeamBridge;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,10 +36,18 @@ public class CompetitorLeon  {
     @OneToMany (mappedBy = "home")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
     private List<OddsLeon> home_odds;
 
     @OneToMany (mappedBy = "away")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
     private List<OddsLeon> away_odds;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @OneToOne(mappedBy = "leonCompetitor")
+    private TeamBridge teamBridge;
 }

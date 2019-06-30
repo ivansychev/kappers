@@ -39,7 +39,7 @@ public class CompetitorLeonServiceImpl implements CompetitorLeonService {
     @Override
     @Transactional(readOnly = true)
     public CompetitorLeon getById(long compId) {
-        return repository.getOne(compId);
+        return repository.findById(compId).orElse(null);
     }
 
     @Override
