@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import ru.kappers.model.catalog.League;
 import ru.kappers.model.leonmodels.MarketLeon;
 import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.model.leonmodels.RunnerLeon;
@@ -14,6 +15,7 @@ import ru.kappers.service.OddsLeonService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -99,12 +101,14 @@ public class RunnerLeonServiceImplTest {
     public void getById() {
         final long id = 1L;
         final RunnerLeon runner = mock(RunnerLeon.class);
-        when(repository.getOne(id)).thenReturn(runner);
+        final Optional<RunnerLeon> opRunner = Optional.of(runner);
+
+        when(repository.findById(id)).thenReturn(opRunner);
 
         final RunnerLeon result = runnerLeonService.getById(id);
 
         assertThat(result, is(runner));
-        verify(repository).getOne(id);
+        verify(repository).findById(id);
     }
 
     @Test

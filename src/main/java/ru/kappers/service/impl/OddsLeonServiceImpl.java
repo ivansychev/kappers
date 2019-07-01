@@ -26,6 +26,7 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     @Override
     @Transactional
     public OddsLeon save(OddsLeon odd) {
+        log.debug("save(odd: {})...", odd);
         OddsLeon newOne = null;
         try {
             newOne = getByName(odd.getName());
@@ -39,18 +40,31 @@ public class OddsLeonServiceImpl implements OddsLeonService {
 
     @Override
     public void delete(OddsLeon odd) {
+        log.debug("delete(odd: {})...", odd);
         repository.delete(odd);
     }
 
     @Override
     public OddsLeon update(OddsLeon odd) {
+        log.debug("update(odd: {})...", odd);
+        if (odd == null || odd.getName() == null) {
+            log.error("OddsLeon update: Не удалось сохранить сущность. Ключевое значение = null");
+            return odd;
+        }
         try {
             OddsLeon newOne = getByName(odd.getName());
-            newOne.setRunners(odd.getRunners());
-            newOne.setKickoff(odd.getKickoff());
-            newOne.setOpen(odd.isOpen());
-            newOne.setLastUpdated(odd.getLastUpdated());
-            return repository.save(newOne);
+            if (newOne == null) {
+                log.debug("update: сохранение новой сущности");
+                return repository.save(odd);
+            } else {
+                newOne.setRunners(odd.getRunners());
+                newOne.setKickoff(odd.getKickoff());
+                newOne.setOpen(odd.isOpen());
+                newOne.setLastUpdated(odd.getLastUpdated());
+                log.debug("update: обновление сущности " + newOne.getName());
+                return repository.save(newOne);
+            }
+
         } catch (Exception e) {
             throw new EntitySaveException("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
         }
@@ -60,17 +74,20 @@ public class OddsLeonServiceImpl implements OddsLeonService {
     @Override
     @Transactional(readOnly = true)
     public OddsLeon getById(long oddId) {
+        log.debug("getById(oddId: {})...", oddId);
         return repository.findById(oddId).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<OddsLeon> getAll() {
+        log.debug("OddsLeon getAll()...");
         return repository.findAll();
     }
 
     @Override
     public OddsLeon getByName(String name) {
+        log.debug("getByName(name: {})...", name);
         return repository.getByName(name);
     }
 }
