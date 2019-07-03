@@ -70,4 +70,18 @@ public class TeamServiceImpl implements TeamService {
         log.debug("getAll()...");
         return teamRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Team> getAllById(Iterable<Integer> ids) {
+        log.debug("getAllById(ids: {})...", ids);
+        return teamRepository.findAllById(ids);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Team> getAllByIdIsNotIn(Iterable<Integer> ids) {
+        log.debug("getAllByIdIsNotIn(ids: {})...", ids);
+        return teamRepository.findAllByIdIsNotIn(ids);
+    }
 }
