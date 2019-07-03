@@ -16,9 +16,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MarketLeonDTOToRunnerLeonListConverterTest {
+public class PairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverterTest {
     @InjectMocks
-    private MarketLeonDTOToRunnerLeonListConverter converter;
+    private PairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter converter;
     @Mock
     private MarketLeonService marketService;
     @Mock

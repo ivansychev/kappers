@@ -21,13 +21,13 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class MarketLeonDTOToRunnerLeonListConverter implements Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> {
+public class PairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter implements Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> {
     private final MarketLeonService marketService;
     private final RunnerLeonService runnerService;
     private final ConversionService conversionService;
 
     @Autowired
-    public MarketLeonDTOToRunnerLeonListConverter(MarketLeonService marketService, RunnerLeonService runnerService, @Lazy ConversionService conversionService) {
+    public PairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter(MarketLeonService marketService, RunnerLeonService runnerService, @Lazy ConversionService conversionService) {
         this.marketService = marketService;
         this.runnerService = runnerService;
         this.conversionService = conversionService;
