@@ -79,6 +79,28 @@ public class CompetitorLeonServiceImplTest {
     }
 
     @Test
+    public void getAllById() {
+        final List<CompetitorLeon> competitorLeonList = Arrays.asList(mock(CompetitorLeon.class), mock(CompetitorLeon.class));
+        when(repository.findAllById(anyIterable())).thenReturn(competitorLeonList);
+
+        final List<CompetitorLeon> result = competitorLeonService.getAllById(Arrays.asList(1L, 2L));
+
+        assertThat(result, is(competitorLeonList));
+        verify(repository).findAllById(anyIterable());
+    }
+
+    @Test
+    public void getAllByIdIsNotIn() {
+        final List<CompetitorLeon> competitorLeonList = Arrays.asList(mock(CompetitorLeon.class), mock(CompetitorLeon.class));
+        when(repository.findAllByIdIsNotIn(anyIterable())).thenReturn(competitorLeonList);
+
+        final List<CompetitorLeon> result = competitorLeonService.getAllByIdIsNotIn(Arrays.asList(1L, 2L));
+
+        assertThat(result, is(competitorLeonList));
+        verify(repository).findAllByIdIsNotIn(anyIterable());
+    }
+
+    @Test
     public void getByName() {
         final String name = "test name";
         final CompetitorLeon competitor = mock(CompetitorLeon.class);
