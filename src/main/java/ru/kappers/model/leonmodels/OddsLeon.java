@@ -26,13 +26,9 @@ public class OddsLeon {
     private String name;
     @ManyToOne
     @JoinColumn(name = "home_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private CompetitorLeon home;
     @ManyToOne
     @JoinColumn(name = "away_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private CompetitorLeon away;
     @Column(name = "kickoff")
     private Timestamp kickoff;
@@ -40,8 +36,6 @@ public class OddsLeon {
     private Timestamp lastUpdated;
     @ManyToOne
     @JoinColumn(name = "league_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private LeagueLeon league;
     @Column(name = "open")
     private boolean open;
