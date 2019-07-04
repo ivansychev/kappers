@@ -6,12 +6,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.scheduling.SchedulingTaskExecutor;
 import ru.kappers.config.KappersProperties;
 import ru.kappers.service.CurrencyService;
 import ru.kappers.service.MessageTranslator;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationStartListenerTest {
@@ -23,11 +23,20 @@ public class ApplicationStartListenerTest {
     private KappersProperties kappersProperties;
     @Mock
     private MessageTranslator translator;
+    @Mock
+    private SchedulingTaskExecutor taskExecutor;
 
     @Test
     public void onApplicationEvent() {
+        doAnswer(it -> {
+            Runnable task = it.getArgument(0);
+            task.run();
+            return null;
+        }).when(taskExecutor).execute(any(Runnable.class));
+
         applicationStartListener.onApplicationEvent(mock(ContextRefreshedEvent.class));
 
+        verify(taskExecutor).execute(any(Runnable.class));
         verify(currencyService).refreshCurrencyRatesForToday();
     }
 }
