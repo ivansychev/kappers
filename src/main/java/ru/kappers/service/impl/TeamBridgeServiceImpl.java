@@ -3,6 +3,7 @@ package ru.kappers.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kappers.model.catalog.Team;
 import ru.kappers.model.leonmodels.CompetitorLeon;
 import ru.kappers.model.mapping.TeamBridge;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@Transactional
 public class TeamBridgeServiceImpl implements TeamBridgeService {
 
     private final TeamBridgeRepository repository;
@@ -54,6 +56,7 @@ public class TeamBridgeServiceImpl implements TeamBridgeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TeamBridge getById(Integer bridgeId) {
         log.debug("getById(bridgeId: {})...", bridgeId);
         return repository.findById(bridgeId).orElse(null);
@@ -82,24 +85,28 @@ public class TeamBridgeServiceImpl implements TeamBridgeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeamBridge> getAll() {
         log.debug("getAll(TeamBridge)");
         return repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TeamBridge getByRapidTeam(Team team) {
         log.debug("getByRapidTeam(team: {})...", team);
         return repository.getByRapidTeam(team);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TeamBridge getByCompetitorLeon(CompetitorLeon competitor) {
         log.debug("getByCompetitorLeon(competitor: {})...", competitor);
         return repository.getByLeonCompetitor(competitor);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CompetitorLeon getCompetitorByTeam(Team team) {
         log.debug("getCompetitorByTeam(team: {})...", team);
         TeamBridge byRapidTeam = getByRapidTeam(team);
@@ -109,6 +116,7 @@ public class TeamBridgeServiceImpl implements TeamBridgeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Team getTeamByCompetitorLeon(CompetitorLeon competitor) {
         log.debug("getTeamByCompetitorLeon(competitor: {})...", competitor);
         TeamBridge byCompetitor = getByCompetitorLeon(competitor);

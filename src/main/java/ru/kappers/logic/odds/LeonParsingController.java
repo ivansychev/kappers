@@ -7,11 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kappers.exceptions.EntitySaveException;
 import ru.kappers.model.dto.leon.MarketLeonDTO;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 import ru.kappers.model.leonmodels.OddsLeon;
@@ -29,12 +27,15 @@ public class LeonParsingController {
 
     private final OddsLeonService oddsLeonService;
     private final ConversionService conversionService;
-    private final BetParser<OddsLeonDTO> leonBetParser = new LeonBetParser();
+    private final MessageTranslator messageTranslator;
+    private final BetParser<OddsLeonDTO> leonBetParser;
 
     @Autowired
-    public LeonParsingController(OddsLeonService oddsLeonService, ConversionService conversionService) {
+    public LeonParsingController(OddsLeonService oddsLeonService, ConversionService conversionService, MessageTranslator messageTranslator, BetParser<OddsLeonDTO> leonBetParser) {
         this.oddsLeonService = oddsLeonService;
         this.conversionService = conversionService;
+        this.messageTranslator = messageTranslator;
+        this.leonBetParser = leonBetParser;
     }
 
     /**
@@ -52,22 +53,25 @@ public class LeonParsingController {
         List<String> list = leonBetParser.loadEventUrlsOfTournament(url);
         List<OddsLeonDTO> eventsWithOdds = leonBetParser.getEventsWithOdds(list);
         for (OddsLeonDTO dto : eventsWithOdds) {
-            OddsLeon odd = conversionService.convert(dto, OddsLeon.class);
-            List<RunnerLeon> runners = runnerLeonConverter(dto.getMarkets(), odd);
-            if (odd != null) {
-                runners.forEach(s -> s.setOdd(odd));
-                odd.setRunners(runners);
-                try {
-                    oddsLeonService.save(odd);
-                } catch (Exception e) {
-                    log.error("Не удалось сохранить сущность " + odd.getId() + " - " + odd.getName(), e);
+            try {
+                OddsLeon odd = oddsLeonService.getById(dto.getId());
+                if (odd == null) {
+                    odd = conversionService.convert(dto, OddsLeon.class);
                 }
-
+                List<RunnerLeon> runners = runnerLeonConverter(dto.getMarkets(), odd);
+                if (odd != null) {
+                    final OddsLeon o = odd;
+                    runners.forEach(s -> s.setOdd(o));
+                    odd.setRunners(runners);
+                    oddsLeonService.save(odd);
+                }
+            } catch (Exception e) {
+                String msg = messageTranslator.byCode("oddsLeon.withIdAndNameAreNotSaved", dto.getId(), dto.getName());
+                log.error(msg, e);
+                return ResponseEntity.unprocessableEntity().body(msg);
             }
         }
-        return new ResponseEntity<>(
-                "Odds from Leon are saved ",
-                HttpStatus.OK);
+        return ResponseEntity.ok(messageTranslator.byCode("oddsLeon.areSaved"));
     }
 
     /**
@@ -77,7 +81,6 @@ public class LeonParsingController {
         final List<RunnerLeon> runners = new ArrayList<>(markets.size());
         for (MarketLeonDTO market : markets) {
             Pair<MarketLeonDTO, OddsLeon> pair = Pair.of(market, odd);
-
             runners.addAll(conversionService.convert(pair, (Class<List<RunnerLeon>>) (Class<?>) List.class));
         }
         return runners;

@@ -47,12 +47,14 @@ public class OddsLeonServiceImplTest {
     @Test
     public void update() {
         final OddsLeon odd = mock(OddsLeon.class);
-       // when(repository.save(odd)).thenReturn(odd);
+        when(repository.save(odd)).thenReturn(odd);
         oddsLeonService = spy(oddsLeonService);
 
         final OddsLeon result = oddsLeonService.update(odd);
 
         assertThat(result, is(odd));
+        verify(oddsLeonService).save(odd);
+        verify(repository).save(odd);
         verify(oddsLeonService).update(odd);
     }
 

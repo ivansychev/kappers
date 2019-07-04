@@ -23,16 +23,13 @@ public class TeamBridge {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", insertable = false, updatable = false)
-    @EqualsAndHashCode.Exclude
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "team_id", nullable = false)
-    @ToString.Exclude
     private Team rapidTeam;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "competitor_id", nullable = false)
-    @ToString.Exclude
     private CompetitorLeon leonCompetitor;
 }

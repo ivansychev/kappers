@@ -3,6 +3,9 @@ package ru.kappers.logic.odds;
 import com.google.gson.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.kappers.exceptions.BetParserException;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
  * Парсер сайта ООО "Леон"
  */
 @Slf4j
+@Service
 public class LeonBetParser implements BetParser<OddsLeonDTO> {
 
     @Getter
@@ -40,7 +44,8 @@ public class LeonBetParser implements BetParser<OddsLeonDTO> {
      *
      * @param leonAddress ссылка на сайт ООО "Леон"
      */
-    public LeonBetParser(String leonAddress) {
+    @Autowired
+    public LeonBetParser(@Value("${kappers.leon-bet-url}") String leonAddress) {
         this.leonAddress = leonAddress;
     }
 

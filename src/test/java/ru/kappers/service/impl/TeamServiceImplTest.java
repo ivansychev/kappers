@@ -125,4 +125,26 @@ public class TeamServiceImplTest {
         assertThat(resultList, is(teamList));
         verify(teamRepository).findAll();
     }
+
+    @Test
+    public void getAllById() {
+        final List<Team> teamList = Arrays.asList(mock(Team.class), mock(Team.class));
+        when(teamRepository.findAllById(anyIterable())).thenReturn(teamList);
+
+        final List<Team> resultList = teamService.getAllById(Arrays.asList(1, 2));
+
+        assertThat(resultList, is(teamList));
+        verify(teamRepository).findAllById(anyIterable());
+    }
+
+    @Test
+    public void getAllByIdIsNotIn() {
+        final List<Team> teamList = Arrays.asList(mock(Team.class), mock(Team.class));
+        when(teamRepository.findAllByIdIsNotIn(anyIterable())).thenReturn(teamList);
+
+        final List<Team> resultList = teamService.getAllByIdIsNotIn(Arrays.asList(1, 2));
+
+        assertThat(resultList, is(teamList));
+        verify(teamRepository).findAllByIdIsNotIn(anyIterable());
+    }
 }

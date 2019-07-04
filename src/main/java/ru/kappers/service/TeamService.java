@@ -47,4 +47,18 @@ public interface TeamService {
      * @return список команд
      */
     List<Team> getAll();
+
+    /**
+     * Получить список команд по их id
+     * @param ids идентификаторы команд
+     * @return список команд
+     */
+    List<Team> getAllById(Iterable<Integer> ids);
+
+    /**
+     * Получить список команд с id, не входящие в список указанных id
+     * @param ids исключаемые id
+     * @return список команд
+     */
+    List<Team> getAllByIdIsNotIn(Iterable<Integer> ids);
 }

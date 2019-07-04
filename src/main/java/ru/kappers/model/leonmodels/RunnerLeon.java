@@ -29,14 +29,10 @@ public class RunnerLeon {
     private String tags;
     @Column(name = "price")
     private double price;
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "market_id", nullable = false)
     private MarketLeon market;
     @ManyToOne
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @JoinColumn(name = "odd_id", nullable = false)
     private OddsLeon odd;
 }

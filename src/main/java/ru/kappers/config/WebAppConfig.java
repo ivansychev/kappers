@@ -36,7 +36,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     private Converter<LeagueLeonDTO, LeagueLeon> leagueLeonDTOLeagueLeonConverter;
     private Converter<OddsLeonDTO, OddsLeon> oddsLeonDTOOddsLeonConverter;
     private Converter<MarketLeonDTO, MarketLeon> marketLeonDTOToMarketLeonConverter;
-    private Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter;
+    private Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> pairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter;
 
     private KappersProperties kappersProperties;
 
@@ -87,8 +87,8 @@ public class WebAppConfig implements WebMvcConfigurer {
     }
 
     @Autowired
-    public void setMarketLeonDTOToRunnerLeonListConverter(Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> marketLeonDTOToRunnerLeonListConverter) {
-        this.marketLeonDTOToRunnerLeonListConverter = marketLeonDTOToRunnerLeonListConverter;
+    public void setPairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter(Converter<Pair<MarketLeonDTO, OddsLeon>, List<RunnerLeon>> pairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter) {
+        this.pairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter = pairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class WebAppConfig implements WebMvcConfigurer {
         registry.addConverter(leagueLeonDTOLeagueLeonConverter);
         registry.addConverter(oddsLeonDTOOddsLeonConverter);
         registry.addConverter(marketLeonDTOToMarketLeonConverter);
-        registry.addConverter(marketLeonDTOToRunnerLeonListConverter);
+        registry.addConverter(pairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverter);
     }
 
     @Override

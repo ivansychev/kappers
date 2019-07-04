@@ -12,6 +12,13 @@ import java.util.Optional;
  */
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Integer> {
+    /**
+     * Найти команды с id, не входящие в список указанных id
+     * @param ids исключаемые id
+     * @return список команд
+     */
+    List<Team> findAllByIdIsNotIn(Iterable<Integer> ids);
+
     /** Найти команду с именем, содержащим указанную строку
      * @param name строка в имени команды
      * @return список команд
