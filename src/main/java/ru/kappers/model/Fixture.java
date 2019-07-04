@@ -36,25 +36,25 @@ public class Fixture implements Serializable, Comparable {
     private Integer leagueId;
     @Column(name="round")
     private String round;
-    @Column(name="homeTeam_id")
+    @Column(name="home_team_id")
     private Integer homeTeamId;
-    @Column(name="awayTeam_id")
+    @Column(name="away_team_id")
     private Integer awayTeamId;
-    @Column(name="homeTeam")
+    @Column(name="home_team")
     private String homeTeam;
-    @Column(name="awayTeam")
+    @Column(name="away_team")
     private String awayTeam;
     /** Статус */
     @Column(name="status")
     @Convert(converter = StatusConverter.class)
     private Status status;
     /** Сокращенный статус */
-    @Column(name="statusShort")
+    @Column(name="status_short")
     @Convert(converter = ShortStatusConverter.class)
     private ShortStatus statusShort;
-    @Column(name="goalsHomeTeam")
+    @Column(name="goals_home_team")
     private Integer goalsHomeTeam;
-    @Column(name="goalsAwayTeam")
+    @Column(name="goals_away_team")
     private Integer goalsAwayTeam;
     @Column(name="halftime_score")
     private String halftimeScore;
@@ -64,9 +64,9 @@ public class Fixture implements Serializable, Comparable {
     private String penalty;
     @Column(name="elapsed")
     private Integer elapsed;
-    @Column(name="firstHalfStart")
+    @Column(name="first_half_start")
     private Long firstHalfStart;
-    @Column(name="secondHalfStart")
+    @Column(name="second_half_start")
     private Long secondHalfStart;
     @OneToMany(mappedBy = "fixture")
     @EqualsAndHashCode.Exclude

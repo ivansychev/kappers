@@ -12,5 +12,8 @@ public interface OddsLeonService {
     OddsLeon update(OddsLeon odd);
 
     OddsLeon getById(long oddId);
+
     List<OddsLeon> getAll();
+
+    OddsLeon getByName(String name);
 }

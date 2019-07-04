@@ -57,7 +57,7 @@ import ru.kappers.util.DateTimeUtilTest;
 		LeagueLeonDTOToLeagueLeonConverterTest.class,
 		LeagueRapidDTOLeagueConverterTest.class,
 		MarketLeonDTOToMarketLeonConverterTest.class,
-		MarketLeonDTOToRunnerLeonListConverterTest.class,
+		PairOfMarketLeonDTOAndOddsLeonToRunnerLeonListConverterTest.class,
 		OddsLeonDTOToOddsLeonConverterTest.class,
 		TeamRapidDTOTeamConverterTest.class
 

@@ -8,12 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.kappers.exceptions.UnirestAPIException;
 import ru.kappers.model.catalog.League;
 import ru.kappers.model.catalog.Team;
-import ru.kappers.service.JsonService;
-import ru.kappers.service.LeagueService;
-import ru.kappers.service.MessageTranslator;
-import ru.kappers.service.TeamService;
+import ru.kappers.service.*;
 import ru.kappers.service.parser.RapidAPIParser;
-
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -40,7 +36,8 @@ public class LeguesAndTeamsController {
         this.messageTranslator = messageTranslator;
     }
 
-    @ResponseBody
+
+        @ResponseBody
     @RequestMapping(value = "/league", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<League> getLeaguesList() {
         log.debug("getLeaguesList()...");

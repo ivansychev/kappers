@@ -34,6 +34,9 @@ public class KappersProperties {
     /** Код валюты рубля (вообще то их 2: RUB и RUR, RUB появился в 1998 году) */
     private String rubCurrencyCode = "RUB";
 
+    /** Адрес сайта букмекера ООО "Леон" */
+    private String leonBetURL = "https://www.leon.ru";
+
     @Data
     public static class CurrencyRates {
         /** cron-выражение для планирования обновления курсов валют, по умолчанию "0 0 0 * * ?" (каждый день в 00:00) */

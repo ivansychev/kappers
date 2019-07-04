@@ -5,11 +5,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import ru.kappers.model.catalog.League;
 import ru.kappers.model.leonmodels.CompetitorLeon;
 import ru.kappers.repository.CompetitorRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -57,12 +60,11 @@ public class CompetitorLeonServiceImplTest {
     public void getById() {
         final long id = 1L;
         final CompetitorLeon competitor = mock(CompetitorLeon.class);
-        when(repository.getOne(id)).thenReturn(competitor);
-
+        final Optional<CompetitorLeon> opCompetitor = Optional.of(competitor);
+        when(repository.findById(id)).thenReturn(opCompetitor);
         final CompetitorLeon result = competitorLeonService.getById(id);
-
         assertThat(result, is(competitor));
-        verify(repository).getOne(id);
+        verify(repository).findById(id);
     }
 
     @Test
@@ -74,6 +76,28 @@ public class CompetitorLeonServiceImplTest {
 
         assertThat(result, is(competitorLeonList));
         verify(repository).findAll();
+    }
+
+    @Test
+    public void getAllById() {
+        final List<CompetitorLeon> competitorLeonList = Arrays.asList(mock(CompetitorLeon.class), mock(CompetitorLeon.class));
+        when(repository.findAllById(anyIterable())).thenReturn(competitorLeonList);
+
+        final List<CompetitorLeon> result = competitorLeonService.getAllById(Arrays.asList(1L, 2L));
+
+        assertThat(result, is(competitorLeonList));
+        verify(repository).findAllById(anyIterable());
+    }
+
+    @Test
+    public void getAllByIdIsNotIn() {
+        final List<CompetitorLeon> competitorLeonList = Arrays.asList(mock(CompetitorLeon.class), mock(CompetitorLeon.class));
+        when(repository.findAllByIdIsNotIn(anyIterable())).thenReturn(competitorLeonList);
+
+        final List<CompetitorLeon> result = competitorLeonService.getAllByIdIsNotIn(Arrays.asList(1L, 2L));
+
+        assertThat(result, is(competitorLeonList));
+        verify(repository).findAllByIdIsNotIn(anyIterable());
     }
 
     @Test

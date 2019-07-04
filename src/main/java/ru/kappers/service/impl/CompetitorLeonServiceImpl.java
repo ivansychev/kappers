@@ -39,13 +39,25 @@ public class CompetitorLeonServiceImpl implements CompetitorLeonService {
     @Override
     @Transactional(readOnly = true)
     public CompetitorLeon getById(long compId) {
-        return repository.getOne(compId);
+        return repository.findById(compId).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompetitorLeon> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompetitorLeon> getAllById(Iterable<Long> ids) {
+        return repository.findAllById(ids);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompetitorLeon> getAllByIdIsNotIn(Iterable<Long> ids) {
+        return repository.findAllByIdIsNotIn(ids);
     }
 
     @Override

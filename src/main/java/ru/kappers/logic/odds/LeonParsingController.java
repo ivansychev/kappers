@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,20 +25,17 @@ import java.util.List;
 public class LeonParsingController {
     private static final Gson GSON = new Gson();
 
-    private final CompetitorLeonService competitorService;
-    private final LeagueLeonService leagueService;
     private final OddsLeonService oddsLeonService;
-    private final MarketLeonService marketService;
     private final ConversionService conversionService;
-    private final BetParser<OddsLeonDTO> leonBetParser = new LeonBetParser();
+    private final MessageTranslator messageTranslator;
+    private final BetParser<OddsLeonDTO> leonBetParser;
 
     @Autowired
-    public LeonParsingController(CompetitorLeonService competitorService, LeagueLeonService leagueService, OddsLeonService oddsLeonService, MarketLeonService marketService, ConversionService conversionService) {
-        this.competitorService = competitorService;
-        this.leagueService = leagueService;
+    public LeonParsingController(OddsLeonService oddsLeonService, ConversionService conversionService, MessageTranslator messageTranslator, BetParser<OddsLeonDTO> leonBetParser) {
         this.oddsLeonService = oddsLeonService;
-        this.marketService = marketService;
         this.conversionService = conversionService;
+        this.messageTranslator = messageTranslator;
+        this.leonBetParser = leonBetParser;
     }
 
     /**
@@ -56,26 +53,35 @@ public class LeonParsingController {
         List<String> list = leonBetParser.loadEventUrlsOfTournament(url);
         List<OddsLeonDTO> eventsWithOdds = leonBetParser.getEventsWithOdds(list);
         for (OddsLeonDTO dto : eventsWithOdds) {
-            OddsLeon odd = conversionService.convert(dto, OddsLeon.class);
-            List<RunnerLeon> runners = runnerLeonConverter(dto.getMarkets());
-            if (odd != null) {
-                runners.forEach(s -> s.setOdd(odd));
-                odd.setRunners(runners);
-                oddsLeonService.save(odd);
+            try {
+                OddsLeon odd = oddsLeonService.getById(dto.getId());
+                if (odd == null) {
+                    odd = conversionService.convert(dto, OddsLeon.class);
+                }
+                List<RunnerLeon> runners = runnerLeonConverter(dto.getMarkets(), odd);
+                if (odd != null) {
+                    final OddsLeon o = odd;
+                    runners.forEach(s -> s.setOdd(o));
+                    odd.setRunners(runners);
+                    oddsLeonService.save(odd);
+                }
+            } catch (Exception e) {
+                String msg = messageTranslator.byCode("oddsLeon.withIdAndNameAreNotSaved", dto.getId(), dto.getName());
+                log.error(msg, e);
+                return ResponseEntity.unprocessableEntity().body(msg);
             }
         }
-        return new ResponseEntity<>(
-                "Odds from Leon are saved ",
-                HttpStatus.OK);
+        return ResponseEntity.ok(messageTranslator.byCode("oddsLeon.areSaved"));
     }
 
     /**
      * Из MarketLeonDTO, который мы получили с сайта Леон, вытаскиваем всех раннеров. Сами маркеты сохраняем отдельной сущностью, они могут повторяться
      */
-    private List<RunnerLeon> runnerLeonConverter(List<MarketLeonDTO> markets) {
+    private List<RunnerLeon> runnerLeonConverter(List<MarketLeonDTO> markets, OddsLeon odd) {
         final List<RunnerLeon> runners = new ArrayList<>(markets.size());
         for (MarketLeonDTO market : markets) {
-            runners.addAll(conversionService.convert(market, (Class<List<RunnerLeon>>) (Class<?>) List.class));
+            Pair<MarketLeonDTO, OddsLeon> pair = Pair.of(market, odd);
+            runners.addAll(conversionService.convert(pair, (Class<List<RunnerLeon>>) (Class<?>) List.class));
         }
         return runners;
     }

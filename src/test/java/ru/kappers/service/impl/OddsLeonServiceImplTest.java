@@ -5,11 +5,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import ru.kappers.model.catalog.League;
 import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.repository.OddsLeonRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -53,18 +55,21 @@ public class OddsLeonServiceImplTest {
         assertThat(result, is(odd));
         verify(oddsLeonService).save(odd);
         verify(repository).save(odd);
+        verify(oddsLeonService).update(odd);
     }
 
     @Test
     public void getById() {
         final long id = 1L;
         final OddsLeon odd = mock(OddsLeon.class);
-        when(repository.getOne(id)).thenReturn(odd);
+        final Optional<OddsLeon> opOdd = Optional.of(odd);
+
+        when(repository.findById(id)).thenReturn(opOdd);
 
         final OddsLeon result = oddsLeonService.getById(id);
 
         assertThat(result, is(odd));
-        verify(repository).getOne(id);
+        verify(repository).findById(id);
     }
 
     @Test

@@ -11,10 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import ru.kappers.exceptions.UnirestAPIException;
 import ru.kappers.model.catalog.League;
 import ru.kappers.model.catalog.Team;
-import ru.kappers.service.JsonService;
-import ru.kappers.service.LeagueService;
-import ru.kappers.service.MessageTranslator;
-import ru.kappers.service.TeamService;
+import ru.kappers.service.*;
 import ru.kappers.service.parser.RapidAPIParser;
 
 import java.util.Arrays;

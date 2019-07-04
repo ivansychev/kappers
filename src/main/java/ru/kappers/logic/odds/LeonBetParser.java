@@ -3,14 +3,19 @@ package ru.kappers.logic.odds;
 import com.google.gson.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.kappers.exceptions.BetParserException;
 import ru.kappers.model.dto.leon.OddsLeonDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,7 @@ import java.util.stream.Collectors;
  * Парсер сайта ООО "Леон"
  */
 @Slf4j
+@Service
 public class LeonBetParser implements BetParser<OddsLeonDTO> {
 
     @Getter
@@ -38,7 +44,8 @@ public class LeonBetParser implements BetParser<OddsLeonDTO> {
      *
      * @param leonAddress ссылка на сайт ООО "Леон"
      */
-    public LeonBetParser(String leonAddress) {
+    @Autowired
+    public LeonBetParser(@Value("${kappers.leon-bet-url}") String leonAddress) {
         this.leonAddress = leonAddress;
     }
 
@@ -81,7 +88,11 @@ public class LeonBetParser implements BetParser<OddsLeonDTO> {
      * @param url - линк веб страницы, которую нужно распарсить
      */
     private JsonArray getArrayOfEventsByURL(String url) {
-
+        try {
+            url = URLEncoder.encode(url, StandardCharsets.UTF_8.toString()).replace("%2F", "/");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         URL address = null;
         try {
             address = new URL(leonAddress + url);

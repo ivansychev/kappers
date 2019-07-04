@@ -16,7 +16,8 @@ import javax.validation.constraints.Size;
 @Table(name = "runner_leon")
 public class RunnerLeon {
     @Id
-    @Column(name = "runner_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "runner_id", insertable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(name = "name")
     @Size(max = 255)
