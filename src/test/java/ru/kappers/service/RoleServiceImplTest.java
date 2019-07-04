@@ -1,7 +1,6 @@
 package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,6 +53,8 @@ public class RoleServiceImplTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void testAddDelAndEdit() {
+        deleteFromTables("users", "roles");
+
         Role role = Role.builder().name("ROLE_TEST").enabled(true).build();
         Role backRole = rolesService.addRole(role);
         Assert.assertNotNull(backRole);
