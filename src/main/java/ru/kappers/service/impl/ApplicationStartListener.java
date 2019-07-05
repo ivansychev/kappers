@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.scheduling.SchedulingTaskExecutor;
 import org.springframework.stereotype.Service;
 import ru.kappers.config.KappersProperties;
 import ru.kappers.service.CurrencyService;
@@ -18,12 +19,15 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
     private final CurrencyService currencyService;
     private final KappersProperties kappersProperties;
     private final MessageTranslator translator;
+    private final SchedulingTaskExecutor taskExecutor;
 
     @Autowired
-    public ApplicationStartListener(CurrencyService currencyService, KappersProperties kappersProperties, MessageTranslator translator) {
+    public ApplicationStartListener(CurrencyService currencyService, KappersProperties kappersProperties,
+                                    MessageTranslator translator, SchedulingTaskExecutor taskExecutor) {
         this.currencyService = currencyService;
         this.kappersProperties = kappersProperties;
         this.translator = translator;
+        this.taskExecutor = taskExecutor;
     }
 
     @Override
@@ -31,6 +35,12 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
         log.debug("onApplicationEvent(event: {})...", event);
         log.info(translator.byCode("kappersMessage.springContextRefreshed"));
         log.info(translator.byCode("kappersMessage.KappersPropertiesForLog"), kappersProperties);
-        currencyService.refreshCurrencyRatesForToday();
+        taskExecutor.execute(() -> {
+            try {
+                currencyService.refreshCurrencyRatesForToday();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        });
     }
 }
