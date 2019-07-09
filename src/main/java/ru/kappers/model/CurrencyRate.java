@@ -10,6 +10,8 @@ import java.sql.Date;
 @Slf4j
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "currency_rate")
 public class CurrencyRate {
