@@ -23,8 +23,8 @@ public class LeagueRapidDTOLeagueConverter implements Converter<LeagueRapidDTO, 
                 .name(source.getName())
                 .logoUrl(source.getLogo())
                 .season(source.getSeason())
-                .seasonStart(DateTimeUtil.parseTimestampFromDate(source.getSeason_start()+"+03:00"))
-                .seasonEnd(DateTimeUtil.parseTimestampFromDate(source.getSeason_end()+"+03:00"))
+                .seasonStart(DateTimeUtil.parseLocalDateTimeFromStartOfDate(source.getSeason_start()+"+03:00"))
+                .seasonEnd(DateTimeUtil.parseLocalDateTimeFromStartOfDate(source.getSeason_end()+"+03:00"))
                 .build();
     }
 }

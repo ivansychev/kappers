@@ -2,7 +2,6 @@ package ru.kappers.util;
 
 import org.junit.Test;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
@@ -41,15 +40,4 @@ public class DateTimeUtilTest {
 		DateTimeUtil.parseLocalDateTimeFromZonedDateTime("20011202T10:15:30+01:00");
 	}
 
-	@Test
-	public void parseTimestampFromDate(){
-		Timestamp parsed = DateTimeUtil.parseTimestampFromDate("2000-12-02+02:00");
-		Timestamp expected = Timestamp.valueOf(LocalDateTime.of(2000, Month.DECEMBER, 2, 00, 0, 0));
-		assertEquals(expected, parsed);
-	}
-
-	@Test(expected = RuntimeException.class)
-	public void parseTimestampFromDateWithWrongFormat(){
-		DateTimeUtil.parseTimestampFromDate("98798asd");
-	}
 }
