@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +31,7 @@ public class Fixture implements Serializable, Comparable {
     @Column(name="event_timestamp")
     private Long eventTimestamp;
     @Column(name="event_date")
-    private Timestamp eventDate;
+    private LocalDateTime eventDate;
     @Column(name="league_id")
     private Integer leagueId;
     @Column(name="round")

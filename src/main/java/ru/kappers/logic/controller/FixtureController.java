@@ -10,8 +10,8 @@ import ru.kappers.model.Fixture;
 import ru.kappers.model.Fixture.Status;
 import ru.kappers.service.FixtureService;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -69,9 +69,9 @@ public class FixtureController {
 
     @RequestMapping(value = "/period", method = RequestMethod.GET)
     public List<Fixture> getFixturesByPeriod(
-            @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-            @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
-        return service.getFixturesByPeriod(new Timestamp(fromDate.getTime()), new Timestamp(toDate.getTime()));
+            @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+            @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate) {
+        return service.getFixturesByPeriod(fromDate.atStartOfDay(), toDate.atTime(LocalTime.MAX));
     }
 
 /*

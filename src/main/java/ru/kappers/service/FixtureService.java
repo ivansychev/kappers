@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.Fixture.Status;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,8 +18,6 @@ public interface FixtureService {
     Fixture updateFixture (Fixture fixture);
     List<Fixture> getAll();
     Page<Fixture> getAll(Pageable pageable);
-    List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to);
-    Page<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to, Pageable pageable);
     List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to);
     Page<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Pageable pageable);
     List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter);

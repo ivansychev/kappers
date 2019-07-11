@@ -50,7 +50,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     private Fixture today = Fixture.builder()
             .id(111)
-            .eventDate(nowTstmp)
+            .eventDate(now)
             .eventTimestamp(nowTstmp.getTime())
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
@@ -65,21 +65,21 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
         Fixture it = todayBegin;
         BeanUtils.copyProperties(today, it);
         it.setId(it.getId() + 10);
-        it.setEventDate(Timestamp.valueOf(LocalDateTime.of(now.toLocalDate(), LocalTime.MIN)));
-        it.setEventTimestamp(it.getEventDate().getTime());
+        it.setEventDate(LocalDateTime.of(now.toLocalDate(), LocalTime.MIN));
+        it.setEventTimestamp(Timestamp.valueOf(it.getEventDate()).getTime());
         it.setStatus(Status.MATCH_FINISHED);
         it.setStatusShort(ShortStatus.MATCH_FINISHED);
 
         it = todayEnd;
         BeanUtils.copyProperties(today, it);
         it.setId(it.getId() + 11);
-        it.setEventDate(Timestamp.valueOf(LocalDateTime.of(now.toLocalDate(), LocalTime.MAX)));
-        it.setEventTimestamp(it.getEventDate().getTime());
+        it.setEventDate(LocalDateTime.of(now.toLocalDate(), LocalTime.MAX));
+        it.setEventTimestamp(Timestamp.valueOf(it.getEventDate()).getTime());
     }
 
     private Fixture tomorrow = Fixture.builder()
             .id(112)
-            .eventDate(new Timestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_DAY))
+            .eventDate(now.plusDays(1))
             .eventTimestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_DAY)
             .awayTeam("Manchester United")
             .homeTeam("FC Liverpool")
@@ -94,19 +94,19 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
         Fixture it = tomorrowBegin;
         BeanUtils.copyProperties(tomorrow, it);
         it.setId(it.getId() + 10);
-        it.setEventDate(Timestamp.valueOf(LocalDateTime.of(now.plusDays(1).toLocalDate(), LocalTime.MIN)));
-        it.setEventTimestamp(it.getEventDate().getTime());
+        it.setEventDate(LocalDateTime.of(now.plusDays(1).toLocalDate(), LocalTime.MIN));
+        it.setEventTimestamp(Timestamp.valueOf(it.getEventDate()).getTime());
 
         it = tomorrowEnd;
         BeanUtils.copyProperties(tomorrow, it);
         it.setId(it.getId() + 11);
-        it.setEventDate(Timestamp.valueOf(LocalDateTime.of(now.plusDays(1).toLocalDate(), LocalTime.MAX)));
-        it.setEventTimestamp(it.getEventDate().getTime());
+        it.setEventDate(LocalDateTime.of(now.plusDays(1).toLocalDate(), LocalTime.MAX));
+        it.setEventTimestamp(Timestamp.valueOf(it.getEventDate()).getTime());
     }
 
     private Fixture yesterday = Fixture.builder()
             .id(110)
-            .eventDate(new Timestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_DAY))
+            .eventDate(now.minusDays(1))
             .eventTimestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_DAY)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
@@ -121,19 +121,19 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
         Fixture it = yesterdayBegin;
         BeanUtils.copyProperties(yesterday, it);
         it.setId(it.getId() + 10);
-        it.setEventDate(Timestamp.valueOf(LocalDateTime.of(now.minusDays(1).toLocalDate(), LocalTime.MIN)));
-        it.setEventTimestamp(it.getEventDate().getTime());
+        it.setEventDate(LocalDateTime.of(now.minusDays(1).toLocalDate(), LocalTime.MIN));
+        it.setEventTimestamp(Timestamp.valueOf(it.getEventDate()).getTime());
 
         it = yesterdayEnd;
         BeanUtils.copyProperties(yesterday, it);
         it.setId(it.getId() + 11);
-        it.setEventDate(Timestamp.valueOf(LocalDateTime.of(now.minusDays(1).toLocalDate(), LocalTime.MAX)));
-        it.setEventTimestamp(it.getEventDate().getTime());
+        it.setEventDate(LocalDateTime.of(now.minusDays(1).toLocalDate(), LocalTime.MAX));
+        it.setEventTimestamp(Timestamp.valueOf(it.getEventDate()).getTime());
     }
 
     private Fixture nextWeek = Fixture.builder()
             .id(113)
-            .eventDate(new Timestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_WEEK))
+            .eventDate(now.plusDays(7))
             .eventTimestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_WEEK)
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
@@ -144,7 +144,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
 
     private Fixture lastWeek = Fixture.builder()
             .id(114)
-            .eventDate(new Timestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_WEEK))
+            .eventDate(now.minusDays(7))
             .eventTimestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_WEEK)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
@@ -168,7 +168,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     public void getById() {
         Fixture fixture = Fixture.builder()
                 .id(54552)
-                .eventDate(Timestamp.valueOf(LocalDateTime.now()))
+                .eventDate(LocalDateTime.now())
                 .build();
         service.addRecord(fixture);
         Fixture byId = service.getById(54552);
@@ -248,8 +248,7 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
         clearTable();
         Stream.of(today, tomorrow, yesterday).forEach(service::addRecord);
 
-        final List<Fixture> todaysFixtures = service.getFixturesByPeriod(new Timestamp(nowTstmp.getTime() - 8 * MILLISECONDS_IN_HOUR),
-                new Timestamp(nowTstmp.getTime() + 8 * MILLISECONDS_IN_HOUR));
+        final List<Fixture> todaysFixtures = service.getFixturesByPeriod(now.minusHours(8), now.plusHours(8));
 
         assertTrue(todaysFixtures.contains(today));
         Stream.of(tomorrow, yesterday).forEach(it -> assertFalse(todaysFixtures.contains(it)));

@@ -23,7 +23,7 @@ public class FixtureRapidDTOToFixtureConverter implements Converter<FixtureRapid
         final Fixture fixture = Fixture.builder()
             .id(dto.getFixture_id())
             .eventTimestamp(dto.getEvent_timestamp())
-            .eventDate(DateTimeUtil.parseTimestampFromZonedDateTime(dto.getEvent_date()))
+            .eventDate(DateTimeUtil.parseLocalDateTimeFromZonedDateTime(dto.getEvent_date()))
             .leagueId(dto.getLeague_id())
             .round(dto.getRound())
             .homeTeamId(dto.getHomeTeam_id())

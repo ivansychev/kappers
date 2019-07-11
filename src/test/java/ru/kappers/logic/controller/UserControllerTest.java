@@ -19,7 +19,6 @@ import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.UserService;
 
 import java.security.Principal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.NoSuchElementException;

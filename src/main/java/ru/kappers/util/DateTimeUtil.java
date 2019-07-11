@@ -35,6 +35,19 @@ public final class DateTimeUtil {
 	}
 
 	/**
+	 * Получить экземпляр {@link LocalDateTime} из строки
+	 * @param dateTime строка с датой и временем в формате {@link DateTimeFormatter#ISO_ZONED_DATE_TIME}
+	 * @return экземпляр {@link LocalDateTime}
+	 */
+	public static LocalDateTime parseLocalDateTimeFromZonedDateTime(String dateTime) {
+		log.debug("parseLocalDateTimeFromZonedDateTime(dateTime: {})...", dateTime);
+		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+		final LocalDateTime result = zonedDateTime.toLocalDateTime();
+		log.debug("parseLocalDateTimeFromZonedDateTime(dateTime: {}) return result: {}", dateTime, result);
+		return result;
+	}
+
+	/**
 	 * Получить экземпляр {@link Timestamp} из строки
 	 * @param date строка с датой в формате {@link DateTimeFormatter#ISO_OFFSET_DATE}
 	 * @return экземпляр {@link Timestamp}
@@ -44,19 +57,6 @@ public final class DateTimeUtil {
 		LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_OFFSET_DATE);
 		final Timestamp result = Timestamp.valueOf(localDate.atStartOfDay());
 		log.debug("parseTimestampFromDate(date: {}) return result: {}", date, result);
-		return result;
-	}
-
-	/**
-	 * Получить экземпляр {@link Timestamp} из строки
-	 * @param dateTime строка с датой и временем в формате {@link DateTimeFormatter#ISO_ZONED_DATE_TIME}
-	 * @return экземпляр {@link Timestamp}
-	 */
-	public static Timestamp parseTimestampFromZonedDateTime(String dateTime) {
-		log.debug("parseTimestampFromZonedDateTime(dateTime: {})...", dateTime);
-		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME);
-		final Timestamp result = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
-		log.debug("parseTimestampFromZonedDateTime(dateTime: {}) return result: {}", dateTime, result);
 		return result;
 	}
 

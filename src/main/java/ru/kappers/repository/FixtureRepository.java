@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.Fixture.Status;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,15 +16,15 @@ import java.util.List;
  */
 public interface FixtureRepository extends JpaRepository<Fixture, Integer> {
     @Query(value = "select f FROM Fixture f WHERE f.eventDate >= :from and f.eventDate <= :to")
-    List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to);
+    List<Fixture> getFixturesByPeriod(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
     @Query(value = "select f FROM Fixture f WHERE f.eventDate >= :from and f.eventDate <= :to")
-    Page<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to, Pageable pageable);
+    Page<Fixture> getFixturesByPeriod(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to, Pageable pageable);
 
     @Query(value = "select f FROM Fixture f WHERE f.eventDate >= :from and f.eventDate <= :to and f.status = :filter")
-    List<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to, @Param("filter") Status filter);
+    List<Fixture> getFixturesByPeriod(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to, @Param("filter") Status filter);
 
     @Query(value = "select f FROM Fixture f WHERE f.eventDate >= :from and f.eventDate <= :to and f.status = :filter")
-    Page<Fixture> getFixturesByPeriod(@Param("from") Timestamp from, @Param("to") Timestamp to, @Param("filter") Status filter,
+    Page<Fixture> getFixturesByPeriod(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to, @Param("filter") Status filter,
                                       Pageable pageable);
 }

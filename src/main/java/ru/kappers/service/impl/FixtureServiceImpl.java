@@ -11,7 +11,6 @@ import ru.kappers.model.Fixture.Status;
 import ru.kappers.repository.FixtureRepository;
 import ru.kappers.service.FixtureService;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -72,44 +71,30 @@ public class FixtureServiceImpl implements FixtureService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to) {
+    public List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to) {
         log.debug("getFixturesByPeriod(from: {}, to: {})...", from, to);
         return repository.getFixturesByPeriod(from, to);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Fixture> getFixturesByPeriod(Timestamp from, Timestamp to, Pageable pageable) {
+    public Page<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Pageable pageable) {
         log.debug("getFixturesByPeriod(from: {}, to: {}, pageable: {})...", from, to, pageable);
         return repository.getFixturesByPeriod(from, to, pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to) {
-        log.debug("getFixturesByPeriod(from: {}, to: {})...", from, to);
-        return getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Pageable pageable) {
-        log.debug("getFixturesByPeriod(from: {}, to: {}, pageable: {})...", from, to, pageable);
-        return getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter) {
         log.debug("getFixturesByPeriod(from: {}, to: {}, filter: {})...", from, to, filter);
-        return repository.getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), filter);
+        return repository.getFixturesByPeriod(from, to, filter);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Fixture> getFixturesByPeriod(LocalDateTime from, LocalDateTime to, Status filter, Pageable pageable) {
         log.debug("getFixturesByPeriod(from: {}, to: {}, filter: {}, pageable: {})...", from, to, filter, pageable);
-        return repository.getFixturesByPeriod(Timestamp.valueOf(from), Timestamp.valueOf(to), filter, pageable);
+        return repository.getFixturesByPeriod(from, to, filter, pageable);
     }
 
     protected LocalDateTime getDayBegin(LocalDate date) {
