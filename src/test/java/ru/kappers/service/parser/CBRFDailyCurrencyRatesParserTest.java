@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.util.ResourceUtils;
 import ru.kappers.model.CurrencyRate;
-import ru.kappers.util.DateTimeUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,7 +86,7 @@ public class CBRFDailyCurrencyRatesParserTest {
         assertThat(usdCurrencyRate.getNumCode(), is("840"));
         assertThat(usdCurrencyRate.getCharCode(), is("USD"));
         assertThat(usdCurrencyRate.getName(), is("Доллар США"));
-        assertThat(usdCurrencyRate.getDate(), is(DateTimeUtil.parseSqlDateFromZonedDateTime("2019-05-17T11:30:00+03:00")));
+        assertThat(usdCurrencyRate.getDate(), is(LocalDate.parse("2019-05-17")));
         assertThat(usdCurrencyRate.getNominal(), is(1));
         assertThat(usdCurrencyRate.getValue(), is(new BigDecimal("64.5598")));
     }

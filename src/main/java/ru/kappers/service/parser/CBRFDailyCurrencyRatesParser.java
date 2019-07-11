@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kappers.model.CurrencyRate;
-import ru.kappers.util.DateTimeUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +15,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -91,7 +92,8 @@ public class CBRFDailyCurrencyRatesParser {
     public List<CurrencyRate> parseFromJSON(String json) {
         log.debug("parseFromJSON(json: {})...", json);
         JsonObject object = (JsonObject) jsonParser.parse(json);
-        Date date = DateTimeUtil.parseSqlDateFromZonedDateTime(object.get("Date").getAsString());
+        LocalDate date = ZonedDateTime.parse(object.get("Date").getAsString(), DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                .toLocalDate();
         JsonObject valutes = object.get("Valute").getAsJsonObject();
         if (valutes.size() == 0) {
             return Collections.emptyList();
