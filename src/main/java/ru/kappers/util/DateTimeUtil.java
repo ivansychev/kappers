@@ -22,13 +22,15 @@ public final class DateTimeUtil {
 	public static final int MILLISECONDS_IN_WEEK = MILLISECONDS_IN_DAY * 7;
 
 	/**
-	 * Получить экземпляр {@link Timestamp} с текущей датой и временем
-	 * @return экземпляр {@link Timestamp}
+	 * Получить экземпляр {@link LocalDateTime} на начало дня из строки
+	 * @param date строка с датой в формате {@link DateTimeFormatter#ISO_OFFSET_DATE}
+	 * @return экземпляр {@link LocalDateTime}
 	 */
-	public static Timestamp getCurrentTime() {
-		log.debug("getCurrentTime()...");
-		final Timestamp result = Timestamp.valueOf(LocalDateTime.now());
-		log.debug("getCurrentTime() return result: {}", result);
+	public static LocalDateTime parseLocalDateTimeFromStartOfDate(String date) {
+		log.debug("parseLocalDateTimeFromStartOfDate(date: {})...", date);
+		LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_OFFSET_DATE);
+		final LocalDateTime result = localDate.atStartOfDay();
+		log.debug("parseLocalDateTimeFromStartOfDate(date: {}) return result: {}", date, result);
 		return result;
 	}
 

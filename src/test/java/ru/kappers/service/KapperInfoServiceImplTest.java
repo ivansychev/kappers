@@ -22,6 +22,9 @@ import ru.kappers.model.User;
 import ru.kappers.util.DateTimeUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.junit.Assert.*;
 
@@ -37,7 +40,8 @@ public class KapperInfoServiceImplTest extends AbstractTransactionalJUnit4Spring
             .userName("user1")
             .name("юзер")
             .password("assaasas")
-            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .dateOfBirth(DateTimeUtil.parseLocalDateTimeFromStartOfDate("1965-08-06+03:00"))
+            .dateOfRegistration(LocalDateTime.of(LocalDate.parse("2019-01-20"), LocalTime.MIDNIGHT))
             .lang("RUSSIAN")
             .balance(Money.of(CurrencyUnit.EUR, new BigDecimal("10.00")))
             .build();
@@ -45,7 +49,8 @@ public class KapperInfoServiceImplTest extends AbstractTransactionalJUnit4Spring
             .userName("kapper1")
             .name("каппер")
             .password("assaasas")
-            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .dateOfBirth(DateTimeUtil.parseLocalDateTimeFromStartOfDate("1965-08-06+03:00"))
+            .dateOfRegistration(LocalDateTime.of(LocalDate.parse("2019-01-20"), LocalTime.MIDNIGHT))
             .lang("RUSSIAN")
             .balance(Money.of(CurrencyUnit.USD, new BigDecimal("100.00")))
             .build();

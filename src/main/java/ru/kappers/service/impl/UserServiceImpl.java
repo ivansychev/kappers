@@ -10,9 +10,9 @@ import ru.kappers.exceptions.MoneyTransferException;
 import ru.kappers.model.*;
 import ru.kappers.repository.UsersRepository;
 import ru.kappers.service.*;
-import ru.kappers.util.DateTimeUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             return userByUserName;
         }
         if (user.getDateOfRegistration() == null) {
-            user.setDateOfRegistration(DateTimeUtil.getCurrentTime());
+            user.setDateOfRegistration(LocalDateTime.now());
         }
         if (user.getRole() == null) {
             user.setRole(rolesService.getByName(Role.Names.USER));

@@ -2,26 +2,27 @@ package ru.kappers.util;
 
 import org.junit.Test;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
 public class DateTimeUtilTest {
 
 	@Test
-	public void getCurrentTime() throws Exception {
-		final Timestamp currentTime = DateTimeUtil.getCurrentTime();
-		assertNotNull(currentTime);
+	public void parseLocalDateTimeFromStartOfDate() {
+		LocalDateTime parsed = DateTimeUtil.parseLocalDateTimeFromStartOfDate("2000-12-02+02:00");
+		LocalDateTime expected = LocalDateTime.of(2000, Month.DECEMBER, 2, 00, 0, 0);
+		assertEquals(expected, parsed);
+	}
 
-		TimeUnit.MILLISECONDS.sleep(5);
-		assertTrue(currentTime.before(DateTimeUtil.getCurrentTime()));
+	@Test(expected = RuntimeException.class)
+	public void parseLocalDateTimeFromStartOfDateWithWrongFormat(){
+		DateTimeUtil.parseLocalDateTimeFromStartOfDate("98798asdt");
 	}
 
 	@Test

@@ -173,8 +173,8 @@ public class UserControllerTest {
         userController = new UserController(userService, encoder, messageTranslator);
         final String testPassword = "testPassword";
         final User user = User.builder()
-                .dateOfBirth(Timestamp.valueOf(LocalDateTime.now().minusYears(20)))
-                .dateOfRegistration(Timestamp.valueOf(LocalDateTime.now().minusMinutes(20)))
+                .dateOfBirth(LocalDateTime.now().minusYears(20))
+                .dateOfRegistration(LocalDateTime.now().minusMinutes(20))
                 .password(testPassword)
                 .build();
         final User userCopy = new User();
