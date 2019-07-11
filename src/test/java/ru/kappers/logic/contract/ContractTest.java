@@ -2,18 +2,15 @@ package ru.kappers.logic.contract;
 
 import org.hibernate.Session;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.kappers.model.KapperInfo;
 import ru.kappers.model.User;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Map;
-
 import static org.junit.Assert.*;
 
+@Ignore("Not implemented yet")
 public class ContractTest {
 
     private static User entity1;
