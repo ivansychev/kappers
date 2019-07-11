@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -31,9 +31,9 @@ public class OddsLeon {
     @JoinColumn(name = "away_id")
     private CompetitorLeon away;
     @Column(name = "kickoff")
-    private Timestamp kickoff;
+    private LocalDateTime kickoff;
     @Column(name = "last_updated")
-    private Timestamp lastUpdated;
+    private LocalDateTime lastUpdated;
     @ManyToOne
     @JoinColumn(name = "league_id")
     private LeagueLeon league;
