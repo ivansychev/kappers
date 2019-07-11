@@ -2,9 +2,7 @@ package ru.kappers.service;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import ru.kappers.KappersApplication;
 import ru.kappers.model.CurrencyRate;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -44,7 +41,7 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
         CurrencyRate rate = CurrencyRate.builder()
                 .nominal(1)
                 .value(expectedValue)
-                .date(Date.valueOf("2018-11-23"))
+                .date(LocalDate.parse("2018-11-23"))
                 .charCode("BTC")
                 .numCode("000")
                 .name("Bitcoin")
@@ -56,24 +53,24 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
         assertEquals(save.getCharCode(), "BTC");
         assertEquals(save.getName(), "Bitcoin");
         assertEquals(save.getNumCode(), "000");
-        assertEquals(save.getDate(), Date.valueOf(LocalDate.of(2018, Month.NOVEMBER, 23)));
+        assertEquals(save.getDate(), LocalDate.of(2018, Month.NOVEMBER, 23));
     }
 
     @Test
     public void isExist() {
-        assertTrue(service.isExist(Date.valueOf("2018-11-21"), "GLD"));
+        assertTrue(service.isExist(LocalDate.parse("2018-11-21"), "GLD"));
     }
 
     @Test
     public void getCurrByDate() {
-        CurrencyRate gld = service.getCurrByDate(Date.valueOf("2018-11-21"), "GLD");
+        CurrencyRate gld = service.getCurrByDate(LocalDate.parse("2018-11-21"), "GLD");
         assertNotNull(gld);
         assertEquals(gld.getNumCode(), "999");
     }
 
     @Test
     public void update() {
-        CurrencyRate gld = service.getCurrByDate(Date.valueOf("2018-11-21"), "GLD");
+        CurrencyRate gld = service.getCurrByDate(LocalDate.parse("2018-11-21"), "GLD");
         assertNotNull(gld);
         assertEquals(gld.getValue(), new BigDecimal("2000.0000"));
 
@@ -95,8 +92,8 @@ public class CurrRateServiceImplTest extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     public void getAllByDate() {
-        List<CurrencyRate> allByDate = service.getAllByDate(Date.valueOf("2018-11-21"));
-        CurrencyRate gld = service.getCurrByDate(Date.valueOf("2018-11-21"), "GLD");
+        List<CurrencyRate> allByDate = service.getAllByDate(LocalDate.parse("2018-11-21"));
+        CurrencyRate gld = service.getCurrByDate(LocalDate.parse("2018-11-21"), "GLD");
         assertTrue(allByDate.contains(gld));
     }
 }

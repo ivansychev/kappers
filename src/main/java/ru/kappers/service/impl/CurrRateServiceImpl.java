@@ -9,7 +9,6 @@ import ru.kappers.model.CurrencyRate;
 import ru.kappers.repository.CurrRateRepository;
 import ru.kappers.service.CurrRateService;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class CurrRateServiceImpl implements CurrRateService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean isExist(Date date, String currLiteral) {
+    public boolean isExist(LocalDate date, String currLiteral) {
         log.debug("isExist(date: {}, currLiteral: {})...", date, currLiteral);
         if (currLiteral.equals(kappersProperties.getRubCurrencyCode())) return true;
         return getCurrByDate(date, currLiteral) != null;
@@ -46,7 +45,7 @@ public class CurrRateServiceImpl implements CurrRateService {
 
     @Override
     @Transactional(readOnly = true)
-    public CurrencyRate getCurrByDate(Date date, String currLiteral) {
+    public CurrencyRate getCurrByDate(LocalDate date, String currLiteral) {
         log.debug("getCurrByDate(date: {}, currLiteral: {})...", date, currLiteral);
         return repository.getCurrencyRateByDateAndCharCode(date, currLiteral);
     }
@@ -72,19 +71,19 @@ public class CurrRateServiceImpl implements CurrRateService {
     @Transactional(readOnly = true)
     public CurrencyRate getToday(String literal) {
         log.debug("getToday(literal: {})...", literal);
-        return getCurrByDate(Date.valueOf(LocalDate.now()), literal);
+        return getCurrByDate(LocalDate.now(), literal);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CurrencyRate> getAllToday() {
         log.debug("getAllToday()...");
-        return getAllByDate(Date.valueOf(LocalDate.now()));
+        return getAllByDate(LocalDate.now());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CurrencyRate> getAllByDate(Date date) {
+    public List<CurrencyRate> getAllByDate(LocalDate date) {
         log.debug("getAllByDate(date: {})...", date);
         return repository.getAllByDate(date);
     }

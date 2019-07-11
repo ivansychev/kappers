@@ -2,7 +2,6 @@ package ru.kappers.util;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,19 +55,6 @@ public final class DateTimeUtil {
 		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME);
 		final Timestamp result = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
 		log.debug("parseTimestampFromZonedDateTime(dateTime: {}) return result: {}", dateTime, result);
-		return result;
-	}
-
-	/**
-	 * Получить экземпляр {@link Date} из строки
-	 * @param dateTime строка с датой и временем в формате {@link DateTimeFormatter#ISO_ZONED_DATE_TIME}
-	 * @return экземпляр {@link Date}
-	 */
-	public static Date parseSqlDateFromZonedDateTime(String dateTime) {
-		log.debug("parseSqlDateFromZonedDateTime(dateTime: {})...", dateTime);
-		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME);
-		final Date result = Date.valueOf(zonedDateTime.toLocalDate());
-		log.debug("parseSqlDateFromZonedDateTime(dateTime: {}) return result: {}", dateTime, result);
 		return result;
 	}
 

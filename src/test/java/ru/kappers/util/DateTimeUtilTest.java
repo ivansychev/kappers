@@ -51,19 +51,4 @@ public class DateTimeUtilTest {
 	public void parseTimestampFromZonedDateTimeWithWrongFormat() {
 		DateTimeUtil.parseTimestampFromZonedDateTime("20011202T10:15:30+01:00");
 	}
-
-	@Test
-	public void parseSqlDateFromZonedDateTime() {
-		final ZonedDateTime expectedZonedDateTime = ZonedDateTime.of(
-				LocalDateTime.of(2001, Month.DECEMBER, 2, 10, 15, 30),
-				ZoneId.of("+02:00"));
-		final Date expectedDate = Date.valueOf(expectedZonedDateTime.toLocalDate());
-		final Date parsedDate = DateTimeUtil.parseSqlDateFromZonedDateTime("2001-12-02T10:15:30+02:00");
-		assertEquals(expectedDate, parsedDate);
-	}
-
-	@Test(expected = DateTimeParseException.class)
-	public void parseSqlDateFromZonedDateTimeWithWrongFormat() {
-		DateTimeUtil.parseSqlDateFromZonedDateTime("20011202T10:15:30+01:00");
-	}
 }

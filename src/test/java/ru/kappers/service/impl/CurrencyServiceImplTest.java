@@ -15,7 +15,6 @@ import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.parser.CBRFDailyCurrencyRatesParser;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +38,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void refreshCurrencyRatesForTodayMustSaveRateIfTableHasNotRate() {
-        final Date currentDate = Date.valueOf(LocalDate.now());
+        final LocalDate currentDate = LocalDate.now();
         final String usdCharCode = "USD";
         final CurrencyRate currencyRate = CurrencyRate.builder()
                 .date(currentDate)
@@ -58,7 +57,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void refreshCurrencyRatesForTodayIfTableHasRate() {
-        final Date currentDate = Date.valueOf(LocalDate.now());
+        final LocalDate currentDate = LocalDate.now();
         final String usdCharCode = "USD";
         final CurrencyRate currencyRate = CurrencyRate.builder()
                 .date(currentDate)
@@ -121,7 +120,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void getActualCurrencyRateDateMustReturnDateFromParameterIfBothCurrencyExists() {
-        final Date date = Date.valueOf(LocalDate.now());
+        final LocalDate date = LocalDate.now();
         final String from = CurrencyUnit.EUR.getCode();
         final String to = CurrencyUnit.USD.getCode();
         final boolean currRatesGotToday = true;
@@ -129,7 +128,7 @@ public class CurrencyServiceImplTest {
         when(currRateService.isExist(date, to)).thenReturn(true);
         currencyService = spy(currencyService);
 
-        final Date result = currencyService.getActualCurrencyRateDate(date, from, to, currRatesGotToday);
+        final LocalDate result = currencyService.getActualCurrencyRateDate(date, from, to, currRatesGotToday);
 
         assertThat(result, is(date));
         verify(currRateService).isExist(date, from);
@@ -139,7 +138,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void getActualCurrencyRateDateMustReturnDateFromParameterIfCurrencyNotExistsAndRefreshFail() {
-        final Date date = Date.valueOf(LocalDate.now());
+        final LocalDate date = LocalDate.now();
         final String from = CurrencyUnit.EUR.getCode();
         final String to = CurrencyUnit.USD.getCode();
         final boolean currRatesGotToday = false;
@@ -147,7 +146,7 @@ public class CurrencyServiceImplTest {
         currencyService = spy(currencyService);
         doReturn(false).when(currencyService).refreshCurrencyRatesForToday();
 
-        final Date result = currencyService.getActualCurrencyRateDate(date, from, to, currRatesGotToday);
+        final LocalDate result = currencyService.getActualCurrencyRateDate(date, from, to, currRatesGotToday);
 
         assertThat(result, is(date));
         verify(currRateService).isExist(date, from);
@@ -158,8 +157,8 @@ public class CurrencyServiceImplTest {
     @Test
     public void getActualCurrencyRateDateMustReturnDateFromParameterIfCurrencyNotExistsAndRefreshSuccess() {
         final LocalDate now = LocalDate.now();
-        final Date date = Date.valueOf(now);
-        final Date date2 = Date.valueOf(now.minusDays(1));
+        final LocalDate date = now;
+        final LocalDate date2 = now.minusDays(1);
         final String from = CurrencyUnit.EUR.getCode();
         final String to = CurrencyUnit.USD.getCode();
         final boolean currRatesGotToday = false;
@@ -169,7 +168,7 @@ public class CurrencyServiceImplTest {
         currencyService = spy(currencyService);
         doReturn(true).when(currencyService).refreshCurrencyRatesForToday();
 
-        final Date result = currencyService.getActualCurrencyRateDate(date, from, to, currRatesGotToday);
+        final LocalDate result = currencyService.getActualCurrencyRateDate(date, from, to, currRatesGotToday);
 
         assertThat(result, is(date2));
         verify(currRateService, times(2)).isExist(date, from);
@@ -212,7 +211,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void exchangeOneEURToUSD() {
-        final Date date = Date.valueOf(LocalDate.now());
+        final LocalDate date = LocalDate.now();
         final String from = CurrencyUnit.EUR.getCode();
         final String to = CurrencyUnit.USD.getCode();
         final BigDecimal amount = BigDecimal.ONE;
@@ -239,7 +238,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void exchangeOneEURToRUB() {
-        final Date date = Date.valueOf(LocalDate.now());
+        final LocalDate date = LocalDate.now();
         final String from = CurrencyUnit.EUR.getCode();
         final String to = kappersProperties.getRubCurrencyCode();
         final BigDecimal amount = BigDecimal.ONE;
@@ -261,7 +260,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void exchangeOneRUBToUSD() {
-        final Date date = Date.valueOf(LocalDate.now());
+        final LocalDate date = LocalDate.now();
         final String from = kappersProperties.getRubCurrencyCode();
         final String to = CurrencyUnit.USD.getCode();
         final BigDecimal amount = BigDecimal.ONE;

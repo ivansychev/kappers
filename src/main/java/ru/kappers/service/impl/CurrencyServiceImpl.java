@@ -16,7 +16,6 @@ import ru.kappers.service.parser.CBRFDailyCurrencyRatesParser;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
     }
 
-    public Date getActualCurrencyRateDate(Date date, String fromCurr, String toCurr, boolean currRatesGotToday) {
+    public LocalDate getActualCurrencyRateDate(LocalDate date, String fromCurr, String toCurr, boolean currRatesGotToday) {
         log.debug("getActualCurrencyRateDate(date: {}, fromCurr: {}, toCurr: {}, currRatesGotToday: {})...",
                 date, fromCurr, toCurr, currRatesGotToday);
         boolean todaysCurrRatesGot = currRatesGotToday;
@@ -90,8 +89,8 @@ public class CurrencyServiceImpl implements CurrencyService {
             }
             if (todaysCurrRatesGot) {
                 if (!currRateService.isExist(date, fromCurr) || !currRateService.isExist(date, toCurr)) {
-                    LocalDate localDate = date.toLocalDate().minusDays(1);
-                    date = getActualCurrencyRateDate(Date.valueOf(localDate), fromCurr, toCurr, todaysCurrRatesGot);
+                    LocalDate localDate = date.minusDays(1);
+                    date = getActualCurrencyRateDate(localDate, fromCurr, toCurr, todaysCurrRatesGot);
                 }
             }
         }
@@ -109,7 +108,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (fromCurr.equals(toCurr)) {
             return amount;
         }
-        Date date = getActualCurrencyRateDate(Date.valueOf(LocalDate.now()), fromCurr, toCurr, false);
+        LocalDate date = getActualCurrencyRateDate(LocalDate.now(), fromCurr, toCurr, false);
         final RoundingMode roundingMode = kappersProperties.getBigDecimalRoundingMode();
         final String rubCurrencyCode = kappersProperties.getRubCurrencyCode();
         if (fromCurr.equals(rubCurrencyCode)) {

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Slf4j
 @Data
@@ -20,8 +20,8 @@ public class CurrencyRate {
     @Column(name = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     private int id;
-    @Column(name="date")
-    private Date date;
+    @Column(name="date", columnDefinition = "DATE")
+    private LocalDate date;
     @Column(name="charcode")
     private String charCode;
     @Column(name="numcode")
