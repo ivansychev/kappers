@@ -21,7 +21,6 @@ import ru.kappers.KappersApplication;
 import ru.kappers.model.Fixture;
 import ru.kappers.model.Fixture.ShortStatus;
 import ru.kappers.model.Fixture.Status;
-import ru.kappers.util.DateTimeUtil;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -33,7 +32,6 @@ import java.util.stream.Stream;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
-import static ru.kappers.util.DateTimeUtil.MILLISECONDS_IN_HOUR;
 
 @Slf4j
 @ActiveProfiles("test")
@@ -46,12 +44,11 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private FixtureService service;
 
     private LocalDateTime now = LocalDateTime.now();
-    private Timestamp nowTstmp = Timestamp.valueOf(now);
 
     private Fixture today = Fixture.builder()
             .id(111)
             .eventDate(now)
-            .eventTimestamp(nowTstmp.getTime())
+            .eventTimestamp(Timestamp.valueOf(now).getTime())
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .leagueId(87)
@@ -80,7 +77,6 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private Fixture tomorrow = Fixture.builder()
             .id(112)
             .eventDate(now.plusDays(1))
-            .eventTimestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_DAY)
             .awayTeam("Manchester United")
             .homeTeam("FC Liverpool")
             .leagueId(2)
@@ -91,6 +87,8 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private Fixture tomorrowBegin = new Fixture();
     private Fixture tomorrowEnd = new Fixture();
     {
+        tomorrow.setEventTimestamp(Timestamp.valueOf(tomorrow.getEventDate()).getTime());
+
         Fixture it = tomorrowBegin;
         BeanUtils.copyProperties(tomorrow, it);
         it.setId(it.getId() + 10);
@@ -107,7 +105,6 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private Fixture yesterday = Fixture.builder()
             .id(110)
             .eventDate(now.minusDays(1))
-            .eventTimestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_DAY)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
@@ -118,6 +115,8 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private Fixture yesterdayBegin = new Fixture();
     private Fixture yesterdayEnd = new Fixture();
     {
+        yesterday.setEventTimestamp(Timestamp.valueOf(yesterday.getEventDate()).getTime());
+
         Fixture it = yesterdayBegin;
         BeanUtils.copyProperties(yesterday, it);
         it.setId(it.getId() + 10);
@@ -134,7 +133,6 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private Fixture nextWeek = Fixture.builder()
             .id(113)
             .eventDate(now.plusDays(7))
-            .eventTimestamp(nowTstmp.getTime() + DateTimeUtil.MILLISECONDS_IN_WEEK)
             .awayTeam("Real Madrid")
             .homeTeam("FC Barselona")
             .leagueId(87)
@@ -145,13 +143,18 @@ public class FixtureServiceImplTest extends AbstractTransactionalJUnit4SpringCon
     private Fixture lastWeek = Fixture.builder()
             .id(114)
             .eventDate(now.minusDays(7))
-            .eventTimestamp(nowTstmp.getTime() - DateTimeUtil.MILLISECONDS_IN_WEEK)
             .awayTeam("Paris Saint Germain")
             .homeTeam("Lyon")
             .leagueId(4)
             .status(Status.MATCH_FINISHED)
             .statusShort(ShortStatus.MATCH_FINISHED)
             .build();
+
+    {
+        nextWeek.setEventTimestamp(Timestamp.valueOf(nextWeek.getEventDate()).getTime());
+
+        lastWeek.setEventTimestamp(Timestamp.valueOf(lastWeek.getEventDate()).getTime());
+    }
 
     protected void clearTable() {
         deleteFromTables("fixtures");
