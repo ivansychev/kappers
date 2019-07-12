@@ -58,8 +58,8 @@ public class LeagueRapidDTOLeagueConverterTest {
             assertThat(league.getName(), is(dto.getName()));
             assertThat(league.getLogoUrl(), is(dto.getLogo()));
             assertThat(league.getSeason(), is(dto.getSeason()));
-            assertThat(league.getSeasonStart(), is(DateTimeUtil.parseTimestampFromDate(dto.getSeason_start()+"+03:00")));
-            assertThat(league.getSeasonEnd(), is(DateTimeUtil.parseTimestampFromDate(dto.getSeason_end()+"+03:00")));
+            assertThat(league.getSeasonStart(), is(DateTimeUtil.parseLocalDateTimeFromStartOfDate(dto.getSeason_start()+"+03:00")));
+            assertThat(league.getSeasonEnd(), is(DateTimeUtil.parseLocalDateTimeFromStartOfDate(dto.getSeason_end()+"+03:00")));
         }
     }
 }

@@ -79,7 +79,7 @@ public class FixtureRapidDTOToFixtureConverterTest {
             assertThat(fixture, is(notNullValue()));
             assertThat(fixture.getId(), is(dto.getFixture_id()));
             assertThat(fixture.getEventTimestamp(), is(dto.getEvent_timestamp()));
-            assertThat(fixture.getEventDate(), is(DateTimeUtil.parseTimestampFromZonedDateTime(dto.getEvent_date())));
+            assertThat(fixture.getEventDate(), is(DateTimeUtil.parseLocalDateTimeFromZonedDateTime(dto.getEvent_date())));
             assertThat(fixture.getLeagueId(), is(dto.getLeague_id()));
             assertThat(fixture.getRound(), is(dto.getRound()));
             assertThat(fixture.getHomeTeamId(), is(dto.getHomeTeam_id()));

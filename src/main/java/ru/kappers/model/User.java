@@ -10,7 +10,7 @@ import org.joda.money.Money;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +49,10 @@ public class User implements Serializable {
     private String email;
 
     @Column(name = "date_of_birth")
-    private Timestamp dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     @Column(name = "date_of_registration")
-    private Timestamp dateOfRegistration;
+    private LocalDateTime dateOfRegistration;
 
     @Column(name = "isblocked", nullable = false)
     private boolean isblocked;

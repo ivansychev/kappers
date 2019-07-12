@@ -13,9 +13,11 @@ import ru.kappers.model.leonmodels.*;
 import ru.kappers.service.CompetitorLeonService;
 import ru.kappers.service.LeagueLeonService;
 
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 @Slf4j
@@ -62,10 +64,12 @@ public class OddsLeonDTOToOddsLeonConverter implements Converter<OddsLeonDTO, Od
         return OddsLeon.builder()
                 .id(source.getId())
                 .name(source.getName())
-                .kickoff(new Timestamp(source.getKickoff()))
+                .kickoff(LocalDateTime.ofInstant(Instant.ofEpochMilli(source.getKickoff()),
+                        TimeZone.getDefault().toZoneId()))
                 .open(source.isOpen())
                 .url(source.getUrl())
-                .lastUpdated(new Timestamp(source.getLastUpdated()))
+                .lastUpdated(LocalDateTime.ofInstant(Instant.ofEpochMilli(source.getLastUpdated()),
+                        TimeZone.getDefault().toZoneId()))
                 .league(league)
                 .home(home)
                 .away(away)

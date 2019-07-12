@@ -19,7 +19,6 @@ import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.UserService;
 
 import java.security.Principal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.NoSuchElementException;
@@ -173,8 +172,8 @@ public class UserControllerTest {
         userController = new UserController(userService, encoder, messageTranslator);
         final String testPassword = "testPassword";
         final User user = User.builder()
-                .dateOfBirth(Timestamp.valueOf(LocalDateTime.now().minusYears(20)))
-                .dateOfRegistration(Timestamp.valueOf(LocalDateTime.now().minusMinutes(20)))
+                .dateOfBirth(LocalDateTime.now().minusYears(20))
+                .dateOfRegistration(LocalDateTime.now().minusMinutes(20))
                 .password(testPassword)
                 .build();
         final User userCopy = new User();

@@ -24,6 +24,9 @@ import ru.kappers.repository.UsersRepository;
 import ru.kappers.util.DateTimeUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,7 +52,8 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .userName("admin")
             .name("админ")
             .password("asasdgfas")
-            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .dateOfBirth(DateTimeUtil.parseLocalDateTimeFromStartOfDate("1965-08-06+03:00"))
+            .dateOfRegistration(LocalDateTime.of(LocalDate.parse("2019-01-20"), LocalTime.MIDNIGHT))
             .lang("RUSSIAN")
             .balance(Money.of(CurrencyUnit.EUR, new BigDecimal("10.00")))
             .build();
@@ -57,7 +61,8 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .userName("user")
             .name("юзер")
             .password("assaasas")
-            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .dateOfBirth(DateTimeUtil.parseLocalDateTimeFromStartOfDate("1965-08-06+03:00"))
+            .dateOfRegistration(LocalDateTime.of(LocalDate.parse("2019-01-22"), LocalTime.MIDNIGHT))
             .lang("RUSSIAN")
             .balance(Money.of(CurrencyUnit.USD, new BigDecimal("10.00")))
             .build();
@@ -65,7 +70,8 @@ public class UserServiceImplTest extends AbstractTransactionalJUnit4SpringContex
             .userName("kapper")
             .name("каппер")
             .password("assaasas")
-            .dateOfBirth(DateTimeUtil.parseTimestampFromDate("1965-08-06+03:00"))
+            .dateOfBirth(DateTimeUtil.parseLocalDateTimeFromStartOfDate("1965-08-06+03:00"))
+            .dateOfRegistration(LocalDateTime.of(LocalDate.parse("2019-01-21"), LocalTime.MIDNIGHT))
             .lang("RUSSIAN")
             .balance(Money.of(CurrencyUnit.of("RUB"), new BigDecimal("100.00")))
             .build();

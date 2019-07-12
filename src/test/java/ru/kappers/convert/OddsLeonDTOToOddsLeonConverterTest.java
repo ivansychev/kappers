@@ -16,9 +16,11 @@ import ru.kappers.model.leonmodels.OddsLeon;
 import ru.kappers.service.CompetitorLeonService;
 import ru.kappers.service.LeagueLeonService;
 
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -101,10 +103,12 @@ public class OddsLeonDTOToOddsLeonConverterTest {
             assertThat(result, is(notNullValue()));
             assertThat(result.getId(), is(dto.getId()));
             assertThat(result.getName(), is(dto.getName()));
-            assertThat(result.getKickoff(), is(new Timestamp(dto.getKickoff())));
+            assertThat(result.getKickoff(), is(LocalDateTime.ofInstant(Instant.ofEpochMilli(dto.getKickoff()),
+                    TimeZone.getDefault().toZoneId())));
             assertThat(result.isOpen(), is(dto.isOpen()));
             assertThat(result.getUrl(), is(dto.getUrl()));
-            assertThat(result.getLastUpdated(), is(new Timestamp(dto.getLastUpdated())));
+            assertThat(result.getLastUpdated(), is(LocalDateTime.ofInstant(Instant.ofEpochMilli(dto.getLastUpdated()),
+                    TimeZone.getDefault().toZoneId())));
             assertThat(result.getLeague(), is(league));
             assertThat(result.getHome(), is(competitor1));
             assertThat(result.getAway(), is(competitor2));

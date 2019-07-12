@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * JPA-сущность для лиги
@@ -40,9 +40,9 @@ public class League {
     @Size(max = 9)
     private String season;
     @Column(name="season_start")
-    private Timestamp seasonStart;
+    private LocalDateTime seasonStart;
     @Column(name="season_end")
-    private Timestamp seasonEnd;
+    private LocalDateTime seasonEnd;
     @Column(name="logo")
     @Size(max = 512)
     private String logoUrl;

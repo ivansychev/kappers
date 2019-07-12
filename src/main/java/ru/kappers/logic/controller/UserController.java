@@ -13,10 +13,10 @@ import ru.kappers.model.User;
 import ru.kappers.model.dto.RoleDto;
 import ru.kappers.service.MessageTranslator;
 import ru.kappers.service.UserService;
-import ru.kappers.util.DateTimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 @Slf4j
@@ -91,7 +91,7 @@ public class UserController {
     @ResponseBody
     public User create(@RequestBody User user) {
         Preconditions.checkNotNull(user, "user is required");
-        user.setDateOfRegistration(DateTimeUtil.getCurrentTime());
+        user.setDateOfRegistration(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.addUser(user);
     }
