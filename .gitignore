@@ -24,3 +24,9 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### NPM ###
+node_modules
+
+### Webpac ###
+dist
