@@ -2,10 +2,10 @@ var path = require("path");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var devMode = process.env.NODE_ENV !== 'production';
 
-//TODO: add source map to dev
-//TODO: add husky hooks
-//TODO: remove comments in config as soon as wiki for ui appears
-//TODO: add styles support to project
+// TODO: add source map to dev
+// TODO: add husky hooks
+// TODO: remove comments in config as soon as wiki for ui appears
+// TODO: add styles support to project
 
 module.exports = {
     mode : devMode ? 'development' : 'production',
@@ -31,11 +31,11 @@ module.exports = {
                 loader: "babel-loader", //to transpile our modern JS to old JS
                 exclude: /node_modules/,
                 options: {
-                    //@TODO move to .babelrc
+                    // TODO move to .babelrc
                     presets: [
                         ["@babel/env", {
                             "targets": {
-                                "browsers": "last 2 Chrome versions",
+                                "browsers": "last 2 Chrome versions", // TODO think about it and change later
                                 "node": "current"
                             }
                         }],

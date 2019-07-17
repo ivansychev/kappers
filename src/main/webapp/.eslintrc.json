@@ -7,11 +7,41 @@
       "jsx": true
     }
   },
+  "env": {
+    "es6":     true,
+    "browser": true,
+    "node":    true,
+    "mocha":   true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "rules": {
-    "semi": 0,
-    "comma-dangle": 0,
-    "no-unused-vars": "warn",
+    // first argument: 0 - silent, 1 - warning, 2 - error
+    "brace-style": [
+      2,
+      "1tbs",
+      { "allowSingleLine": false }
+    ],
+    "comma-dangle": [ 2, "never" ],
+    "quotes": [ 1, "single" ],
+    "no-eval": 2,
+    "no-with": 2,
     "no-console": 1,
-    "no-unexpected-multiline": "warn"
+    "no-unexpected-multiline": 1,
+    "no-debugger": 2,
+    "no-trailing-spaces": 2,
+    "no-extra-semi": 1,
+    "no-unreachable": 1,
+    "no-unused-expressions": 1,
+    "no-undef": 2,
+    "no-undefined": 2,
+    "no-magic-numbers": 1,
+    "valid-typeof": 2,
+    "no-unused-vars": 1,
+    "spaced-comment": [2, "always" ],
+    "strict": [ 2, "safe" ],
+    "semi": [ 1, "never" ]
   }
 }

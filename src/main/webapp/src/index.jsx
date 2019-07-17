@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import ReactDOM from "react-dom";
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+
+import style from './style.scss'
 
 class App extends Component{
     render(){
@@ -9,5 +11,5 @@ class App extends Component{
     }
 }
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
