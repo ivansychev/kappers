@@ -20,10 +20,12 @@ const App = ({ user }) => {
     const routeResult = useRoutes(routes)
     return (
         <div className="App">
-            <a href="/">Users Page</a> <br />
+            <a href="/">Users Page</a><br />
             <a href="/about">About Page</a><br />
-            <a href="/contacts">Contacts Page</a> <br />
-            {routeResult(user) || <NotFoundPage />}
+            <a href="/contacts">Contacts Page</a><br />
+            <a href="/sign-in">Sign-In</a><br />
+            <a href="/sign-up">Sign-Up</a><br />
+            {routeResult ? routeResult(user) : <NotFoundPage />}
         </div>
     )
 };
