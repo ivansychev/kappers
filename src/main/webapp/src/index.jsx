@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
+import normalized_style from 'normalize.css'
 import style from './style.scss'
 
-class App extends Component{
-    render(){
-        return(
-            <div>Hello world</div>
-        )
-    }
-}
+const App = () => (
+    <div>
+        App
+    </div>
+)
 
 const rootElement = document.getElementById('root')
 ReactDOM.render(<App />, rootElement)

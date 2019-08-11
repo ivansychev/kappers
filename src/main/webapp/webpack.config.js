@@ -1,5 +1,6 @@
 var path = require("path");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var devMode = process.env.NODE_ENV !== 'production';
 
 // TODO: add source map to dev
@@ -29,31 +30,21 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 loader: "babel-loader", //to transpile our modern JS to old JS
-                exclude: /node_modules/,
-                options: {
-                    // TODO move to .babelrc
-                    presets: [
-                        ["@babel/env", {
-                            "targets": {
-                                "browsers": "last 2 Chrome versions", // TODO think about it and change later
-                                "node": "current"
-                            }
-                        }],
-                        "@babel/react"
-                    ],
-                    plugins: [
-                        ['@babel/plugin-proposal-class-properties', { "loose": true }]
-                    ]
-                }
+                exclude: /node_modules/
             },
             {
-                test: /\.scss$/,
+                test: /\.(scss|css)$/,
                 use: [
+                    (devMode
+                            ? 'style-loader' // to link and incorporate our style-in-JS in code
+                            : MiniCssExtractPlugin.loader
+                    ),
                     {
-                        loader: "style-loader" // to link and incorporate our style-in-JS in code
-                    },
-                    {
-                        loader: "css-loader" // CSS --> style-in-JS
+                        loader: "css-loader", // CSS --> style-in-JS
+                        options: {
+                            modules: true,
+                            localsConvention: 'camelCase'
+                        }
                     },
                     {
                         loader: "postcss-loader" // CSS --> to better crossplatform CSS
@@ -65,9 +56,18 @@ module.exports = {
             }
         ]
     },
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/index.html"
+            template: "./src/index.html",
+            filename: 'index.html'
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false
         })
     ]
 };
