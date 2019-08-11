@@ -6,14 +6,16 @@ var devMode = process.env.NODE_ENV !== 'production';
 // TODO: add source map to dev
 // TODO: add husky hooks
 // TODO: remove comments in config as soon as wiki for ui appears
-// TODO: add styles support to project
+// TODO: justify why use hookrouters lib?
+
 
 module.exports = {
     mode : devMode ? 'development' : 'production',
     entry: "./src/index.jsx",
     output: {
-        path: path.join(__dirname, "/dist"),
-        filename: "bundle.js"
+        path: path.resolve(__dirname, "/dist"),
+        filename: "bundle.js",
+        publicPath: '/'
     },
     module: {
         rules: [
@@ -69,5 +71,11 @@ module.exports = {
             chunkFilename: '[id].css',
             ignoreOrder: false
         })
-    ]
+    ],
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        historyApiFallback: true,
+        compress: false,
+        port: 9000
+    }
 };
