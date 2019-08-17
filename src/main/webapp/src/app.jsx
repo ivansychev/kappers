@@ -1,5 +1,5 @@
 import React from 'react'
-import {useRoutes} from 'hookrouter';
+import {useRoutes, A} from 'hookrouter';
 
 import HomePage from './homePage'
 import AboutPage from './aboutPage'
@@ -20,11 +20,11 @@ const App = ({ user }) => {
     const routeResult = useRoutes(routes)
     return (
         <div className="App">
-            <a href="/">Users Page</a><br />
-            <a href="/about">About Page</a><br />
-            <a href="/contacts">Contacts Page</a><br />
-            <a href="/sign-in">Sign-In</a><br />
-            <a href="/sign-up">Sign-Up</a><br />
+            <A href="/">Users Page</A><br />
+            <A href="/about">About Page</A><br />
+            <A href="/contacts">Contacts Page</A><br />
+            <A href="/sign-in">Sign-In</A><br />
+            <A href="/sign-up">Sign-Up</A><br />
             {routeResult ? routeResult(user) : <NotFoundPage />}
         </div>
     )
